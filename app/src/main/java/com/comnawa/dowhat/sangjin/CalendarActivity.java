@@ -1,23 +1,18 @@
 package com.comnawa.dowhat.sangjin;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.CalendarView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.comnawa.dowhat.R;
 
-import java.util.List;
-
 public class CalendarActivity extends AppCompatActivity {
     CalendarView calview;
     TextView txtDate;
     ListView list1;
-    CalDAO dao;
-    public static List<CalDTO> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
