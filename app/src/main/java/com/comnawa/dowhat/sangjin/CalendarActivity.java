@@ -1,25 +1,20 @@
 package com.comnawa.dowhat.sangjin;
 
 import android.content.Context;
-import android.support.annotation.IdRes;
+import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.comnawa.dowhat.R;
-
-import java.util.List;
 
 public class CalendarActivity extends AppCompatActivity {
     CalendarView calview;
