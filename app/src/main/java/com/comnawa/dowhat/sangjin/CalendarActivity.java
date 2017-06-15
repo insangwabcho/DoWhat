@@ -1,23 +1,28 @@
 package com.comnawa.dowhat.sangjin;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.comnawa.dowhat.R;
 
+import java.util.List;
+
 public class CalendarActivity extends AppCompatActivity {
-    CalendarView calview;
+   /* CalendarView calview;
     TextView txtDate;
     ListView list1;
     CalDAO dao;
@@ -62,13 +67,13 @@ public class CalendarActivity extends AppCompatActivity {
             txtSchedule.setText(dto.gteTitle());
             String event = dto.getEvent();
             if (event.equals("공휴일")) {
-                img1.
+                img1.setImageResource(R.drawable.공휴일);
             } else if (event.equals("생일")) {
-                img1.
+                img1.setImageResource(R.drawable.생일);
             } else if (event.equals("기념일")) {
-                img1.
+                img1.setImageResource(R.drawable.기념일);
             }
             return v;
         }
-    }
+    }*/
 }
