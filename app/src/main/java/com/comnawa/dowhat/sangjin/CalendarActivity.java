@@ -32,6 +32,6 @@ public class CalendarActivity extends AppCompatActivity {
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int day) {
                 txtDate.setText(year + "년 " + (month + 1) + "월 " + day + "일 일정");
             }
-        });
+        });//
     }
 }
