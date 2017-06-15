@@ -10,6 +10,6 @@ public class calendarcoreActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.calendar_core);
+        setContentView(R.layout.calendar_core_kwanwoo);
     }
 }
