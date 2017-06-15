@@ -12,10 +12,10 @@
 
   </PreferenceCategory>
   <PreferenceCategory>
+
     <PreferenceScreen
       android:title="글꼴 설정"
       android:summary="별도페이지에 설정페이지가 나옵니다">
-
       <ListPreference
         android:defaultValue="10"
         android:dialogTitle="글꼴 크기를 선택하세요"
@@ -25,7 +25,6 @@
         android:key="fontSize"
         android:title="글꼴 크기"
         />
-
       <ListPreference
         android:dialogTitle="글꼴 색상을 선택하세요"
         android:entries="@array/font_color"
@@ -34,7 +33,7 @@
         android:summary="글꼴 색상을 선택합니다"
         android:title="글꼴 색상"
         />
-
     </PreferenceScreen>
+
   </PreferenceCategory>
 </PreferenceScreen>
