@@ -16,8 +16,8 @@ public class CalendarActivity extends AppCompatActivity {
     CalendarView calview;
     TextView txtDate;
     ListView list1;
-    어쩌구Dao dao;
-    public static List<어쩌구DTO> items;
+    CalDAO dao;
+    public static List<CalDTO> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
