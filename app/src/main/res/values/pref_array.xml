@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array name="font_size_value">
+    <item>10</item>
+    <item>15</item>
+    <item>20</item>
+    <item>25</item>
+    <item>30</item>
+    <item>35</item>
+  </string-array>
+  <string-array name="font_size">
+    <item>10sp</item>
+    <item>15sp</item>
+    <item>20sp</item>
+    <item>25sp</item>
+    <item>30sp</item>
+    <item>35sp</item>
+  </string-array>
+  <string-array name="font_color">
+    <item>Red</item>
+    <item>Green</item>
+    <item>Blue</item>
+    <item>White</item>
+  </string-array>
+  <string-array name="font_color_value">
+    <item>#ff0000</item>
+    <item>#00ff00</item>
+    <item>#0000ff</item>
+    <item>#ffffff</item>
+  </string-array>
+</resources>
