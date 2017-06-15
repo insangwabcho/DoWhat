@@ -9,23 +9,11 @@
     <item>35</item>
   </string-array>
   <string-array name="font_size">
-    <item>10sp</item>
-    <item>15sp</item>
-    <item>20sp</item>
-    <item>25sp</item>
-    <item>30sp</item>
-    <item>35sp</item>
-  </string-array>
-  <string-array name="font_color">
-    <item>Red</item>
-    <item>Green</item>
-    <item>Blue</item>
-    <item>White</item>
-  </string-array>
-  <string-array name="font_color_value">
-    <item>#ff0000</item>
-    <item>#00ff00</item>
-    <item>#0000ff</item>
-    <item>#ffffff</item>
+    <item>매우작음</item>
+    <item>작음</item>
+    <item>중간</item>
+    <item>큼</item>
+    <item>매우큼</item>
+    <item>베리킹갓제너럴매니페스트익스트림큼</item>
   </string-array>
 </resources>
