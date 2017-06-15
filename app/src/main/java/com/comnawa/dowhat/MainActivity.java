@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.comnawa.dowhat.insang.Preferences;
+import com.comnawa.dowhat.sangjin.CalendarActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,15 +23,19 @@ public class MainActivity extends AppCompatActivity {
     //인상
   }
 
-  public void test(View v) {
+  public void onClick(View v) {
     Intent intent = null;
     switch (v.getId()) {
       //인상
       case R.id.btnInsang:
         intent = new Intent(this, Preferences.class);
         break;
+      case R.id.btnSangjin:
+        intent = new Intent(this, CalendarActivity.class);
+        break;
       //인상
     }
     startActivity(intent);
   }
+
 }
