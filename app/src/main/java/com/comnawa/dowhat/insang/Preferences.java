@@ -16,7 +16,7 @@ public class Preferences extends android.preference.PreferenceActivity {
 
   } //환경설정 화면구현
 
-  //희희희
+  //희희희gmlgml
   public static class MyFragment extends PreferenceFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
