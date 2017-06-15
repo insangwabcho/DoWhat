@@ -21,6 +21,7 @@
       </intent-filter>
     </activity>
     <activity android:name=".sangjin.CalendarActivity"/>
+    <activity android:name=".insang.Preferences"/>
   </application>
 
 </manifest>
