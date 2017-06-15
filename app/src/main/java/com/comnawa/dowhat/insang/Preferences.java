@@ -16,8 +16,6 @@ public class Preferences extends android.preference.PreferenceActivity {
 
   } //환경설정 화면구현
 
-  //이거보이면 풀 된거임
-
   public static class MyFragment extends PreferenceFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
