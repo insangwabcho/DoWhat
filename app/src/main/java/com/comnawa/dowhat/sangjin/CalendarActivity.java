@@ -7,14 +7,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
 
@@ -37,6 +38,7 @@ public class CalendarActivity extends ListActivity {
     CalendarView calview; //달력
     TextView txtDate; //날짜표시
     ArrayList<ScheduleDTO> items; //일정을 담을 리스트
+    String id, startdate;
 
     Handler handler = new Handler() {
         @Override
@@ -59,14 +61,18 @@ public class CalendarActivity extends ListActivity {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int day) {
                 txtDate.setText(year + "년 " + (month + 1) + "월 " + day + "일 일정"); //텍스트에 날짜표시
-                final String id = "root1";
-                final String startdate = year + "-" + (month + 1) + "-" + day;
+                id = "root1";
+                if((month+1)< 10){
+                    startdate = year + "-" +"0"+(month + 1) + "-" + day;
+                }else{
+                    startdate = year + "-" + (month + 1) + "-" + day;
+                }
                 Thread th = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
                             items = new ArrayList<ScheduleDTO>();
-                            String page = Common.SERVER_URL + "";
+                            String page = Common.SERVER_URL + "/Dowhat/Schedule_servlet/show.do";
                             HttpClient http = new DefaultHttpClient();
                             ArrayList<NameValuePair> postData = new ArrayList<>();
                             postData.add(new BasicNameValuePair("id", id));
@@ -80,9 +86,19 @@ public class CalendarActivity extends ListActivity {
                             String body = EntityUtils.toString(response.getEntity());
                             JSONObject jsonObj = new JSONObject(body);
                             JSONArray jArray = (JSONArray) jsonObj.get("sendData");
+                            Log.i("test",jsonObj+"");
+                            Log.i("tes",jArray+"");
                             for (int i = 0; i < jArray.length(); i++) {
                                 JSONObject row = jArray.getJSONObject(i);
                                 ScheduleDTO dto = new ScheduleDTO();
+         /*                       dto.setStartdate(row.getString("startdate"));
+                                dto.setEnddate(row.getString("enddate"));
+                                starttime;
+                                endtime;
+                                place;
+                                memeo;
+                                alarm; i;
+                                repeat; i*/
                                 dto.setEvent(row.getString("event"));
                                 dto.setTitle(row.getString("title"));
                                 items.add(dto);
