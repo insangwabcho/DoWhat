@@ -37,7 +37,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/calview" />
 
     <ListView
-        android:id="@+id/list1"
+        android:id="@android:id/list"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:divider="#fafafa"

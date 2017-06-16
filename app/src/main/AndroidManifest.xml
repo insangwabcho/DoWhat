@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.comnawa.dowhat">
 
-  <!-- 권한설정 -->
-  <uses-permission android:name="android.permission.INTERNET"/>
+  <!--권한설정-->
+  <uses-permission android:name="android.permission.INTERNET"/> <!--인상-->
 
-  <!-- 인상 -->
+
   <application
     android:allowBackup="true"
     android:icon="@mipmap/ic_launcher"
@@ -22,8 +22,6 @@
     </activity>
     <activity android:name=".sangjin.CalendarActivity"/>
     <activity android:name=".insang.Preferences"/>
-    <activity android:name=".insang.TestActivity">
-    </activity>
   </application>
 
 </manifest>
