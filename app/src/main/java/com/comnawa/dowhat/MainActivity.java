@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.comnawa.dowhat.insang.TestActivity;
 import com.comnawa.dowhat.sangjin.CalendarActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     Intent intent = null;
     switch (v.getId()) {
       case R.id.btnInsang:
-        intent = new Intent(this, TestActivity.class);
+        intent = new Intent(this, LoadActivity.class);
         break;
       case R.id.btnSangjin:
         intent = new Intent(this, CalendarActivity.class);
