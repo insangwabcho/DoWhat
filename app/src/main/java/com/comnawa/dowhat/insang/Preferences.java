@@ -23,6 +23,6 @@ public class Preferences extends android.preference.PreferenceActivity {
       super.onCreate(savedInstanceState);
       addPreferencesFromResource(R.xml.preference_insang);
     }
-  } // 환경설정 화면구현
+  } // 환경설정 화면구현//
 
 }

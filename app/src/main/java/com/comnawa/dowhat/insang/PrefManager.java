@@ -54,7 +54,7 @@ public class PrefManager {
       result = false;
     }
     return result;
-  } //자동로그인 설정 (성공시 ture반환, 실패시 false 반환)
+  } //자동로그인 설정 (성공시 ture반환, 실패시 false 반환함)
 
   public boolean getAutoLogin() {
 
