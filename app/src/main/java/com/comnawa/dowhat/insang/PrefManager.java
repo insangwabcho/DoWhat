@@ -29,7 +29,16 @@ public class PrefManager {
     return textSize;
   } // 어플리케이션에 설정되어있는 tetSize 반환
 
-  public boolean setAutoLogin(String id, String passwd) {
+  public boolean setAutoLogin(String userid, String userpasswd) {
+    String id = userid;
+    String passwd = userpasswd;
+    if (id.equals("") || id == null) {
+      id = "not Login";
+    }
+    if (passwd.equals("") || passwd == null) {
+      passwd = "not Login";
+    }
+
     boolean result = false;
     String path = "/data/data/" + context.getPackageName() + "/files";
     File f = null;

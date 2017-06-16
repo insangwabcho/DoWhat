@@ -26,7 +26,8 @@ public class TestActivity extends AppCompatActivity {
     btnLogin.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Toast.makeText(TestActivity.this, prefManager.getAutoLogin() + "", Toast.LENGTH_SHORT).show();
+        prefManager.setAutoLogin("","");
+        Toast.makeText(TestActivity.this, prefManager.getUserID(), Toast.LENGTH_SHORT).show();
       }
     });
 

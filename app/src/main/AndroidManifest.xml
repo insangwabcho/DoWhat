@@ -22,6 +22,7 @@
     </activity>
     <activity android:name=".sangjin.CalendarActivity"/>
     <activity android:name=".insang.Preferences"/>
+    <activity android:name=".insang.TestActivity"/>
   </application>
 
 </manifest>
