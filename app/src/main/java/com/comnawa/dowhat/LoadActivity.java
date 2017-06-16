@@ -49,7 +49,7 @@ public class LoadActivity extends AppCompatActivity {
     protected void onPostExecute(Void aVoid) {
       super.onPostExecute(aVoid);
       PrefManager pm= new PrefManager(LoadActivity.this);
-      if (pm.getAutoLogin()){ //자동로그인 on일경우
+      if (pm.getAutoLogin()){ //자동로그인 on일경우//
         Intent intent = new Intent(LoadActivity.this, MainActivity.class);
         startActivity(intent);
         Toast.makeText(LoadActivity.this, "자동로그인on", Toast.LENGTH_SHORT).show();
