@@ -1,3 +1,4 @@
 <resources>
   <string name="app_name">DoWhat</string>
+  <string name="user_id_pref"></string>
 </resources>

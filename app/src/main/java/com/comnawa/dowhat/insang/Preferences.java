@@ -14,8 +14,9 @@ public class Preferences extends android.preference.PreferenceActivity {
 
     getFragmentManager().beginTransaction().replace(android.R.id.content, new MyFragment()).commit();
 
+
   } //환경설정 화면구현
-  
+
   public static class MyFragment extends PreferenceFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

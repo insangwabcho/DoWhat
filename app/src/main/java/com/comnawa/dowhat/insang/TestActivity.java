@@ -30,21 +30,5 @@ public class TestActivity extends AppCompatActivity {
       }
     });
 
-    btnSwitch.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        boolean result = false;
-        if (prefManager.getAutoLogin()) {
-          result = prefManager.setAutoLogin(false);
-        } else {
-          result = prefManager.setAutoLogin(true);
-        }
-        if (result) {
-          Toast.makeText(TestActivity.this, "성공하였습니다.", Toast.LENGTH_SHORT).show();
-        } else {
-          Toast.makeText(TestActivity.this, "실패하였습니다.", Toast.LENGTH_SHORT).show();
-        }
-      }
-    });
   }
 }
