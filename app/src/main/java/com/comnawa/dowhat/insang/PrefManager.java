@@ -84,7 +84,7 @@ public class PrefManager {
       result = "null";
     }
     return result;
-  }
+  } //자동로그인 on일시 유저아이디 리턴
 
   private void startOrRefresh() {
     prefs = PreferenceManager.getDefaultSharedPreferences(context);
