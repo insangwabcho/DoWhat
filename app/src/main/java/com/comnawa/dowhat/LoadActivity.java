@@ -8,14 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.comnawa.dowhat.insang.Lib;
+import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.PrefManager;
 
 public class LoadActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    Lib.fixedScreen(this, Lib.sero); //세로화면 고정
+    DoWhat.fixedScreen(this, DoWhat.sero); //세로화면 고정
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     setContentView(R.layout.load_insang);
     super.onCreate(savedInstanceState);

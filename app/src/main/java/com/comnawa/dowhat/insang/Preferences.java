@@ -10,7 +10,8 @@ public class Preferences extends android.preference.PreferenceActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    Lib.fixedScreen(this, Lib.sero);
+    DoWhat.fixedScreen(this, DoWhat.sero);
+
     super.onCreate(savedInstanceState);
 
     getFragmentManager().beginTransaction().replace(android.R.id.content, new MyFragment()).commit();

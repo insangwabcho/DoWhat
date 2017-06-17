@@ -9,7 +9,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.widget.Toast;
 
-public class Lib {
+public class DoWhat {
 
   public static final int sero = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
   public static final int garo = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
