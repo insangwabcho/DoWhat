@@ -33,7 +33,7 @@ public class LoadActivity extends AppCompatActivity {
     protected void onPreExecute() {
       dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
       dialog.setMessage("로딩중입니다. 잠시만기다려주세요");
-      dialog.show();
+//      dialog.show();
       super.onPreExecute();
     }
 

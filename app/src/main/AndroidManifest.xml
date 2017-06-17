@@ -4,6 +4,7 @@
 
   <!-- 권한설정 -->
   <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
   <application
     android:allowBackup="true"
@@ -24,9 +25,31 @@
     <activity android:name=".sangjin.CalendarActivity"/>
     <activity android:name=".insang.Preferences"/>
     <activity android:name=".insang.TestActivity"/>
-    <activity
-      android:name=".MainActivity">
+    <activity android:name=".insang.AlarmPref"/>
+    <activity android:name=".MainActivity">
     </activity>
+
+    <receiver
+      android:name="insang.BootReceiver"
+      android:enabled="true"
+      android:exported="false">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+      </intent-filter>
+    </receiver>
+
+    <receiver
+      android:name=".insang.AlarmBroadcast"
+      android:enabled="true"
+      android:exported="true">
+    </receiver>
+
+    <service
+      android:name=".insang.AlarmService"
+      android:enabled="true"
+      android:exported="true">
+    </service>
+
   </application>
 
 </manifest>

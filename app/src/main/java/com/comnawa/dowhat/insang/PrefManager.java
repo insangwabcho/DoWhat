@@ -14,6 +14,8 @@ import java.util.Properties;
 public class PrefManager {
 
   private boolean autoLogin;
+  private boolean pushAlarm;
+  private boolean autoUpdate;
   private float textSize;
 
   private SharedPreferences prefs;
@@ -23,6 +25,16 @@ public class PrefManager {
   public PrefManager(Context context) {
     this.context = context;
     startOrRefresh();
+  }
+
+  public boolean getPushAlarm() {
+    return pushAlarm;
+  }
+
+  public boolean setPushAlarm(boolean onOrOff) {
+    boolean result = edit.putBoolean("pushService", onOrOff).commit();
+    startOrRefresh();
+    return result;
   }
 
   public float getTextSize() {
@@ -62,11 +74,11 @@ public class PrefManager {
       e.printStackTrace();
       result = false;
     }
+    startOrRefresh();
     return result;
   } //자동로그인 설정 (성공시 ture반환, 실패시 false 반환함)
 
   public boolean getAutoLogin() {
-
     return autoLogin;
   } //자동로그인 상태값 (설정되어있을시 true, 아닐시 false)
 
@@ -92,5 +104,8 @@ public class PrefManager {
 
     autoLogin = prefs.getBoolean("autoLogin", false);
     textSize = Float.parseFloat(prefs.getString("fontSize", "20"));
+    pushAlarm = prefs.getBoolean("pushService", false);
+    autoUpdate = prefs.getBoolean("autoUpdate", false);
+
   } //인상이꺼
 }

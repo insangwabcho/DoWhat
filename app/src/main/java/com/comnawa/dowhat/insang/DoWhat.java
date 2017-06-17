@@ -3,7 +3,9 @@ package com.comnawa.dowhat.insang;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -89,5 +91,16 @@ public class DoWhat {
     }
   }
   //권한체크 (Manifest.xml 에 먼저 정의해둔것만 실행됨)
+
+  public static void setAlarm(Context context, int year, int month, int date, int hour, int min) {
+    Intent intent = new Intent(context, AlarmPref.class);
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    intent.putExtra("year", year);
+    intent.putExtra("month", month);
+    intent.putExtra("date", date);
+    intent.putExtra("hour", hour);
+    intent.putExtra("min", min);
+    context.startActivity(intent);
+  } //서비스에서 호출시 null
 
 }
