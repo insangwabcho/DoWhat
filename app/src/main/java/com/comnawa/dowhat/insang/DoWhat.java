@@ -11,9 +11,10 @@ import android.widget.Toast;
 
 public class DoWhat {
 
+  //화면고정 옵션
   public static final int sero = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
   public static final int garo = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-
+  //권한 옵션
   public static final String read_calendar = Manifest.permission.READ_CALENDAR;
   public static final String write_calendar = Manifest.permission.WRITE_CALENDAR;
   public static final String camera = Manifest.permission.CAMERA;
@@ -48,7 +49,7 @@ public class DoWhat {
   }
   //화면고정
 
-  //권한체크
+  //권한체크 (Manifest.xml 에 먼저 정의해둔것만 실행됨)
   public static void checkPermission(final Activity activity, final String... args) {
     for (int i = 0; i < args.length; i++) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -87,6 +88,6 @@ public class DoWhat {
       }
     }
   }
-  //권한체크
+  //권한체크 (Manifest.xml 에 먼저 정의해둔것만 실행됨)
 
 }
