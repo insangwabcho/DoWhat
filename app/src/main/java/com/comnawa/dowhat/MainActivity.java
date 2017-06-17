@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.comnawa.dowhat.insang.DoWhatLibrary;
 import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.sangjin.CalendarActivity;
 
@@ -12,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    DoWhatLibrary.fixedScreen(this, DoWhatLibrary.sero);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
   }
