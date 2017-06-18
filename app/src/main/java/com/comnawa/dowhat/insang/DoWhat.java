@@ -97,9 +97,11 @@ public class DoWhat {
   //권한체크 (Manifest.xml 에 먼저 정의해둔것만 실행됨)
 
   public static boolean setAlarm
-    (final Context context, int year, int month, int date, int hour, int min, int requestCode) {
-    boolean current = false;
+    (final Context context, int year, int month, int date, int hour, int min) {
     PrefManager pm = new PrefManager(context);
+    int requestCode = pm.getScheduleCount() + 1;
+    pm.setScheduleCount(requestCode);
+    boolean current = false;
     if (!pm.getPushAlarm()) {
       AlertDialog.Builder dialog = new AlertDialog.Builder(context);
       dialog.setTitle("알람설정").setMessage("알람을 설정하시기 위해서는 \n 푸시알람설정이 필요합니다.\n  환경설정으로 이동하시겠습니까?")
@@ -142,9 +144,14 @@ public class DoWhat {
         am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
       }
 
+
       current = true;
     }
     return current;
   } //서비스에서 호출시 null
+
+  public void test() {
+
+  }
 
 }

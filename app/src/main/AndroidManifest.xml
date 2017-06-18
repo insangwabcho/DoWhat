@@ -39,7 +39,6 @@
         <action android:name="android.intent.action.BOOT_COMPLETED"/>
       </intent-filter>
     </receiver>
-
     <receiver
       android:name=".insang.AlarmBroadcast"
       android:enabled="true"
@@ -52,6 +51,11 @@
       android:exported="true">
     </service>
 
+    <receiver
+      android:name=".insang.DateChangedReceiver"
+      android:enabled="true"
+      android:exported="true">
+    </receiver>
   </application>
 
 </manifest>

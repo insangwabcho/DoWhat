@@ -8,35 +8,28 @@ import android.os.Message;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class AlarmService extends Service {
   boolean isRunning;
   private static ArrayList<Integer> list;
-  private final int todayList = 2;
 
   @Override
   public void onCreate() {
     super.onCreate();
+    Toast.makeText(this, "서비스 시작", Toast.LENGTH_SHORT).show();
+
+    /*
+      DateChangedReceiver로 서비스가 재생성됨.
+      당일에 해당되는 일정자료 reload 코드작성해야함
+      preference 에 aCountSchedule 리셋 후 reload진행 :: new PrefManager(this).resetScheduleCount();
+     */
+
   } //서비스 생성될시 (최초 1회)
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     super.onStartCommand(intent, flags, startId);
 
-    Calendar cal = Calendar.getInstance();
-    int year = cal.get(Calendar.YEAR);
-    int month = 6;
-    int date = cal.get(Calendar.DATE);
-    int hour = cal.get(Calendar.HOUR_OF_DAY);
-    int min = cal.get(Calendar.MINUTE);
-
-
-    list = new ArrayList<>();
-    for (int i = 0; i < todayList; i++) {
-      list.add(i);
-      DoWhat.setAlarm(this, year, month, date, hour, min + i, i);
-    }
     isRunning = true;
     Thread th = new Thread(new MyThread());
     th.start();
@@ -48,13 +41,14 @@ public class AlarmService extends Service {
   public void onDestroy() {
     super.onDestroy();
     isRunning = false;
+    Toast.makeText(this, "서비스 종료", Toast.LENGTH_SHORT).show();
   } // 서비스가 종료될때
 
   class MyThread extends Thread {
     @Override
     public void run() {
       while (isRunning) {
-        handler.sendEmptyMessage(0);
+        handler.sendEmptyMessage(0); //서비스 실행중 이라는 Toast메세지 출력 반복
         try {
           Thread.sleep(4000);
         } catch (InterruptedException e) {

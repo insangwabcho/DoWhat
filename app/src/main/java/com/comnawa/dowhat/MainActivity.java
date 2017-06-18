@@ -24,6 +24,14 @@ public class MainActivity extends AppCompatActivity {
       case R.id.btnInsang:
         intent = new Intent(this, Preferences.class);
         break;
+//        Calendar cal = Calendar.getInstance();
+//        int year = cal.get(Calendar.YEAR);
+//        int month = 6;
+//        int date = cal.get(Calendar.DATE);
+//        int hour = cal.get(Calendar.HOUR_OF_DAY);
+//        int min = cal.get(Calendar.MINUTE);
+//        DoWhat.setAlarm(this, year, month, date, hour, min, 100);
+//        return;
       case R.id.btnSangjin:
         intent = new Intent(this, CalendarActivity.class);
         break;

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
-import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
 
@@ -37,11 +36,9 @@ public class Preferences extends android.preference.PreferenceActivity {
     if (pm.getPushAlarm() && !serviceStatus) {
       Intent intent = new Intent(this, AlarmService.class);
       startService(intent);
-      Toast.makeText(this, "push서비스 시작", Toast.LENGTH_SHORT).show();
     } else if (serviceStatus && !pm.getPushAlarm()){
       Intent intent = new Intent(this, AlarmService.class);
       stopService(intent);
-      Toast.makeText(this, "push서비스 종료", Toast.LENGTH_SHORT).show();
     }
   }
 }

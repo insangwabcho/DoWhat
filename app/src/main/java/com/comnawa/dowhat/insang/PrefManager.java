@@ -42,6 +42,9 @@ public class PrefManager {
   } // 어플리케이션에 설정되어있는 tetSize 반환
 
   public boolean setAutoLogin(String userid, String userpasswd) {
+    if (!getAutoLogin()) {
+      return false;
+    }
     String id = userid;
     String passwd = userpasswd;
     if (id.equals("") || id == null) {
@@ -77,6 +80,23 @@ public class PrefManager {
     startOrRefresh();
     return result;
   } //자동로그인 설정 (성공시 ture반환, 실패시 false 반환함)
+
+  public int getScheduleCount() {
+    int result = Integer.parseInt(prefs.getString("aCountSchedule", "0"));
+    return result;
+  }
+
+  public boolean setScheduleCount(int aCount) {
+    boolean result = edit.putString("aCountSchedule", aCount + "").commit();
+    startOrRefresh();
+    return result;
+  }
+
+  public boolean resetScheduleCount() {
+    boolean result = edit.putString("aCountSchedule", "0").commit();
+    startOrRefresh();
+    return result;
+  }
 
   public boolean getAutoLogin() {
     return autoLogin;
