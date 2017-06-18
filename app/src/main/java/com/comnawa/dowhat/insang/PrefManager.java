@@ -108,4 +108,5 @@ public class PrefManager {
     autoUpdate = prefs.getBoolean("autoUpdate", false);
 
   } //인상이꺼
+
 }

@@ -5,6 +5,7 @@
   <!-- 권한설정 -->
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+  <uses-permission android:name="android.permission.VIBRATE"/>
 
   <application
     android:allowBackup="true"
@@ -14,7 +15,7 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
     <activity
-      android:name=".LoadActivity"
+      android:name=".insang.LoadActivity"
       android:theme="@style/loadTheme">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -25,14 +26,15 @@
     <activity android:name=".sangjin.CalendarActivity"/>
     <activity android:name=".insang.Preferences"/>
     <activity android:name=".insang.TestActivity"/>
-    <activity android:name=".insang.AlarmPref"/>
     <activity android:name=".MainActivity">
     </activity>
 
     <receiver
-      android:name="insang.BootReceiver"
+      android:name=".insang.BootReceiver"
       android:enabled="true"
-      android:exported="false">
+      android:exported="false"
+      android:label="BootReceiver"
+      android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
       <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED"/>
       </intent-filter>

@@ -1,4 +1,4 @@
-package com.comnawa.dowhat;
+package com.comnawa.dowhat.insang;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.comnawa.dowhat.insang.DoWhat;
-import com.comnawa.dowhat.insang.PrefManager;
+import com.comnawa.dowhat.MainActivity;
+import com.comnawa.dowhat.R;
 
 public class LoadActivity extends AppCompatActivity {
 

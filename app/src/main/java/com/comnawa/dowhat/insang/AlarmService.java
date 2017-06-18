@@ -7,8 +7,13 @@ import android.os.IBinder;
 import android.os.Message;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
 public class AlarmService extends Service {
   boolean isRunning;
+  private static ArrayList<Integer> list;
+  private final int todayList = 2;
 
   @Override
   public void onCreate() {
@@ -19,6 +24,19 @@ public class AlarmService extends Service {
   public int onStartCommand(Intent intent, int flags, int startId) {
     super.onStartCommand(intent, flags, startId);
 
+    Calendar cal = Calendar.getInstance();
+    int year = cal.get(Calendar.YEAR);
+    int month = 6;
+    int date = cal.get(Calendar.DATE);
+    int hour = cal.get(Calendar.HOUR_OF_DAY);
+    int min = cal.get(Calendar.MINUTE);
+
+
+    list = new ArrayList<>();
+    for (int i = 0; i < todayList; i++) {
+      list.add(i);
+      DoWhat.setAlarm(this, year, month, date, hour, min + i, i);
+    }
     isRunning = true;
     Thread th = new Thread(new MyThread());
     th.start();
@@ -31,7 +49,6 @@ public class AlarmService extends Service {
     super.onDestroy();
     isRunning = false;
   } // 서비스가 종료될때
-
 
   class MyThread extends Thread {
     @Override
@@ -65,4 +82,5 @@ public class AlarmService extends Service {
     // TODO: Return the communication channel to the service.
     throw new UnsupportedOperationException("Not yet implemented");
   }
+
 }

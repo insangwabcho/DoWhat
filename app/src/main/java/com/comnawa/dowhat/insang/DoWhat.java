@@ -2,7 +2,9 @@ package com.comnawa.dowhat.insang;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +12,8 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class DoWhat {
 
@@ -92,15 +96,55 @@ public class DoWhat {
   }
   //권한체크 (Manifest.xml 에 먼저 정의해둔것만 실행됨)
 
-  public static void setAlarm(Context context, int year, int month, int date, int hour, int min) {
-    Intent intent = new Intent(context, AlarmPref.class);
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    intent.putExtra("year", year);
-    intent.putExtra("month", month);
-    intent.putExtra("date", date);
-    intent.putExtra("hour", hour);
-    intent.putExtra("min", min);
-    context.startActivity(intent);
+  public static boolean setAlarm
+    (final Context context, int year, int month, int date, int hour, int min, int requestCode) {
+    boolean current = false;
+    PrefManager pm = new PrefManager(context);
+    if (!pm.getPushAlarm()) {
+      AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+      dialog.setTitle("알람설정").setMessage("알람을 설정하시기 위해서는 \n 푸시알람설정이 필요합니다.\n  환경설정으로 이동하시겠습니까?")
+        .setPositiveButton("이동", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            Intent intent = new Intent(context, Preferences.class);
+            intent.putExtra("msg", "hello");
+            Toast.makeText(context, "푸시설정 -> 알람설정 을 켜주세요", Toast.LENGTH_SHORT).show();
+            context.startActivity(intent);
+          }
+        })
+        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            Toast.makeText(context, "현재 푸시알람기능이 켜져있지 않습니다", Toast.LENGTH_LONG).show();
+          }
+        })
+        .create().show();
+    }
+
+    pm = new PrefManager(context);
+    if (pm.getPushAlarm()) {
+
+      AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+      Intent intent = new Intent(context, AlarmBroadcast.class);
+      intent.putExtra("push", "푸시내요오오옹" + requestCode);
+      intent.putExtra("requestCode", requestCode);
+
+      PendingIntent sender = PendingIntent.getBroadcast(context, requestCode, intent, 0);
+
+      Calendar calendar = Calendar.getInstance();
+      calendar.set(year, month - 1, date, hour, min, 0);
+
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+      } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+      } else {
+        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+      }
+
+      current = true;
+    }
+    return current;
   } //서비스에서 호출시 null
 
 }
