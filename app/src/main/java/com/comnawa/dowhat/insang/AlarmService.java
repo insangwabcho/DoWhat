@@ -5,15 +5,29 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Toast;
+
+import com.comnawa.dowhat.sangjin.ScheduleDTO;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AlarmService extends Service {
   boolean isRunning;
+  static ArrayList<ScheduleDTO> schedules = new ArrayList<>();
 
   @Override
   public void onCreate() {
     super.onCreate();
     Toast.makeText(this, "서비스 시작", Toast.LENGTH_SHORT).show();
+
+
+  } //서비스 생성될시 (최초 1회)
+
+  @Override
+  public int onStartCommand(Intent intent, int flags, int startId) {
+    super.onStartCommand(intent, flags, startId);
 
     /*
       DateChangedReceiver로 서비스가 재생성됨.
@@ -21,11 +35,20 @@ public class AlarmService extends Service {
       preference 에 aCountSchedule 리셋 후 reload진행 :: new PrefManager(this).resetScheduleCount();
      */
 
-  } //서비스 생성될시 (최초 1회)
+    DoWhat.test(this, schedules);
+    Log.i("test", schedules.toString());
+    Calendar cal = Calendar.getInstance();
+    int year = cal.get(Calendar.YEAR);
+    int month = cal.get(Calendar.MONTH);
+    int date = cal.get(Calendar.DATE);
 
-  @Override
-  public int onStartCommand(Intent intent, int flags, int startId) {
-    super.onStartCommand(intent, flags, startId);
+    for (ScheduleDTO dto : schedules) {
+      String alarmtime = dto.getStarttime();
+      String[] foo = alarmtime.split(":");
+      Log.i("test",foo[0]+""+foo[1]);
+
+      DoWhat.setAlarm(this, year, month, date, Integer.parseInt(foo[0]), Integer.parseInt(foo[1]), dto.getTitle());
+    }
 
     isRunning = true;
     Thread th = new Thread(new MyThread());
@@ -72,6 +95,10 @@ public class AlarmService extends Service {
   public IBinder onBind(Intent intent) {
     // TODO: Return the communication channel to the service.
     throw new UnsupportedOperationException("Not yet implemented");
+  }
+
+  public static void setlists(ArrayList<ScheduleDTO> lists) {
+    schedules = lists;
   }
 
 }

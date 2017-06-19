@@ -44,7 +44,7 @@ public class PrefManager {
   } // 어플리케이션에 설정되어있는 tetSize 반환
 
   public boolean setAutoLogin(String userid, String userpasswd, String namee, String friendid) {
-    Log.i("test","1");
+    Log.i("test", "1");
     if (userid.equals("") || userid == null) {
       userid = "not Login";
     }
@@ -82,7 +82,7 @@ public class PrefManager {
       bw.close();
       edit.putBoolean("autoLogin", true).apply();
       edit.commit();
-      Log.i("test","2");
+      Log.i("test", "2");
     } catch (Exception e) {
       e.printStackTrace();
       result = false;
@@ -150,5 +150,11 @@ public class PrefManager {
     autoUpdate = prefs.getBoolean("autoUpdate", false);
 
   } //인상이꺼
+
+  public void testAlarm(String content) {
+    Log.i("test",content);
+    edit.putString("testAlarm", prefs.getString("testAlarm", null) + content + ",").commit();
+    resetScheduleCount();
+  }
 
 }

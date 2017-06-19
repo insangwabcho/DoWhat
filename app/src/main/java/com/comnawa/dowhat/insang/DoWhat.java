@@ -11,8 +11,12 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.comnawa.dowhat.sangjin.ScheduleDTO;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class DoWhat {
@@ -150,8 +154,16 @@ public class DoWhat {
     return current;
   } //서비스에서 호출시 null
 
-  public void test() {
-
+  public static void test(Context context, ArrayList<ScheduleDTO> lists) {
+    GetSchedule sc= new GetSchedule(context, lists);
+    sc.start();
+    try {
+      sc.join();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    Log.i("test","완료");
   }
+
 
 }
