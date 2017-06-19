@@ -8,6 +8,7 @@ import android.view.View;
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.sangjin.CalendarActivity;
+import com.comnawa.dowhat.sungwon.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
 //        return;
       case R.id.btnSangjin:
         intent = new Intent(this, CalendarActivity.class);
+        break;
+      case R.id.btnSungwon:
+        intent = new Intent(this,LoginActivity.class);
         break;
     }
     startActivity(intent);
