@@ -28,6 +28,7 @@
         <activity android:name=".insang.Preferences" />
         <activity android:name=".kwanwoo.CalendarCoreActivity" />
         <activity android:name=".kwanwoo.ColorChoice" />
+        <activity android:name=".sungwon.LoginActivity"/>
         <activity android:name=".MainActivity"></activity>
 
         <receiver
@@ -60,7 +61,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".sangjin.TestS"></activity>
     </application>
 
 </manifest>
