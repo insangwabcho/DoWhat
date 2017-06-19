@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class PrefManager {
@@ -41,7 +42,7 @@ public class PrefManager {
     return textSize;
   } // 어플리케이션에 설정되어있는 tetSize 반환
 
-  public boolean setAutoLogin(String userid, String userpasswd, String name) {
+  public boolean setAutoLogin(String userid, String userpasswd, String name, String friendid) {
     if (!getAutoLogin()) {
       return false;
     }
@@ -70,6 +71,10 @@ public class PrefManager {
       bw.write("id:" + id);
       bw.newLine();
       bw.write("passwd:" + passwd);
+      bw.newLine();
+      bw.write("name:" + name);
+      bw.newLine();
+      bw.write("friendid:" + friendid);
       bw.flush();
       bw.close();
       result = edit.putBoolean("autoLogin", true).commit();
@@ -102,18 +107,30 @@ public class PrefManager {
     return autoLogin;
   } //자동로그인 상태값 (설정되어있을시 true, 아닐시 false)
 
-  public String getUserID() {
-    String result = "";
+  public HashMap<String, String> getUserInfo() {
+    HashMap<String, String> result = new HashMap<>();
     try {
       Properties prop = new Properties();
       prop.load(new InputStreamReader(new FileInputStream(
         new File("/data/data/" + context.getPackageName() + "/files/log.prop"))));
-      result = prop.getProperty("id");
+      String id = prop.getProperty("id");
+      String pwd = prop.getProperty("pwd");
+      String name = prop.getProperty("name");
+      String friendid = prop.getProperty("friendid");
+
+      result.put("id", id);
+      result.put("passwd", pwd);
+      result.put("name", name);
+      result.put("friendid", friendid);
+
     } catch (Exception e) {
       e.printStackTrace();
     }
-    if (result.equals("") || result == null) {
-      result = "null";
+    if (result.size() == 0 || result == null) {
+      result.put("id", "not Login");
+      result.put("passwd", "not Login");
+      result.put("name", "not Login");
+      result.put("friendid", "not Login");
     }
     return result;
   } //자동로그인 on일시 유저아이디 리턴
