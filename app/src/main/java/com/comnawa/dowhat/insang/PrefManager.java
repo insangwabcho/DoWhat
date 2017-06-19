@@ -128,7 +128,7 @@ public class PrefManager {
     }
     if (result.size() == 0 || result == null) {
       result.put("id", "not Login");
-      result.put("passwd", "not Login");
+      result.put("password", "not Login");
       result.put("name", "not Login");
       result.put("friendid", "not Login");
     }
