@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.Preferences;
+import com.comnawa.dowhat.kwanwoo.CalendarCoreActivity;
 import com.comnawa.dowhat.sangjin.CalendarActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, CalendarActivity.class);
         break;
       case R.id.btnKwanwoo:
-        intent= null;
+        intent= new Intent(this, CalendarCoreActivity.class);
         break;
     }
     startActivity(intent);
