@@ -30,6 +30,7 @@
         <activity android:name=".kwanwoo.ColorChoice" />
         <activity android:name=".sungwon.LoginActivity"/>
         <activity android:name=".MainActivity"></activity>
+        <activity android:name=".sungwon.SignUpActivity"/>
 
         <receiver
             android:name=".insang.BootReceiver"
