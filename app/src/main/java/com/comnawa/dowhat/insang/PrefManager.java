@@ -3,6 +3,7 @@ package com.comnawa.dowhat.insang;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -43,9 +44,7 @@ public class PrefManager {
   } // 어플리케이션에 설정되어있는 tetSize 반환
 
   public boolean setAutoLogin(String userid, String userpasswd, String namee, String friendid) {
-    if (!getAutoLogin()) {
-      return false;
-    }
+    Log.i("test","1");
     if (userid.equals("") || userid == null) {
       userid = "not Login";
     }
@@ -83,6 +82,7 @@ public class PrefManager {
       bw.close();
       edit.putBoolean("autoLogin", true).apply();
       edit.commit();
+      Log.i("test","2");
     } catch (Exception e) {
       e.printStackTrace();
       result = false;
