@@ -1,69 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.comnawa.dowhat">
+    package="com.comnawa.dowhat">
 
-  <!-- 권한설정 -->
-  <uses-permission android:name="android.permission.INTERNET"/>
-  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-  <uses-permission android:name="android.permission.VIBRATE"/>
-  <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!-- 권한설정 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-  <application
-    android:allowBackup="true"
-    android:icon="@mipmap/ic_launcher"
-    android:label="@string/app_name"
-    android:roundIcon="@mipmap/ic_launcher_round"
-    android:supportsRtl="true"
-    android:theme="@style/AppTheme">
-    <activity
-      android:name=".insang.LoadActivity"
-      android:theme="@style/loadTheme">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".insang.LoadActivity"
+            android:theme="@style/loadTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity>
-    <activity android:name=".sangjin.CalendarActivity"/>
-    <activity android:name=".insang.Preferences"/>
-    <activity android:name=".insang.TestActivity"/>
-    <activity android:name=".kwanwoo.CalendarCoreActivity"/>
-    <activity android:name=".kwanwoo.ColorChoice"/>
-    <activity android:name=".MainActivity">
-    </activity>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".sangjin.CalendarActivity" />
+        <activity android:name=".insang.Preferences" />
+        <activity android:name=".insang.TestActivity" />
+        <activity android:name=".kwanwoo.CalendarCoreActivity" />
+        <activity android:name=".kwanwoo.ColorChoice" />
+        <activity android:name=".MainActivity"></activity>
 
-    <receiver
-      android:name=".insang.BootReceiver"
-      android:enabled="true"
-      android:exported="false"
-      android:label="BootReceiver"
-      android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
-      <intent-filter>
-        <action android:name="android.intent.action.BOOT_COMPLETED"/>
-      </intent-filter>
-    </receiver>
-    <receiver
-      android:name=".insang.AlarmBroadcast"
-      android:enabled="true"
-      android:exported="true">
-    </receiver>
+        <receiver
+            android:name=".insang.BootReceiver"
+            android:enabled="true"
+            android:exported="false"
+            android:label="BootReceiver"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".insang.AlarmBroadcast"
+            android:enabled="true"
+            android:exported="true"></receiver>
 
-    <service
-      android:name=".insang.AlarmService"
-      android:enabled="true"
-      android:exported="true">
-    </service>
+        <service
+            android:name=".insang.AlarmService"
+            android:enabled="true"
+            android:exported="true"></service>
 
-    <receiver
-      android:name=".insang.DateChangedReceiver"
-      android:enabled="true"
-      android:exported="false"
-      android:label="DateChangedReceiver">
-      <intent-filter>
-        <action android:name="android.intent.action.DATE_CHANGED"/>
-      </intent-filter>
-    </receiver>
+        <receiver
+            android:name=".insang.DateChangedReceiver"
+            android:enabled="true"
+            android:exported="false"
+            android:label="DateChangedReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DATE_CHANGED" />
+            </intent-filter>
+        </receiver>
 
-  </application>
+    </application>
 
 </manifest>
