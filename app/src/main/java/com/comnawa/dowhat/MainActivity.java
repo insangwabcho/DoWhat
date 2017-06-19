@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
       case R.id.btnSangjin:
         intent = new Intent(this, CalendarActivity.class);
         break;
+      case R.id.btnKwanwoo:
+        intent= null;
+        break;
     }
     startActivity(intent);
   } //onClick
