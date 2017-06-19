@@ -7,11 +7,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 public class AlarmService extends Service {
   boolean isRunning;
-  private static ArrayList<Integer> list;
 
   @Override
   public void onCreate() {

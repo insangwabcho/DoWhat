@@ -6,6 +6,7 @@
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
+  <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
   <application
     android:allowBackup="true"
@@ -54,8 +55,13 @@
     <receiver
       android:name=".insang.DateChangedReceiver"
       android:enabled="true"
-      android:exported="true">
+      android:exported="false"
+      android:label="DateChangedReceiver">
+      <intent-filter>
+        <action android:name="android.intent.action.DATE_CHANGED"/>
+      </intent-filter>
     </receiver>
+
   </application>
 
 </manifest>

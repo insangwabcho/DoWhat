@@ -97,7 +97,7 @@ public class DoWhat {
   //권한체크 (Manifest.xml 에 먼저 정의해둔것만 실행됨)
 
   public static boolean setAlarm
-    (final Context context, int year, int month, int date, int hour, int min) {
+    (final Context context, int year, int month, int date, int hour, int min, String subject) {
     PrefManager pm = new PrefManager(context);
     int requestCode = pm.getScheduleCount() + 1;
     pm.setScheduleCount(requestCode);
@@ -128,7 +128,7 @@ public class DoWhat {
 
       AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
       Intent intent = new Intent(context, AlarmBroadcast.class);
-      intent.putExtra("push", "푸시내요오오옹" + requestCode);
+      intent.putExtra("subject", subject);
       intent.putExtra("requestCode", requestCode);
 
       PendingIntent sender = PendingIntent.getBroadcast(context, requestCode, intent, 0);
