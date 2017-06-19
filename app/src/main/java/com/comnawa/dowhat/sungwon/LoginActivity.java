@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText editid, editpwd;
     Button btnLogin, btnSignUp;
     CheckBox cb;
+    boolean check;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,12 @@ public class LoginActivity extends AppCompatActivity {
         btnSignUp = (Button) findViewById(R.id.btnSignUp);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         cb = (CheckBox)findViewById(R.id.cb);
+        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                check = isChecked;
+            }
+        });
         if(new PrefManager(this).getAutoLogin()){
             Intent intent = new Intent(LoginActivity.this,CalendarActivity.class);
             HashMap<String,String> map = new PrefManager(this).getUserInfo();
@@ -89,7 +97,8 @@ public class LoginActivity extends AppCompatActivity {
                                 String name = jlist.get("name").toString();
                                 String friendid = jlist.get("friendid").toString();
                                 PrefManager pm = new PrefManager(LoginActivity.this);
-                                if(cb.isChecked()){
+                                if(check){
+                                    Log.i("test","sss");
                                     pm.setAutoLogin(id,pwd,name,friendid);
                                 }
                                 Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);
