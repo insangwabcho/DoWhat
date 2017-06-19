@@ -10,7 +10,7 @@ public class DateChangedReceiver extends BroadcastReceiver {
   public void onReceive(Context context, Intent intent) {
     if (intent.getAction().equals(Intent.ACTION_DATE_CHANGED)) {
       context.stopService(new Intent(context, AlarmService.class));
-//      context.startService(new Intent(context, AlarmService.class));
+      context.startService(new Intent(context, AlarmService.class));
     }
   }
 }
