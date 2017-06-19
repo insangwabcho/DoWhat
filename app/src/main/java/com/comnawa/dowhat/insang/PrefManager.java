@@ -42,17 +42,21 @@ public class PrefManager {
     return textSize;
   } // 어플리케이션에 설정되어있는 tetSize 반환
 
-  public boolean setAutoLogin(String userid, String userpasswd, String name, String friendid) {
+  public boolean setAutoLogin(String userid, String userpasswd, String namee, String friendid) {
     if (!getAutoLogin()) {
       return false;
     }
-    String id = userid;
-    String passwd = userpasswd;
-    if (id.equals("") || id == null) {
-      id = "not Login";
+    if (userid.equals("") || userid == null) {
+      userid = "not Login";
     }
-    if (passwd.equals("") || passwd == null) {
-      passwd = "not Login";
+    if (userpasswd.equals("") || userpasswd == null) {
+      userpasswd = "not Login";
+    }
+    if (namee.equals("") || namee == null) {
+      namee = "not Login";
+    }
+    if (friendid.equals("") || friendid == null) {
+      friendid = "not Login";
     }
 
     boolean result = false;
@@ -68,16 +72,17 @@ public class PrefManager {
     BufferedWriter bw = null;
     try {
       bw = new BufferedWriter(new FileWriter(f));
-      bw.write("id:" + id);
+      bw.write("id:" + userid);
       bw.newLine();
-      bw.write("passwd:" + passwd);
+      bw.write("passwd:" + userpasswd);
       bw.newLine();
-      bw.write("name:" + name);
+      bw.write("name:" + namee);
       bw.newLine();
       bw.write("friendid:" + friendid);
       bw.flush();
       bw.close();
-      result = edit.putBoolean("autoLogin", true).commit();
+      edit.putBoolean("autoLogin", true).apply();
+      edit.commit();
     } catch (Exception e) {
       e.printStackTrace();
       result = false;
