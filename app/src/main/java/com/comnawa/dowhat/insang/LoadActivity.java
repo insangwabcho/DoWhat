@@ -32,8 +32,8 @@ public class LoadActivity extends AppCompatActivity {
     @Override
     protected void onPreExecute() {
       dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-      dialog.setMessage("로딩중입니다. 잠시만기다려주세요");
-//      dialog.show();
+      dialog.setMessage("업데이트 확인중입니다. 잠시만기다려주세요");
+      dialog.show();
       super.onPreExecute();
     }
 
@@ -50,8 +50,8 @@ public class LoadActivity extends AppCompatActivity {
     @Override
     protected void onPostExecute(Void aVoid) {
       super.onPostExecute(aVoid);
-      PrefManager pm= new PrefManager(LoadActivity.this);
-      if (pm.getAutoLogin()){ //자동로그인 on일경우//
+      PrefManager pm = new PrefManager(LoadActivity.this);
+      if (pm.getAutoLogin()) { //자동로그인 on일경우//
         Intent intent = new Intent(LoadActivity.this, MainActivity.class);
         startActivity(intent);
         Toast.makeText(LoadActivity.this, "자동로그인on", Toast.LENGTH_SHORT).show();
