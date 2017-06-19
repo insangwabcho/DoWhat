@@ -26,7 +26,6 @@
     </activity>
     <activity android:name=".sangjin.CalendarActivity"/>
     <activity android:name=".insang.Preferences"/>
-    <activity android:name=".insang.TestActivity"/>
     <activity android:name=".kwanwoo.CalendarCoreActivity"/>
     <activity android:name=".kwanwoo.ColorChoice"/>
     <activity android:name=".MainActivity">
