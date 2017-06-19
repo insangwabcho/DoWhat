@@ -14,7 +14,7 @@ import com.comnawa.dowhat.R;
 public class LoadActivity extends AppCompatActivity {
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  protected void onCreate(Bundle savedInstanceState) {//
     DoWhat.fixedScreen(this, DoWhat.sero); //세로화면 고정
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     setContentView(R.layout.load_insang);
@@ -33,7 +33,7 @@ public class LoadActivity extends AppCompatActivity {
     protected void onPreExecute() {
       dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
       dialog.setMessage("업데이트 확인중입니다. 잠시만기다려주세요");
-    //  dialog.show();
+      dialog.show();
       super.onPreExecute();
     }
 
