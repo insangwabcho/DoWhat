@@ -41,7 +41,7 @@ public class PrefManager {
     return textSize;
   } // 어플리케이션에 설정되어있는 tetSize 반환
 
-  public boolean setAutoLogin(String userid, String userpasswd) {
+  public boolean setAutoLogin(String userid, String userpasswd, String name) {
     if (!getAutoLogin()) {
       return false;
     }
