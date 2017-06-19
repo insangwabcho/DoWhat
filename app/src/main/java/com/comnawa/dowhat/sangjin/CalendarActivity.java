@@ -32,6 +32,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -40,7 +41,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 
 
-public class CalendarActivity extends ListActivity {
+public class CalendarActivity extends ListActivity implements Serializable {
     CalendarView calview; //달력
     TextView txtDate; //날짜표시
     ArrayList<ScheduleDTO> items; //일정을 담을 리스트
@@ -60,9 +61,7 @@ public class CalendarActivity extends ListActivity {
         super.onListItemClick(l, v, position, id);
         Intent intent=null;
         intent=new Intent(this, CalendarCoreActivity.class);
-        intent.putExtra("dto",items);
         startActivity(intent);
-        int nposition=position;
         finish();
     }
 
@@ -80,7 +79,7 @@ public class CalendarActivity extends ListActivity {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int day) {
                 txtDate.setText(year + "년 " + (month + 1) + "월 " + day + "일 일정"); //텍스트에 날짜표시
-                id = "dowhat@dowhat.com";
+                id = getIntent().getStringExtra("id");
                 if((month+1)< 10){
                     startdate = year + "-" +"0"+(month + 1) + "-" + day;
                 }else{
@@ -174,7 +173,7 @@ public class CalendarActivity extends ListActivity {
 
     private void StartDay(@NonNull CalendarView view, int year, int month, int day){
         txtDate.setText(year + "년 " + (month + 1) + "월 " + day + "일 일정"); //텍스트에 날짜표시
-        id = "dowhat@dowhat.com";
+        id = getIntent().getStringExtra("id");
         if((month+1)< 10){
             startdate = year + "-" +"0"+(month + 1) + "-" + day;
         }else{
@@ -224,4 +223,9 @@ public class CalendarActivity extends ListActivity {
         });
         th.start();
     }
+
+    public ArrayList<ScheduleDTO> getSchedule(){
+        return items;
+    }
+
 }
