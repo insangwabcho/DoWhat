@@ -3,6 +3,8 @@ package com.comnawa.dowhat.sangjin;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,10 +16,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
+import com.comnawa.dowhat.insang.DoWhat;
+import com.comnawa.dowhat.kwanwoo.CalendarCoreActivity;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -46,13 +50,23 @@ public class CalendarActivity extends ListActivity {
             super.handleMessage(msg);
             ScheduleAdapter adapter = new ScheduleAdapter(CalendarActivity.this, R.layout.clist_sangjin, items);
             setListAdapter(adapter);
-
         }
     };
 
     @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        Intent intent=null;
+        intent=new Intent(this, CalendarCoreActivity.class);
+        startActivity(intent);
+        int nposition=position;
+        finish();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DoWhat.fixedScreen(this, DoWhat.sero);
         setContentView(R.layout.calendar_sangjin);
         txtDate = (TextView) findViewById(R.id.txtDate);
         calview = (CalendarView) findViewById(R.id.calview);
@@ -91,16 +105,16 @@ public class CalendarActivity extends ListActivity {
                             for (int i = 0; i < jArray.length(); i++) {
                                 JSONObject row = jArray.getJSONObject(i);
                                 ScheduleDTO dto = new ScheduleDTO();
-         /*                       dto.setStartdate(row.getString("startdate"));
-                                dto.setEnddate(row.getString("enddate"));
-                                starttime;
-                                endtime;
-                                place;
-                                memeo;
-                                alarm; i;
-                                repeat; i*/
-                                dto.setEvent(row.getString("event"));
                                 dto.setTitle(row.getString("title"));
+                                dto.setEvent(row.getString("event"));
+                                dto.setStartdate(row.getString("startdate"));
+                                dto.setEnddate(row.getString("enddate"));
+                                dto.setStarttime(row.getString("starttime"));
+                                dto.setEndtime(row.getString("endtime"));
+                                dto.setPlace(row.getString("place"));
+                                dto.setMemo(row.getString("memo"));
+                                dto.setAlarm(row.getInt("alarm"));
+                                dto.setRepeat(row.getInt("repeat"));
                                 items.add(dto);
                             }
                             handler.sendEmptyMessage(0);
@@ -133,11 +147,16 @@ public class CalendarActivity extends ListActivity {
                 txtSchedule.setText(dto.getTitle());
                 String event = dto.getEvent();
                 if (event.equals("공휴일")) {
-                    img1.setImageResource(R.drawable.red);
+                    img1.setColorFilter(Color.RED);
+                    img1.setVisibility(View.VISIBLE);
                 } else if (event.equals("생일")) {
-                    img1.setImageResource(R.drawable.blue);
+                    img1.setColorFilter(Color.BLUE);
+                    img1.setVisibility(View.VISIBLE);
                 } else if (event.equals("기념일")) {
-                    img1.setImageResource(R.drawable.green);
+                    img1.setColorFilter(Color.GREEN);
+                    img1.setVisibility(View.VISIBLE);
+                } else {
+                    img1.setVisibility(View.GONE);
                 }
             }
             return v;
