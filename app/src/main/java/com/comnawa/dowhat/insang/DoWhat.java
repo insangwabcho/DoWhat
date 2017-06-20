@@ -166,7 +166,8 @@ public class DoWhat {
 
     PrefManager pm = new PrefManager(context);
 
-    for (int i = 0; i < pm.getScheduleCount(); i++) {
+    Log.i("test",pm.getScheduleCount()+"");
+    for (int i = 1; i <= pm.getScheduleCount(); i++) {
       AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
       Intent intent = new Intent(context, AlarmBroadcast.class);
       PendingIntent sender = PendingIntent.getBroadcast(context, i, intent, PendingIntent.FLAG_UPDATE_CURRENT);
