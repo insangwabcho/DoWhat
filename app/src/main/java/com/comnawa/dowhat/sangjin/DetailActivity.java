@@ -1,15 +1,13 @@
 package com.comnawa.dowhat.sangjin;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
-
-import com.comnawa.dowhat.R;
 
 public class DetailActivity extends AppCompatActivity {
     EditText editSdate;
@@ -20,11 +18,11 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.detail_sangjin);
-        editSdate = (EditText)findViewById(R.id.editSdate);
-        Sdp = (DatePicker)findViewById(R.id.datePicker);
-        layout1 = (LinearLayout)findViewById(R.id.layout1);
-        layout2 = (LinearLayout)findViewById(R.id.layout2);
+//        setContentView(R.layout.detail_sangjin);
+//        editSdate = (EditText)findViewById(R.id.editSdate);
+//        Sdp = (DatePicker)findViewById(R.id.datePicker);
+//        layout1 = (LinearLayout)findViewById(R.id.layout1);
+//        layout2 = (LinearLayout)findViewById(R.id.layout2);
 
         editSdate.setOnTouchListener(new View.OnTouchListener() {
             @Override

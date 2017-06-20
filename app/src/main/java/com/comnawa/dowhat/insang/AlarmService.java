@@ -8,6 +8,8 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.comnawa.dowhat.sangjin.ScheduleDTO;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -33,7 +35,7 @@ public class AlarmService extends Service {
       preference 에 aCountSchedule 리셋 후 reload진행 :: new PrefManager(this).resetScheduleCount();
      */
 
-    DoWhat.test(this, schedules);
+    DoWhat.getSchedule(this);
     Log.i("test", schedules.toString());
     Calendar cal = Calendar.getInstance();
     int year = cal.get(Calendar.YEAR);
