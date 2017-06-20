@@ -164,14 +164,61 @@ public class SignUpActivity extends AppCompatActivity {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hasWindowFocus();
                 //중복확인 상태가 true 이고 이름의 글자수가 0이 아니고 비밀번호가 8~16자리사이이고 일치할때
-                if (checkid && editName.length() > 0 && editPwd1.length() >= 8 && editPwd1.length() < 16
-                        && editPwd1.getText().toString().equals(editPwd2.getText().toString())) {
-                    Toast.makeText(SignUpActivity.this, "회원가입성공", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(SignUpActivity.this, "실패", Toast.LENGTH_SHORT).show();
-                }
+                Thread th = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (checkid && editName.length() > 0 && editPwd1.length() >= 8 && editPwd1.length() < 16
+                                && editPwd1.getText().toString().equals(editPwd2.getText().toString())) {
+                            try {
+                                String page = Common.SERVER_URL + "/Dowhat/Member_servlet/signup.do";
+                                HttpClient http = new DefaultHttpClient();
+                                ArrayList<NameValuePair> postDate = new ArrayList<NameValuePair>();
+                                postDate.add(new BasicNameValuePair("name", editName.getText().toString()));
+                                postDate.add(new BasicNameValuePair("id", editId.getText().toString()));
+                                postDate.add(new BasicNameValuePair("password", editPwd1.getText().toString()));
+                                UrlEncodedFormEntity request = new UrlEncodedFormEntity(postDate, "utf-8");
+                                HttpPost httpPost = new HttpPost(page);
+                                httpPost.setEntity(request);
+                                HttpResponse response = http.execute(httpPost);
+
+                                String body = EntityUtils.toString(response.getEntity());
+                                JSONObject jsonMain = new JSONObject(body);
+                                int result = (int) jsonMain.get("postDate");
+                                if (result > 0) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(SignUpActivity.this, "회원가입이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                    });
+
+                                } else {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(SignUpActivity.this, "알수없는 오류로 회원가입에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        } else if (editName.length() == 0) {
+                                    Toast.makeText(SignUpActivity.this, "이름을 입력하세요", Toast.LENGTH_SHORT).show();
+                                    editName.requestFocus();
+                        } else if (checkid == false) {
+                                    Toast.makeText(SignUpActivity.this, "아이디 중복확인을 해주세요", Toast.LENGTH_SHORT).show();
+                                    editId.requestFocus();
+                        } else if (editPwd1.getText().toString().equals(editPwd2.getText().toString())) {
+                                    Toast.makeText(SignUpActivity.this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                                    editPwd1.requestFocus();
+                        }
+                    }
+                });
+                th.start();
             }
         });
     }
