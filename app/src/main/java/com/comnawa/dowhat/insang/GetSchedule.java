@@ -67,7 +67,7 @@ public class GetSchedule extends Thread {
     ArrayList<ScheduleDTO> items = null;
     try {
       items = new ArrayList<ScheduleDTO>();
-      String page = Common.SERVER_URL + "/Dowhat/Schedule_servlet/simple.do";
+      String page = Common.SERVER_URL + "/Dowhat/Schedule_servlet/alarm.do";
       HttpClient http = new DefaultHttpClient();
       ArrayList<NameValuePair> postData = new ArrayList<>();
       Calendar cal = Calendar.getInstance();
