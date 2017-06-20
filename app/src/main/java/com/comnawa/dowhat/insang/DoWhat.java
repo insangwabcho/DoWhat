@@ -14,7 +14,6 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class DoWhat {
@@ -136,7 +135,7 @@ public class DoWhat {
       PendingIntent sender = PendingIntent.getBroadcast(context, requestCode, intent, 0);
 
       Calendar calendar = Calendar.getInstance();
-      calendar.set(year, month - 1, date, hour, min, 0);
+      calendar.set(year, month, date, hour, min, 0);
 
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
@@ -152,15 +151,36 @@ public class DoWhat {
     return current;
   } //서비스에서 호출시 null
 
-  public static void test(Context context, ArrayList<ScheduleDTO> lists) {
-    GetSchedule sc= new GetSchedule(context, lists);
+  public static void getSchedule(Context context) {
+    GetSchedule sc = new GetSchedule(context);
     sc.start();
     try {
       sc.join();
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
-    Log.i("test","완료");
+    Log.i("test", "완료");
+  }
+
+  public static void resetAlarm(Context context) {
+
+    PrefManager pm = new PrefManager(context);
+
+    for (int i = 0; i < pm.getScheduleCount(); i++) {
+      AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+      Intent intent = new Intent(context, AlarmBroadcast.class);
+      PendingIntent sender = PendingIntent.getBroadcast(context, i, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+      if (sender != null) {
+        am.cancel(sender);
+        sender.cancel();
+        sender.cancel();
+      }
+    }
+    pm.setScheduleCount(0);
+
+    context.stopService(new Intent(context, AlarmService.class));
+    context.startService(new Intent(context, AlarmService.class));
   }
 
 

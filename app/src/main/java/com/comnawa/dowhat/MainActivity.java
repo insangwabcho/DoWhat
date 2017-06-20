@@ -43,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
       case R.id.btnSungwon:
         intent= new Intent(this, LoginActivity.class);
         break;
+      case R.id.btnInsang2:
+        DoWhat.resetAlarm(this);
+        return;
     }
     startActivity(intent);
   } //onClick

@@ -8,6 +8,9 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.comnawa.dowhat.sangjin.ScheduleDTO;
+
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -20,6 +23,35 @@ public class AlarmService extends Service {
     super.onCreate();
     Toast.makeText(this, "서비스 시작", Toast.LENGTH_SHORT).show();
 
+    DoWhat.getSchedule(this); //당일 일정 가져오기
+    Log.i("test", schedules.toString()); //당일 일정 정보 로그출력
+    Calendar cal = Calendar.getInstance();
+    int year = cal.get(Calendar.YEAR);
+    int month = cal.get(Calendar.MONTH);
+    int date = cal.get(Calendar.DATE);
+    int hour = cal.get(Calendar.HOUR_OF_DAY);
+    int min = cal.get(Calendar.MINUTE);
+    int sec = cal.get(Calendar.SECOND);
+
+    for (ScheduleDTO dto : schedules) {
+      String[] year_month_date = dto.getStartdate().split("-");
+      String[] hour_min_sec = dto.getStarttime().split(":");
+      boolean result = true;
+
+      long dtoTime = Time.valueOf(dto.getStarttime()).getTime();
+      long nowTime= Time.valueOf(hour+":"+min+":"+sec).getTime();
+
+      Log.i("test",dtoTime+","+nowTime);
+      //현재시간 이후의 일정들만 등록
+      if (dtoTime >= nowTime) {
+        Log.i("test", Integer.parseInt(year_month_date[1]) + "");
+        String alarmtime = dto.getStarttime();
+        String[] foo = alarmtime.split(":");
+        Log.i("test", foo[0] + ":" + foo[1]);
+        DoWhat.setAlarm(this, year, month, date, Integer.parseInt(foo[0]), Integer.parseInt(foo[1]), dto.getTitle());
+      }
+
+    }
 
   } //서비스 생성될시 (최초 1회)
 
@@ -27,26 +59,6 @@ public class AlarmService extends Service {
   public int onStartCommand(Intent intent, int flags, int startId) {
     super.onStartCommand(intent, flags, startId);
 
-    /*
-      DateChangedReceiver로 서비스가 재생성됨.
-      당일에 해당되는 일정자료 reload 코드작성해야함
-      preference 에 aCountSchedule 리셋 후 reload진행 :: new PrefManager(this).resetScheduleCount();
-     */
-
-    DoWhat.test(this, schedules);
-    Log.i("test", schedules.toString());
-    Calendar cal = Calendar.getInstance();
-    int year = cal.get(Calendar.YEAR);
-    int month = cal.get(Calendar.MONTH);
-    int date = cal.get(Calendar.DATE);
-
-    for (ScheduleDTO dto : schedules) {
-      String alarmtime = dto.getStarttime();
-      String[] foo = alarmtime.split(":");
-      Log.i("test",foo[0]+""+foo[1]);
-
-      DoWhat.setAlarm(this, year, month, date, Integer.parseInt(foo[0]), Integer.parseInt(foo[1]), dto.getTitle());
-    }
 
     isRunning = true;
     Thread th = new Thread(new MyThread());

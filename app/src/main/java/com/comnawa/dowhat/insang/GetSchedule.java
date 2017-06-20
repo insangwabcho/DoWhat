@@ -33,11 +33,9 @@ import java.util.Properties;
 
 public class GetSchedule extends Thread {
   private Context context;
-  private ArrayList<ScheduleDTO> lists;
 
-  public GetSchedule(Context context, ArrayList<ScheduleDTO> lists) {
+  public GetSchedule(Context context) {
     this.context = context;
-    this.lists = lists;
   }
 
   @Override
@@ -115,7 +113,6 @@ public class GetSchedule extends Thread {
     } catch (JSONException e) {
       e.printStackTrace();
     }
-    lists = items;
     AlarmService.setlists(items);
   }
 }
