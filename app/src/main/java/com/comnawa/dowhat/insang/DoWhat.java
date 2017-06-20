@@ -14,8 +14,6 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.comnawa.dowhat.sangjin.ScheduleDTO;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 

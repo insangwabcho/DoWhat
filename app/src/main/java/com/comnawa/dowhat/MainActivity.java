@@ -8,7 +8,6 @@ import android.view.View;
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.kwanwoo.CalendarCoreActivity;
-import com.comnawa.dowhat.sangjin.CalendarActivity;
 import com.comnawa.dowhat.sungwon.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {

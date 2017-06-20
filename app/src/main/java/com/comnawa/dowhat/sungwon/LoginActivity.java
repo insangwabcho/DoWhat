@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.insang.PrefManager;
-import com.comnawa.dowhat.sangjin.CalendarActivity;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;

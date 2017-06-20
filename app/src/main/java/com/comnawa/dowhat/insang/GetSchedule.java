@@ -3,7 +3,6 @@ package com.comnawa.dowhat.insang;
 import android.content.Context;
 import android.util.Log;
 
-import com.comnawa.dowhat.sangjin.ScheduleDTO;
 import com.comnawa.dowhat.sungwon.Common;
 
 import org.apache.http.HttpResponse;

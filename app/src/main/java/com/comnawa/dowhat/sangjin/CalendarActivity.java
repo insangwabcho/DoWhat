@@ -4,7 +4,6 @@ package com.comnawa.dowhat.sangjin;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 
 import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.insang.DoWhat;
-import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.kwanwoo.CalendarCoreActivity;
 import com.comnawa.dowhat.sungwon.Common;
 
@@ -46,6 +44,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
     TextView txtDate; //날짜표시
     ArrayList<ScheduleDTO> items; //일정을 담을 리스트
     String id, startdate;
+    ImageView btnAdd;
 
     Handler handler = new Handler() {
         @Override
@@ -62,7 +61,6 @@ public class CalendarActivity extends ListActivity implements Serializable {
         Intent intent=null;
         intent=new Intent(this, CalendarCoreActivity.class);
         startActivity(intent);
-        finish();
     }
 
     @Override
@@ -71,20 +69,34 @@ public class CalendarActivity extends ListActivity implements Serializable {
         DoWhat.fixedScreen(this, DoWhat.sero);
         setContentView(R.layout.calendar_sangjin);
         txtDate = (TextView) findViewById(R.id.txtDate);
+        btnAdd = (ImageView)findViewById(R.id.btnAdd);
         calview = (CalendarView) findViewById(R.id.calview);
         Calendar cal=Calendar.getInstance();
         StartDay(calview,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DATE));
+        btnAdd.setImageResource(R.drawable.plus);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CalendarActivity.this, CalendarCoreActivity.class);
+                startActivity(intent);
+            }
+        });
 
         calview.setOnDateChangeListener(new CalendarView.OnDateChangeListener() { //날짜를 눌렀을때
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int day) {
-                txtDate.setText(year + "년 " + (month + 1) + "월 " + day + "일 일정"); //텍스트에 날짜표시
                 id = getIntent().getStringExtra("id");
-                if((month+1)< 10){
-                    startdate = year + "-" +"0"+(month + 1) + "-" + day;
-                }else{
-                    startdate = year + "-" + (month + 1) + "-" + day;
+                String n=String.valueOf(year);
+                String w=String.valueOf(month+1);
+                String i=String.valueOf(day);
+                if((month+1)< 10) {
+                    w = "0" + String.valueOf(month + 1);
                 }
+                if(day<10){
+                    i = "0" + String.valueOf(day);
+                }
+                startdate=n+"-"+w+"-"+i;
+                txtDate.setText(n+"년 "+w+"월 "+i+"일 일정"); //텍스트에 날짜표시
                 Thread th = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -150,19 +162,22 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 TextView txtStartTime = (TextView)v.findViewById(R.id.txtStartTime);
                 ImageView img1 = (ImageView) v.findViewById(R.id.img1);
                 txtSchedule.setText(dto.getTitle());
-                txtSchedule.setTextSize(new PrefManager(CalendarActivity.this).getTextSize());
-                String starttime=dto.getStarttime().substring(0,5);
-                txtStartTime.setText(starttime);
+                if(!dto.getStarttime().equals("")){
+                    String time=dto.getStarttime().substring(0,5)+" - "+dto.getEndtime().substring(0,5);
+                    txtStartTime.setText(time);
+                }else{
+                    txtStartTime.setText("하루종일");
+                }
                 String event = dto.getEvent();
                 if (event.equals("공휴일")) {
-                    img1.setColorFilter(Color.RED);
-                    img1.setVisibility(View.VISIBLE);
+                    img1.setImageResource(R.drawable.holiday);
+                    img1.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 } else if (event.equals("생일")) {
-                    img1.setColorFilter(Color.BLUE);
-                    img1.setVisibility(View.VISIBLE);
+                    img1.setImageResource(R.drawable.birthday);
+                    img1.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 } else if (event.equals("기념일")) {
-                    img1.setColorFilter(Color.GREEN);
-                    img1.setVisibility(View.VISIBLE);
+                    img1.setImageResource(R.drawable.heart);
+                    img1.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 } else {
                     img1.setVisibility(View.GONE);
                 }
@@ -171,14 +186,19 @@ public class CalendarActivity extends ListActivity implements Serializable {
         }
     }
 
-    private void StartDay(@NonNull CalendarView view, int year, int month, int day){
-        txtDate.setText(year + "년 " + (month + 1) + "월 " + day + "일 일정"); //텍스트에 날짜표시
+    public void StartDay(@NonNull CalendarView view, int year, int month, int day){
         id = getIntent().getStringExtra("id");
-        if((month+1)< 10){
-            startdate = year + "-" +"0"+(month + 1) + "-" + day;
-        }else{
-            startdate = year + "-" + (month + 1) + "-" + day;
+        String n=String.valueOf(year);
+        String w=String.valueOf(month+1);
+        String i=String.valueOf(day);
+        if((month+1)< 10) {
+            w = "0" + String.valueOf(month + 1);
         }
+        if(day<10){
+            i = "0" + String.valueOf(day);
+        }
+        startdate=n+"-"+w+"-"+i;
+        txtDate.setText(n+"년 "+w+"월 "+i+"일 일정"); //텍스트에 날짜표시
         Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
