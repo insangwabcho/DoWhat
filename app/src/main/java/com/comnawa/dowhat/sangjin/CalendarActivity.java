@@ -43,8 +43,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
     CalendarView calview; //달력
     TextView txtDate; //날짜표시
     ArrayList<ScheduleDTO> items; //일정을 담을 리스트
-    String id, startdate;
-    ImageView btnAdd;
+    String id, startdate; //아이디와 선택 날짜
+    ImageView btnAdd; //일정 추가버튼
 
     Handler handler = new Handler() {
         @Override
@@ -65,8 +65,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로 고정
         super.onCreate(savedInstanceState);
-        DoWhat.fixedScreen(this, DoWhat.sero);
         setContentView(R.layout.calendar_sangjin);
         txtDate = (TextView) findViewById(R.id.txtDate);
         btnAdd = (ImageView)findViewById(R.id.btnAdd);
@@ -74,6 +74,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
         Calendar cal=Calendar.getInstance();
         StartDay(calview,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DATE));
         btnAdd.setImageResource(R.drawable.plus);
+
+        //일정 추가버튼을 눌렀을때 이벤트
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,21 +84,22 @@ public class CalendarActivity extends ListActivity implements Serializable {
             }
         });
 
-        calview.setOnDateChangeListener(new CalendarView.OnDateChangeListener() { //날짜를 눌렀을때
+        //날짜를 눌렀을 때 목록표시 이벤트
+        calview.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int day) {
                 id = getIntent().getStringExtra("id");
                 String n=String.valueOf(year);
                 String w=String.valueOf(month+1);
                 String i=String.valueOf(day);
-                if((month+1)< 10) {
+                if((month+1)< 10) { //1~9월에는 앞에 0을 붙임
                     w = "0" + String.valueOf(month + 1);
                 }
-                if(day<10){
+                if(day<10){ //1~9일에는 앞에 0을 붙임
                     i = "0" + String.valueOf(day);
                 }
                 startdate=n+"-"+w+"-"+i;
-                txtDate.setText(n+"년 "+w+"월 "+i+"일 일정"); //텍스트에 날짜표시
+                txtDate.setText(n+"년 "+w+"월 "+i+"일 일정"); //텍스트뷰에 날짜표시
                 Thread th = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -105,8 +108,9 @@ public class CalendarActivity extends ListActivity implements Serializable {
                             String page = Common.SERVER_URL + "/Dowhat/Schedule_servlet/simple.do";
                             HttpClient http = new DefaultHttpClient();
                             ArrayList<NameValuePair> postData = new ArrayList<>();
+                            //postData에 id와 시작날짜를 붙임
                             postData.add(new BasicNameValuePair("id", id));
-                            postData.add(new BasicNameValuePair("startdate", startdate)); //아이디와 날짜를 넘김
+                            postData.add(new BasicNameValuePair("startdate", startdate));
                             //한글, 특수문자 등이 잘 전달될 수 있도록 인코딩
                             final UrlEncodedFormEntity request = new UrlEncodedFormEntity(postData, "utf-8");
                             //post 방식으로 데이터 전달
@@ -116,8 +120,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                             String body = EntityUtils.toString(response.getEntity());
                             JSONObject jsonObj = new JSONObject(body);
                             JSONArray jArray = (JSONArray) jsonObj.get("sendData");
-                            Log.i("test",jsonObj+"");
-                            Log.i("tes",jArray+"");
+                            //JArray에서 받아온 자료를 dto에 담은후 ArrayList에 저장
                             for (int i = 0; i < jArray.length(); i++) {
                                 JSONObject row = jArray.getJSONObject(i);
                                 ScheduleDTO dto = new ScheduleDTO();
@@ -158,17 +161,21 @@ public class CalendarActivity extends ListActivity implements Serializable {
             }
             ScheduleDTO dto = items.get(position);
             if (dto != null) {
-                TextView txtSchedule = (TextView) v.findViewById(R.id.txtSchedule); //일정
+                TextView txtSchedule = (TextView) v.findViewById(R.id.txtSchedule);
                 TextView txtStartTime = (TextView)v.findViewById(R.id.txtStartTime);
                 ImageView img1 = (ImageView) v.findViewById(R.id.img1);
+                //일정 표시
                 txtSchedule.setText(dto.getTitle());
                 if(!dto.getStarttime().equals("")){
+                    //내용이있으면 시간표시
                     String time=dto.getStarttime().substring(0,5)+" - "+dto.getEndtime().substring(0,5);
                     txtStartTime.setText(time);
                 }else{
+                    //내용이 없으면 하루종일로 표시
                     txtStartTime.setText("하루종일");
                 }
                 String event = dto.getEvent();
+                    //이벤트가 있으면 이미지표시
                 if (event.equals("공휴일")) {
                     img1.setImageResource(R.drawable.holiday);
                     img1.setScaleType(ImageView.ScaleType.FIT_CENTER);
