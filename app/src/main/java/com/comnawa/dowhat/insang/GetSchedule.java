@@ -97,13 +97,13 @@ public class GetSchedule extends Thread {
         ScheduleDTO dto = new ScheduleDTO();
         dto.setTitle(row.getString("title"));
         dto.setEvent(row.getString("event"));
-        dto.setStartdate(row.getString("startdate"));
-        dto.setEnddate(row.getString("enddate"));
+//        dto.setStartdate(row.getString("startdate"));
+//        dto.setEnddate(row.getString("enddate"));
         dto.setStarttime(row.getString("starttime"));
-        dto.setEndtime(row.getString("endtime"));
-        dto.setPlace(row.getString("place"));
+//        dto.setEndtime(row.getString("endtime"));
+//        dto.setPlace(row.getString("place"));
         dto.setMemo(row.getString("memo"));
-        dto.setAlarm(row.getInt("alarm"));
+//        dto.setAlarm(row.getInt("alarm"));
         dto.setRepeat(row.getInt("repeat"));
         items.add(dto);
       }
