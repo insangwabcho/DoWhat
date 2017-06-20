@@ -162,7 +162,7 @@ public class DoWhat {
     Log.i("test", "완료");
   }
 
-  public static void resetAlarm(Context context) {//
+  public static void resetAlarm(Context context) {
 
     PrefManager pm = new PrefManager(context);
 
