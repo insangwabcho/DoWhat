@@ -12,8 +12,9 @@ import com.comnawa.dowhat.R;
 
 public class CalendarCoreActivity extends AppCompatActivity {
   // 변수선언
-    EditText txtTitle, txtPlace;
+    EditText txtTitle, txtPlace,txtStart, txtEnd;
     ImageButton btnColor, btnPlace;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +22,8 @@ public class CalendarCoreActivity extends AppCompatActivity {
     //생성
         txtTitle = (EditText)findViewById(R.id.txtTitle);
         txtPlace = (EditText)findViewById(R.id.txtPlace);
+        txtStart = (EditText)findViewById(R.id.txtStart);
+        txtEnd = (EditText)findViewById(R.id.txtEnd);
         btnColor = (ImageButton)findViewById(R.id.btnColor);
         btnPlace = (ImageButton)findViewById(R.id.btnPlace);
     //버튼클릭 이벤트
