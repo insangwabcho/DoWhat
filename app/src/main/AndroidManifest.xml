@@ -7,6 +7,13 @@
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+  <meta-data
+      android:name="com.google.android.maps.v2.API_KEY"
+      android:value="AIzaSyBnldQ6iPmxKkeRc0HMNHhwInYwgBTV_IE"/>
 
   <application
     android:allowBackup="true"
@@ -26,7 +33,6 @@
     </activity>
     <activity android:name=".sangjin.CalendarActivity"/>
     <activity android:name=".insang.Preferences"/>
-    <activity android:name=".insang.TestActivity"/>
     <activity android:name=".kwanwoo.CalendarCoreActivity"/>
     <activity android:name=".kwanwoo.ColorChoice"/>
     <activity android:name=".MainActivity">

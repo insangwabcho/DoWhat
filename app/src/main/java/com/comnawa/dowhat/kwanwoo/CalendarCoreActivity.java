@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.comnawa.dowhat.R;
+import com.google.android.gms.maps.MapFragment;
 
 public class CalendarCoreActivity extends AppCompatActivity {
   // 변수선언
@@ -40,5 +41,13 @@ public class CalendarCoreActivity extends AppCompatActivity {
                 cb.show();  //컬러버튼을 화면에 표시
             }
         });
+      btnPlace.setOnClickListener(new View.OnClickListener() {
+        MapFragment fragment;
+          @Override
+          public void onClick(View v) {
+              MapFragment pc = new MapFragment();
+
+          }
+      });
     }// onCreate
 }

@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.comnawa.dowhat.R;
 
-public class positionActivity extends AppCompatActivity {
+public class PositionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
