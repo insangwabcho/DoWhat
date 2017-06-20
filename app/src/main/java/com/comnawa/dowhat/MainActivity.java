@@ -9,6 +9,7 @@ import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.kwanwoo.CalendarCoreActivity;
 import com.comnawa.dowhat.sangjin.CalendarActivity;
+import com.comnawa.dowhat.sangjin.DetailActivity;
 import com.comnawa.dowhat.sungwon.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 //        DoWhat.setAlarm(this, year, month, date, hour, min, "");
 //        return;
       case R.id.btnSangjin:
-        intent = new Intent(this, CalendarActivity.class);
+        intent = new Intent(this, DetailActivity.class);
         break;
       case R.id.btnKwanwoo:
         intent= new Intent(this, CalendarCoreActivity.class);

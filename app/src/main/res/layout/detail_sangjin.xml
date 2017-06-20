@@ -18,6 +18,7 @@
         android:visibility="gone" />
 
     <LinearLayout
+        android:id="@+id/layout1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -29,10 +30,10 @@
             android:layout_width="match_parent"
             android:layout_height="37dp"
             android:layout_weight="0.04"
-            android:gravity="center"
-            android:text="일정 "
-            android:textColor="@android:color/white"
             android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="일정"
+            android:textColor="@android:color/white"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -41,10 +42,10 @@
             android:layout_width="match_parent"
             android:layout_height="31dp"
             android:layout_weight="0.05"
-            android:gravity="center"
-            android:text="분류 "
-            android:textColor="@android:color/white"
             android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="분류"
+            android:textColor="@android:color/white"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -53,10 +54,10 @@
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:layout_weight="0.01"
-            android:gravity="center"
-            android:text="장소 "
-            android:textColor="@android:color/white"
             android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="장소"
+            android:textColor="@android:color/white"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -64,10 +65,10 @@
             android:id="@+id/tv4"
             android:layout_width="match_parent"
             android:layout_height="43dp"
-            android:gravity="center"
-            android:text="시작 "
-            android:textColor="@android:color/white"
             android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="시작"
+            android:textColor="@android:color/white"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -75,10 +76,10 @@
             android:id="@+id/tv5"
             android:layout_width="match_parent"
             android:layout_height="42dp"
-            android:gravity="center"
-            android:text="종료 "
-            android:textColor="@android:color/white"
             android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="종료"
+            android:textColor="@android:color/white"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -86,11 +87,11 @@
             android:id="@+id/tv6"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:layout_weight="0.51"
-            android:gravity="center"
-            android:text="메모 "
-            android:textColor="@android:color/white"
+            android:layout_weight="0.45"
             android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="메모"
+            android:textColor="@android:color/white"
             android:textSize="17sp"
             android:textStyle="bold" />
 
@@ -98,38 +99,41 @@
             android:id="@+id/tv7"
             android:layout_width="match_parent"
             android:layout_height="42dp"
-            android:gravity="center"
-            android:text="알람 "
-            android:textColor="@android:color/white"
             android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="알람"
+            android:textColor="@android:color/white"
             android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_weight="0.02" />
 
         <TextView
             android:id="@+id/tv8"
             android:layout_width="match_parent"
             android:layout_height="42dp"
-            android:gravity="center"
-            android:text="반복 "
-            android:textColor="@android:color/white"
             android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="반복"
+            android:textColor="@android:color/white"
             android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_weight="0.06" />
 
         <TextView
             android:id="@+id/tv9"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:layout_weight="0.32"
-            android:gravity="center"
-            android:text="일행 "
-            android:textColor="@android:color/white"
             android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:text="일행"
+            android:textColor="@android:color/white"
             android:textSize="17sp"
             android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="4"
@@ -137,12 +141,13 @@
         android:weightSum="1">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/editTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="일정"
             android:inputType="textPersonName"
+
             android:textAlignment="center" />
 
         <Spinner
@@ -152,7 +157,7 @@
             android:layout_weight="0.10" />
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/editPlace"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -166,9 +171,10 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/editText3"
+                android:id="@+id/editSdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:windowSoftInputMode="stateAlwaysHidden"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="시작일"
@@ -176,9 +182,10 @@
                 android:textAlignment="center" />
 
             <EditText
-                android:id="@+id/editText4"
+                android:id="@+id/editStime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:windowSoftInputMode="stateAlwaysHidden"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="시작시간"
@@ -193,9 +200,10 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/editText7"
+                android:id="@+id/editEdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:windowSoftInputMode="stateAlwaysHidden"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="종료일"
@@ -203,9 +211,10 @@
                 android:textAlignment="center" />
 
             <EditText
-                android:id="@+id/editText8"
+                android:id="@+id/editEtime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:windowSoftInputMode="stateAlwaysHidden"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="종료시간"
@@ -214,7 +223,7 @@
         </LinearLayout>
 
         <EditText
-            android:id="@+id/editText11"
+            android:id="@+id/editMemo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.50"
@@ -224,16 +233,17 @@
             android:textAlignment="center" />
 
         <EditText
-            android:id="@+id/editText12"
+            android:id="@+id/editAlarm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="알람"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:inputType="textPersonName"
             android:textAlignment="center" />
 
         <CheckBox
-            android:id="@+id/checkBox"
+            android:id="@+id/cbRepeat"
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:layout_marginLeft="85dp"
@@ -242,7 +252,7 @@
             android:textSize="17sp" />
 
         <EditText
-            android:id="@+id/editText5"
+            android:id="@+id/editFriend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.33"
