@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.comnawa.dowhat.sangjin.ScheduleDTO;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -41,13 +42,22 @@ public class AlarmService extends Service {
     int year = cal.get(Calendar.YEAR);
     int month = cal.get(Calendar.MONTH);
     int date = cal.get(Calendar.DATE);
+    int hour = cal.get(Calendar.HOUR_OF_DAY);
+    int min = cal.get(Calendar.MINUTE);
+    int sec = cal.get(Calendar.SECOND);
 
     for (ScheduleDTO dto : schedules) {
-      String alarmtime = dto.getStarttime();
-      String[] foo = alarmtime.split(":");
-      Log.i("test",foo[0]+""+foo[1]);
 
-      DoWhat.setAlarm(this, year, month, date, Integer.parseInt(foo[0]), Integer.parseInt(foo[1]), dto.getTitle());
+      long dtoTime = Time.valueOf(dto.getStarttime()).getTime();
+      long nowTime = Time.valueOf(hour + ":" + min + ":" + sec).getTime();
+
+      if (dtoTime > nowTime) {
+        String alarmtime = dto.getStarttime();
+        String[] foo = alarmtime.split(":");
+        Log.i("test", foo[0] + "" + foo[1]);
+
+        DoWhat.setAlarm(this, year, month, date, Integer.parseInt(foo[0]), Integer.parseInt(foo[1]), dto.getTitle());
+      }
     }
 
     isRunning = true;
