@@ -23,7 +23,6 @@ public class AlarmService extends Service {
     super.onCreate();
     Toast.makeText(this, "서비스 시작", Toast.LENGTH_SHORT).show();
 
-
   } //서비스 생성될시 (최초 1회)
 
   @Override
