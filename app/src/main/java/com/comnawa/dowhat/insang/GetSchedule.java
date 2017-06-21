@@ -72,12 +72,13 @@ public class GetSchedule extends Thread {
       ArrayList<NameValuePair> postData = new ArrayList<>();
       Calendar cal = Calendar.getInstance();
       String startdate = "";
+      String year = cal.get(Calendar.YEAR) + "";
+      String month = (cal.get(Calendar.MONTH) + 1 < 10) ?
+        "0" + (cal.get(Calendar.MONTH) + 1) : (cal.get(Calendar.MONTH) + 1) + "";
+      String date = (cal.get(Calendar.DATE) + 1 < 10) ?
+        "0" + (cal.get(Calendar.DATE) + 1) : (cal.get(Calendar.DATE) + 1) + "";
 
-      if (cal.get(Calendar.MONTH) + 1 >= 10) {
-        startdate = (cal.get(Calendar.YEAR)) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + (cal.get(Calendar.DATE));
-      } else {
-        startdate = (cal.get(Calendar.YEAR)) + "-0" + (cal.get(Calendar.MONTH) + 1) + "-" + (cal.get(Calendar.DATE));
-      }
+      startdate = year + "-" + month + "-" + date;
 
       postData.add(new BasicNameValuePair("id", id));
       postData.add(new BasicNameValuePair("startdate", startdate)); //아이디와 날짜를 넘김
