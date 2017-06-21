@@ -160,13 +160,13 @@ public class DoWhat {
       e.printStackTrace();
     }
     Log.i("test", "완료");
-  }
+  } //스케쥴 일정 서버에서 받아오기
 
   public static void resetAlarm(Context context) {
 
     PrefManager pm = new PrefManager(context);
 
-    Log.i("test",pm.getScheduleCount()+"");
+    Log.i("test", pm.getScheduleCount() + "");
     for (int i = 1; i <= pm.getScheduleCount(); i++) {
       AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
       Intent intent = new Intent(context, AlarmBroadcast.class);
@@ -182,7 +182,6 @@ public class DoWhat {
 
     context.stopService(new Intent(context, AlarmService.class));
     context.startService(new Intent(context, AlarmService.class));
-  }
-
+  } //알람 리셋
 
 }
