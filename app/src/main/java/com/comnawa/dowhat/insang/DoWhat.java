@@ -185,3 +185,27 @@ public class DoWhat {
   } //알람 리셋
 
 }
+
+/*
+
+
+--환경설정 메뉴 액션바 등록
+@Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_pref, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getTitle().equals("환경설정")) {
+      startActivity(new Intent(MainActivity.this, Preferences.class));
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
+
+
+
+
+ */

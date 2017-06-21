@@ -1,8 +1,10 @@
 package com.comnawa.dowhat;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.comnawa.dowhat.insang.DoWhat;
@@ -11,15 +13,27 @@ import com.comnawa.dowhat.kwanwoo.CalendarCoreActivity;
 import com.comnawa.dowhat.sangjin.DetailActivity;
 import com.comnawa.dowhat.sungwon.LoginActivity;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     DoWhat.fixedScreen(this, DoWhat.sero); //세로화면 고정
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+  }
 
-//    DoWhat.setActionMenu(this, R.layout.activity_main);
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_pref, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getTitle().equals("환경설정")) {
+      startActivity(new Intent(MainActivity.this, Preferences.class));
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   public void onClick(View v) {
@@ -41,10 +55,10 @@ public class MainActivity extends Activity {
         intent = new Intent(this, CalendarActivity.class);
         break;
       case R.id.btnKwanwoo:
-        intent= new Intent(this, CalendarCoreActivity.class);
+        intent = new Intent(this, CalendarCoreActivity.class);
         break;
       case R.id.btnSungwon:
-        intent= new Intent(this, LoginActivity.class);
+        intent = new Intent(this, LoginActivity.class);
         break;
       case R.id.btnInsang2:
         DoWhat.resetAlarm(this);
