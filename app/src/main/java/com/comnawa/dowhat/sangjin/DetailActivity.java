@@ -2,17 +2,17 @@ package com.comnawa.dowhat.sangjin;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.comnawa.dowhat.R;
@@ -26,11 +26,14 @@ public class DetailActivity extends AppCompatActivity {
     CheckBox cbRepeat; //반복설정
     DatePicker dp; //데이트피커
     TimePicker tp; //타임피커
+    Spinner spinner; //이벤트 스피너
+    String event; //이벤트를 저장할 변수
     boolean dateOk; //시작일과 종료일을 구분할 변수
     int timeOk; //시작시간, 종료시간, 알람을 구분할 변수
     DatePickerDialog Ddialog; //데이트피커 다이얼로그
     TimePickerDialog Tdialog; //타임피커 다이얼로그
-    InputMethodManager imm;
+    String DBstime, DBetime; //DB에 담을 시간
+//    InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,27 +45,39 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.detail_sangjin);
         editTitle = (EditText) findViewById(R.id.editTitle);
         editPlace = (EditText) findViewById(R.id.editPlace);
-        init();
- //       editSdate = (EditText) findViewById(R.id.editSdate);
- //       editEdate = (EditText) findViewById(R.id.editEdate);
- //       editStime = (EditText) findViewById(R.id.editStime);
- //       editEtime = (EditText) findViewById(R.id.editEtime);
- //       editAlarm = (EditText) findViewById(R.id.editAlarm);
+ //       init();
+        editSdate = (EditText) findViewById(R.id.editSdate);
+        editEdate = (EditText) findViewById(R.id.editEdate);
+        editStime = (EditText) findViewById(R.id.editStime);
+        editEtime = (EditText) findViewById(R.id.editEtime);
+        editAlarm = (EditText) findViewById(R.id.editAlarm);
         editMemo = (EditText) findViewById(R.id.editMemo);
         editFriend = (EditText) findViewById(R.id.editFriend);
         cbRepeat = (CheckBox) findViewById(R.id.cbRepeat);
         dp = (DatePicker) findViewById(R.id.datePicker);
         tp = (TimePicker) findViewById(R.id.timePicker);
+        spinner = (Spinner) findViewById(R.id.spinner);
         //데이트피커다이얼로그 생성(액티비티, 리스너, 년, 월, 일)
         Ddialog = new DatePickerDialog(this, listener2, dp.getYear(), dp.getMonth(), dp.getDayOfMonth());
         //타임피커다이얼로그 생성(액티비티, 리스너, 시, 분, 12시간구분)
         Tdialog = new TimePickerDialog(this, listener, tp.getHour(), tp.getMinute(), false);
+        BasicSet();
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                event=String.valueOf(parent.getItemAtPosition(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         //시작일 editText를 눌렀을때
         editSdate.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                hideKeyboard();
+            //    hideKeyboard();
                 dateOk = true; //시작일
                 Ddialog.show(); //다이얼로그 표시
                 return false;
@@ -72,7 +87,7 @@ public class DetailActivity extends AppCompatActivity {
         editEdate.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                hideKeyboard();
+            //    hideKeyboard();
                 dateOk = false; //종료일
                 Ddialog.show(); //다이얼로그 표시
                 return false;
@@ -82,7 +97,7 @@ public class DetailActivity extends AppCompatActivity {
         editStime.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                hideKeyboard();
+           //     hideKeyboard();
                 timeOk = 1; //시작시간
                 Tdialog.show(); //다이얼로그 표시
                 return false;
@@ -92,7 +107,7 @@ public class DetailActivity extends AppCompatActivity {
         editEtime.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                hideKeyboard();
+            //    hideKeyboard();
                 timeOk = 2; //종료시간
                 Tdialog.show(); //다이얼로그 표시
                 return false;
@@ -102,7 +117,7 @@ public class DetailActivity extends AppCompatActivity {
         editAlarm.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                hideKeyboard();
+           //     hideKeyboard();
                 timeOk = 3; //알람시간
                 Tdialog.show(); //다이얼로그 표시
                 return false;
@@ -130,6 +145,35 @@ public class DetailActivity extends AppCompatActivity {
             } else {
                 editEdate.setText(date);
             }
+
+            //시작일이 종료일보다 나중일때 처리
+            int Ey1,Sy1,Em1,Sm1,Ed1,Sd1,Ey2,Sy2,Em2,Sm2,Ed2,Sd2;
+            Ey1=year;
+            Sy1=Integer.parseInt(editSdate.getText().toString().substring(0,4));
+            Em1=Integer.parseInt(w);
+            Sm1=Integer.parseInt(editSdate.getText().toString().substring(5,7));
+            Ed1=Integer.parseInt(i);
+            Sd1=Integer.parseInt(editSdate.getText().toString().substring(8));
+            if(Ey1<Sy1){
+                editSdate.setText(date);
+            }else if(Ey1==Sy1 && Em1<Sm1){
+                editSdate.setText(date);
+            }else if(Ey1==Sy1 && Em1==Sm1 && Ed1<Sd1){
+                editSdate.setText(date);
+            }
+            Sy2=year;
+            Ey2=Integer.parseInt(editEdate.getText().toString().substring(0,4));
+            Sm2=Integer.parseInt(w);
+            Em2=Integer.parseInt(editEdate.getText().toString().substring(5,7));
+            Sd2=Integer.parseInt(i);
+            Ed2=Integer.parseInt(editEdate.getText().toString().substring(8));
+            if(Ey2<Sy2){
+                editEdate.setText(date);
+            }else if(Ey2==Sy2 && Em2<Sm2){
+                editEdate.setText(date);
+            }else if(Ey2==Sy2 && Em2==Sm2 && Ed2<Sd2){
+                editEdate.setText(date);
+            }
         }
     };
 
@@ -139,7 +183,7 @@ public class DetailActivity extends AppCompatActivity {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             String h = "";
             String m = "";
-            if (hourOfDay < 10) { //1~9시일경우 앞에 0을 붙임
+            if (hourOfDay < 10) { //0~9시일경우 앞에 0을 붙임
                 h = "0" + String.valueOf(hourOfDay);
             } else {
                 h = String.valueOf(hourOfDay);
@@ -150,20 +194,29 @@ public class DetailActivity extends AppCompatActivity {
             } else {
                 m = String.valueOf(minute);
             }
-            String time = h + ":" + m + ":00"; //DB에는 넣어야하므로 초까지 표시
-            //시작시간, 종료시간, 알람을 구분하여 알맞는 editText에
-            //substring을 이용하여 초를 제거한 시:분 형식으로 입력
+            String eTime =""; //editText에 출력할 시간
+            if(hourOfDay>12){
+                eTime = "오후 0"+(hourOfDay-12) + "시 " + m +"분";
+            }else if(hourOfDay==12){
+                eTime = "오후 "+h+"시 "+m+"분";
+            }else{
+                eTime = "오전 "+h+"시 "+m+"분";
+            }
+            //시작시간, 종료시간, 알람을 구분하여 알맞는 editText에 출력
+            //DB에는 시:분 형식으로 저장
             if (timeOk == 1) {
-                editStime.setText(time.substring(0, 5));
+                DBstime=h+":"+m;
+                editStime.setText(eTime);
             } else if (timeOk == 2) {
-                editEtime.setText(time.substring(0, 5));
+                DBetime=h+":"+m;
+                editEtime.setText(eTime);
             } else if (timeOk == 3) {
-                editAlarm.setText(time.substring(0, 5));
+                editAlarm.setText(eTime);
             }
         }
     };
 
-    private void init(){
+/*    private void init(){
         imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         editSdate = (EditText) findViewById(R.id.editSdate);
         editEdate = (EditText) findViewById(R.id.editEdate);
@@ -178,6 +231,15 @@ public class DetailActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(editStime.getWindowToken(), 0);
         imm.hideSoftInputFromWindow(editEtime.getWindowToken(), 0);
         imm.hideSoftInputFromWindow(editAlarm.getWindowToken(), 0);
+    }*/
+
+    private void BasicSet(){ //신규일정 등록시 기본 날짜와 시간 세팅
+        editSdate.setText(CalendarActivity.startdate);
+        editStime.setText("오전 08시 00분");
+        DBstime="08:00";
+        editEdate.setText(CalendarActivity.startdate);
+        editEtime.setText("오전 09시 00분");
+        DBetime="09:00";
     }
 
 }

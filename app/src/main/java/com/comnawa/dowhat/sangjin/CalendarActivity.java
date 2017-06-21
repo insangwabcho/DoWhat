@@ -43,7 +43,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
     CalendarView calview; //달력
     TextView txtDate; //날짜표시
     ArrayList<ScheduleDTO> items; //일정을 담을 리스트
-    String id, startdate; //아이디와 선택 날짜
+    String id;
+    static String startdate; //아이디와 선택 날짜
     ImageView btnAdd; //일정 추가버튼
 
     Handler handler = new Handler() {
@@ -168,7 +169,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 txtSchedule.setText(dto.getTitle());
                 if(!dto.getStarttime().equals("")){
                     //내용이있으면 시간표시
-                    String time=dto.getStarttime().substring(0,5)+" - "+dto.getEndtime().substring(0,5);
+                    String time=dto.getStarttime()+" - "+dto.getEndtime();
                     txtStartTime.setText(time);
                 }else{
                     //내용이 없으면 하루종일로 표시
@@ -251,8 +252,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
         th.start();
     }
 
-    public ArrayList<ScheduleDTO> getSchedule(){
-        return items;
+    public ScheduleDTO getSchedule(int index){
+        return items.get(index);
     }
 
 }
