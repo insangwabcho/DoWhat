@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_insang, menu);
+    getMenuInflater().inflate(R.menu.saveButton, menu);
     return super.onCreateOptionsMenu(menu);
   }
 
