@@ -1,8 +1,8 @@
 package com.comnawa.dowhat.sungwon;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +13,16 @@ import android.widget.Toast;
 import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.sangjin.CalendarActivity;
+import com.kakao.auth.ErrorCode;
+import com.kakao.auth.ISessionCallback;
+import com.kakao.auth.Session;
+import com.kakao.network.ErrorResult;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.LogoutResponseCallback;
+import com.kakao.usermgmt.callback.MeResponseCallback;
+import com.kakao.usermgmt.response.model.UserProfile;
+import com.kakao.util.exception.KakaoException;
+import com.kakao.util.helper.log.Logger;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -28,7 +38,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends Activity {
+
+    SessionCallback callback;
+
     EditText editid, editpwd;
     Button btnLogin, btnSignUp;
     CheckBox cb;
@@ -117,5 +130,66 @@ public class LoginActivity extends AppCompatActivity {
                 th.start();
             }
         });
+
+        /**카카오톡 로그아웃 요청**/
+        //한번 로그인이 성공하면 세션 정보가 남아있어서 로그인창이 뜨지 않고 바로 onSuccess()메서드를 호출합니다.
+        //테스트 하시기 편하라고 매번 로그아웃 요청을 수행하도록 코드를 넣었습니다 ^^
+        UserManagement.requestLogout(new LogoutResponseCallback() {
+            @Override
+            public void onCompleteLogout() {
+                //로그아웃 성공 후 하고싶은 내용 코딩 ~
+            }
+        });
+
+        callback = new SessionCallback();
+        Session.getCurrentSession().addCallback(callback);
+    }
+    private class SessionCallback implements ISessionCallback {
+        @Override
+        public void onSessionOpened() {
+
+            UserManagement.requestMe(new MeResponseCallback() {
+
+                @Override
+                public void onFailure(ErrorResult errorResult) {
+                    String message = "failed to get user info. msg=" + errorResult;
+                    Logger.d(message);
+
+                    ErrorCode result = ErrorCode.valueOf(errorResult.getErrorCode());
+                    if (result == ErrorCode.CLIENT_ERROR_CODE) {
+                        finish();
+                    } else {
+                        //redirectMainActivity();
+                    }
+                }
+
+                @Override
+                public void onSessionClosed(ErrorResult errorResult) {
+                }
+
+                @Override
+                public void onNotSignedUp() {
+                }
+
+                @Override
+                public void onSuccess(UserProfile userProfile) {
+                    //로그인에 성공하면 로그인한 사용자의 일련번호, 닉네임, 이미지url등을 리턴합니다.
+                    //사용자 ID는 보안상의 문제로 제공하지 않고 일련번호는 제공합니다.
+                    Log.e("UserProfile", userProfile.toString());
+                    Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+
+        }
+
+        @Override
+        public void onSessionOpenFailed(KakaoException exception) {
+            Log.i("SessionCallback", "Error");
+            if(exception != null) {
+                Logger.e(exception);
+            }
+        }
     }
 }
