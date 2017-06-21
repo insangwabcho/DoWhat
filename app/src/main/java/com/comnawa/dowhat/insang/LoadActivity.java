@@ -1,7 +1,10 @@
 package com.comnawa.dowhat.insang;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,12 +23,20 @@ public class LoadActivity extends AppCompatActivity {
     setContentView(R.layout.load_insang);
     super.onCreate(savedInstanceState);
 
+    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+    NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+    boolean isNetWorkConnect = false;
+    if (mobile.isConnected() || wifi.isConnected()) {
+      isNetWorkConnect = true;
+    }
     Loading loading = new Loading();
-    loading.execute();
+    loading.execute(isNetWorkConnect);
 
   }
 
-  private class Loading extends AsyncTask<Void, Void, Void> {
+  private class Loading extends AsyncTask<Boolean, Void, Void> {
 
     ProgressDialog dialog = new ProgressDialog(LoadActivity.this);
 
@@ -33,16 +44,31 @@ public class LoadActivity extends AppCompatActivity {
     protected void onPreExecute() {
       dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
       dialog.setMessage("업데이트 확인중입니다. 잠시만기다려주세요");
-      //dialog.show();
+//      dialog.show();
       super.onPreExecute();
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
-      try {
-        Thread.sleep(1500);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
+    protected Void doInBackground(Boolean... params) {
+
+      if (params[0] == false) {
+        try {
+          Toast.makeText(LoadActivity.this, "인터넷에 연결되어있지 않습니다.", Toast.LENGTH_SHORT).show();
+          Thread.sleep(1500);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      } else {
+        //서버와 달력 동기화 작업
+        //새로운 클래스 만들어서 동기화 작업만
+
+        //여기는 임시작업
+        try {
+          Toast.makeText(LoadActivity.this, "인터넷에 연결되어있습니다.", Toast.LENGTH_SHORT).show();
+          Thread.sleep(1500);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
       }
       return null;
     }
