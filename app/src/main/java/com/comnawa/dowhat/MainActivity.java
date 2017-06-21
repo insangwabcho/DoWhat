@@ -2,6 +2,7 @@ package com.comnawa.dowhat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     DoWhat.fixedScreen(this, DoWhat.sero); //세로화면 고정
     super.onCreate(savedInstanceState);
+    ActionBar actionBar= getSupportActionBar();
+    DoWhat.setTitleBar(this, "DoWhat 개발자 디버깅전용화면");
     setContentView(R.layout.activity_main);
   }
 
