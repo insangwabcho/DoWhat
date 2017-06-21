@@ -198,13 +198,32 @@ public class DoWhat {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getTitle().equals("환경설정")) {
+    if (item.getItemId()== R.id.action_settings) {
       startActivity(new Intent(MainActivity.this, Preferences.class));
     }
-    return super.onOptionsItemSelected(item);
+    return false;
   }
 
 
+
+--상진시꺼 저장 메뉴 액션바 등록
+@Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_savebutton, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getItemId()== R.id.action_settings) {
+      startActivity(new Intent(MainActivity.this, Preferences.class));
+    } else if (item.getItemId()== R.id.menu_select){
+      --저장버튼 클릭시(상진씨 기능)
+
+
+    }
+    return false;
+  }
 
 
 

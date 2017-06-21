@@ -6,11 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.kwanwoo.CalendarCoreActivity;
-import com.comnawa.dowhat.sangjin.DetailActivity;
+import com.comnawa.dowhat.sangjin.CalendarActivity;
 import com.comnawa.dowhat.sungwon.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,18 +31,19 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    if (item.getTitle().equals("환경설정")) {
+    if (item.getItemId()== R.id.action_settings) {
       startActivity(new Intent(MainActivity.this, Preferences.class));
     }
-    return super.onOptionsItemSelected(item);
+    return false;
   }
 
   public void onClick(View v) {
     Intent intent = null;
     switch (v.getId()) {
       case R.id.btnInsang:
-        intent = new Intent(this, Preferences.class);
-        break;
+        Toast.makeText(this, "테스트중인거없습니다 ㅡ ㅡ", Toast.LENGTH_SHORT).show();
+//        intent = new Intent(this, Preferences.class);
+//        break;
 //        new PrefManager(this).resetScheduleCount();
 //        Calendar cal = Calendar.getInstance();
 //        int year = cal.get(Calendar.YEAR);
@@ -61,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, LoginActivity.class);
         break;
       case R.id.btnInsang2:
+        Toast.makeText(this, "알람시간 수정", Toast.LENGTH_SHORT).show();
         DoWhat.resetAlarm(this);
         return;
     }
