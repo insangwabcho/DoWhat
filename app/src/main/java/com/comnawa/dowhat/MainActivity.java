@@ -1,24 +1,32 @@
 package com.comnawa.dowhat;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.View;
 
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.kwanwoo.CalendarCoreActivity;
-import com.comnawa.dowhat.sangjin.CalendarActivity;
 import com.comnawa.dowhat.sangjin.DetailActivity;
 import com.comnawa.dowhat.sungwon.LoginActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     DoWhat.fixedScreen(this, DoWhat.sero); //세로화면 고정
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+//    DoWhat.setActionMenu(this, R.layout.activity_main);
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_insang, menu);
+    return super.onCreateOptionsMenu(menu);
   }
 
   public void onClick(View v) {
