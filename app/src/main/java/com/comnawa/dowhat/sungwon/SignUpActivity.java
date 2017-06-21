@@ -83,7 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 HttpResponse response = http.execute(httpPost);
                                 String body = EntityUtils.toString(response.getEntity());
                                 JSONObject jsonObj = new JSONObject(body);
-                                if (jsonObj.get("id").equals("success")) {
+                                if (jsonObj.get("sendData").equals("success")) {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -128,6 +128,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
+                    editPwd2.setText("");
                     if (editPwd1.length() == 0 || editPwd1.length() < 8 || editPwd1.length() > 16) {
                         Toast.makeText(SignUpActivity.this, "비밀번호는 8~16자리로 입력해주세요", Toast.LENGTH_SHORT).show();
                         editPwd2.setText("");
@@ -165,26 +166,26 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //중복확인 상태가 true 이고 이름의 글자수가 0이 아니고 비밀번호가 8~16자리사이이고 일치할때
-                Thread th = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (checkid && editName.length() > 0 && editPwd1.length() >= 8 && editPwd1.length() < 16
-                                && editPwd1.getText().toString().equals(editPwd2.getText().toString())) {
+                if (checkid && editName.length() > 0 && editPwd1.length() >= 8 && editPwd1.length() < 16
+                        && editPwd1.getText().toString().equals(editPwd2.getText().toString())) {
+                    Thread th = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
                             try {
                                 String page = Common.SERVER_URL + "/Dowhat/Member_servlet/signup.do";
                                 HttpClient http = new DefaultHttpClient();
-                                ArrayList<NameValuePair> postDate = new ArrayList<NameValuePair>();
-                                postDate.add(new BasicNameValuePair("name", editName.getText().toString()));
-                                postDate.add(new BasicNameValuePair("id", editId.getText().toString()));
-                                postDate.add(new BasicNameValuePair("password", editPwd1.getText().toString()));
-                                UrlEncodedFormEntity request = new UrlEncodedFormEntity(postDate, "utf-8");
+                                ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>();
+                                postData.add(new BasicNameValuePair("name", editName.getText().toString()));
+                                postData.add(new BasicNameValuePair("id", editId.getText().toString()));
+                                postData.add(new BasicNameValuePair("password", editPwd1.getText().toString()));
+                                UrlEncodedFormEntity request = new UrlEncodedFormEntity(postData, "utf-8");
                                 HttpPost httpPost = new HttpPost(page);
                                 httpPost.setEntity(request);
                                 HttpResponse response = http.execute(httpPost);
-
                                 String body = EntityUtils.toString(response.getEntity());
                                 JSONObject jsonMain = new JSONObject(body);
-                                int result = (int) jsonMain.get("postDate");
+                                int result = (int) jsonMain.get("sendData");
+
                                 if (result > 0) {
                                     runOnUiThread(new Runnable() {
                                         @Override
@@ -193,7 +194,6 @@ public class SignUpActivity extends AppCompatActivity {
                                             finish();
                                         }
                                     });
-
                                 } else {
                                     runOnUiThread(new Runnable() {
                                         @Override
@@ -205,22 +205,22 @@ public class SignUpActivity extends AppCompatActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-
-                        } else if (editName.length() == 0) {
-                                    Toast.makeText(SignUpActivity.this, "이름을 입력하세요", Toast.LENGTH_SHORT).show();
-                                    editName.requestFocus();
-                        } else if (checkid == false) {
-                                    Toast.makeText(SignUpActivity.this, "아이디 중복확인을 해주세요", Toast.LENGTH_SHORT).show();
-                                    editId.requestFocus();
-                        } else if (editPwd1.getText().toString().equals(editPwd2.getText().toString())) {
-                                    Toast.makeText(SignUpActivity.this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
-                                    editPwd1.requestFocus();
                         }
-                    }
-                });
-                th.start();
+                    });
+                    th.start();
+                } else if (editName.length() == 0) {
+                    Toast.makeText(SignUpActivity.this, "이름을 입력하세요", Toast.LENGTH_SHORT).show();
+                    editName.requestFocus();
+                } else if (checkid == false) {
+                    Toast.makeText(SignUpActivity.this, "아이디 중복확인을 해주세요", Toast.LENGTH_SHORT).show();
+                    editId.requestFocus();
+                } else if (!editPwd1.getText().toString().equals(editPwd2.getText().toString())) {
+                    Toast.makeText(SignUpActivity.this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                    editPwd1.requestFocus();
+                }
             }
         });
+
     }
 
     //Editid정규화 메소드
