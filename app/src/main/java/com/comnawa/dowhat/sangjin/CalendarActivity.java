@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.insang.DoWhat;
-import com.comnawa.dowhat.kwanwoo.CalendarCoreActivity;
 import com.comnawa.dowhat.sungwon.Common;
 
 import org.apache.http.HttpResponse;
@@ -42,7 +41,7 @@ import java.util.Calendar;
 public class CalendarActivity extends ListActivity implements Serializable {
     CalendarView calview; //달력
     TextView txtDate; //날짜표시
-    ArrayList<ScheduleDTO> items; //일정을 담을 리스트
+    static ArrayList<ScheduleDTO> items; //일정을 담을 리스트
     String id;
     static String startdate; //아이디와 선택 날짜
     ImageView btnAdd; //일정 추가버튼
@@ -51,7 +50,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ScheduleAdapter adapter = new ScheduleAdapter(CalendarActivity.this, R.layout.clist_sangjin, items);
+            ScheduleAdapter adapter = new ScheduleAdapter(CalendarActivity.this, R.layout.layout, items);
             setListAdapter(adapter);
         }
     };
@@ -59,8 +58,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        Intent intent=null;
-        intent=new Intent(this, CalendarCoreActivity.class);
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("index",position);
         startActivity(intent);
     }
 
@@ -158,18 +157,57 @@ public class CalendarActivity extends ListActivity implements Serializable {
             View v = convertView;
             if (v == null) {
                 LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = li.inflate(R.layout.clist_sangjin, null);
+                v = li.inflate(R.layout.layout, null);
             }
             ScheduleDTO dto = items.get(position);
             if (dto != null) {
                 TextView txtSchedule = (TextView) v.findViewById(R.id.txtSchedule);
-                TextView txtStartTime = (TextView)v.findViewById(R.id.txtStartTime);
+                TextView txtStartTime = (TextView)v.findViewById(R.id.txtStarttime);
                 ImageView img1 = (ImageView) v.findViewById(R.id.img1);
                 //일정 표시
                 txtSchedule.setText(dto.getTitle());
                 if(!dto.getStarttime().equals("")){
                     //내용이있으면 시간표시
-                    String time=dto.getStarttime()+" - "+dto.getEndtime();
+                    int Shour=Integer.parseInt(dto.getStarttime().substring(0,2));
+                    int Sminute=Integer.parseInt(dto.getStarttime().substring(3));
+                    int Ehour=Integer.parseInt(dto.getEndtime().substring(0,2));
+                    int Eminute=Integer.parseInt(dto.getEndtime().substring(3));
+                    String h1,h2,m1,m2,setStime,setEtime;
+                    if (Shour < 10) { //0~9시일경우 앞에 0을 붙임
+                        h1 = "0" + String.valueOf(Shour);
+                    } else {
+                        h1 = String.valueOf(Shour);
+                    }
+                    if (Ehour < 10) { //0~9시일경우 앞에 0을 붙임
+                        h2 = "0" + String.valueOf(Ehour);
+                    } else {
+                        h2 = String.valueOf(Ehour);
+                    }
+                    if (Sminute < 10) { //1~9분일경우 앞에 0을 붙임
+                        m2 = "0" + String.valueOf(Sminute);
+                    } else {
+                        m2 = String.valueOf(Sminute);
+                    }
+                    if (Eminute < 10) { //1~9분일경우 앞에 0을 붙임
+                        m1 = "0" + String.valueOf(Eminute);
+                    } else {
+                        m1 = String.valueOf(Eminute);
+                    }
+                    if(Shour>12){
+                        setStime = "오후 0"+(Shour-12) + "시 " + m1 +"분";
+                    }else if(Shour==12){
+                        setStime = "오후 "+h1+"시 "+m1+"분";
+                    }else{
+                        setStime = "오전 "+h1+"시 "+m1+"분";
+                    }
+                    if(Ehour>12){
+                        setEtime = "오후 0"+(Ehour-12) + "시 " + m1 +"분";
+                    }else if(Shour==12){
+                        setEtime = "오후 "+h2+"시 "+m2+"분";
+                    }else{
+                        setEtime = "오전 "+h2+"시 "+m2+"분";
+                    }
+                    String time=setStime+" - "+setEtime;
                     txtStartTime.setText(time);
                 }else{
                     //내용이 없으면 하루종일로 표시

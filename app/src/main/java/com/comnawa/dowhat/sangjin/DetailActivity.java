@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -43,9 +44,9 @@ public class DetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_sangjin);
+        int index=getIntent().getIntExtra("index",-1);
         editTitle = (EditText) findViewById(R.id.editTitle);
         editPlace = (EditText) findViewById(R.id.editPlace);
- //       init();
         editSdate = (EditText) findViewById(R.id.editSdate);
         editEdate = (EditText) findViewById(R.id.editEdate);
         editStime = (EditText) findViewById(R.id.editStime);
@@ -61,7 +62,59 @@ public class DetailActivity extends AppCompatActivity {
         Ddialog = new DatePickerDialog(this, listener2, dp.getYear(), dp.getMonth(), dp.getDayOfMonth());
         //타임피커다이얼로그 생성(액티비티, 리스너, 시, 분, 12시간구분)
         Tdialog = new TimePickerDialog(this, listener, tp.getHour(), tp.getMinute(), false);
-        BasicSet();
+        Log.i("index:",index+"");
+        if(index==-1){
+            BasicSet();
+        }else{
+            ScheduleDTO dto=CalendarActivity.items.get(index);
+            editTitle.setText(dto.getTitle());
+            editPlace.setText(dto.getPlace());
+            editSdate.setText(dto.getStartdate());
+            editEdate.setText(dto.getEnddate());
+            int Shour=Integer.parseInt(dto.getStarttime().substring(0,2));
+            int Sminute=Integer.parseInt(dto.getStarttime().substring(3));
+            int Ehour=Integer.parseInt(dto.getEndtime().substring(0,2));
+            int Eminute=Integer.parseInt(dto.getEndtime().substring(3));
+            String h1,h2,m1,m2,setStime,setEtime;
+            if (Shour < 10) { //0~9시일경우 앞에 0을 붙임
+                h1 = "0" + String.valueOf(Shour);
+            } else {
+                h1 = String.valueOf(Shour);
+            }
+            if (Ehour < 10) { //0~9시일경우 앞에 0을 붙임
+                h2 = "0" + String.valueOf(Ehour);
+            } else {
+                h2 = String.valueOf(Ehour);
+            }
+            if (Sminute < 10) { //1~9분일경우 앞에 0을 붙임
+                m2 = "0" + String.valueOf(Sminute);
+            } else {
+                m2 = String.valueOf(Sminute);
+            }
+            if (Eminute < 10) { //1~9분일경우 앞에 0을 붙임
+                m1 = "0" + String.valueOf(Eminute);
+            } else {
+                m1 = String.valueOf(Eminute);
+            }
+            if(Shour>12){
+                setStime = "오후 0"+(Shour-12) + "시 " + m1 +"분";
+            }else if(Shour==12){
+                setStime = "오후 "+h1+"시 "+m1+"분";
+            }else{
+                setStime = "오전 "+h1+"시 "+m1+"분";
+            }
+            if(Ehour>12){
+                setEtime = "오후 0"+(Ehour-12) + "시 " + m1 +"분";
+            }else if(Shour==12){
+                setEtime = "오후 "+h2+"시 "+m2+"분";
+            }else{
+                setEtime = "오전 "+h2+"시 "+m2+"분";
+            }
+            editStime.setText(setStime);
+            editEtime.setText(setEtime);
+            /*editAlarm.setText(dto.getAlarm());*/
+            editMemo.setText(dto.getMemo());
+        }
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
