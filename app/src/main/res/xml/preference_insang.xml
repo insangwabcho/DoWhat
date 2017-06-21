@@ -55,10 +55,5 @@
       android:summary="DoWhat Product by team.comnawa"
       android:title="Thanks for DoWhat User"/>
   </PreferenceCategory>
-  <EditTextPreference
-    android:dialogTitle="테스트"
-    android:enabled="true"
-    android:key="testAlarm"
-    android:title="k"/>
 </PreferenceScreen>
 
