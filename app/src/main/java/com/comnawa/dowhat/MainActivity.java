@@ -3,7 +3,6 @@ package com.comnawa.dowhat;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 
 import com.comnawa.dowhat.insang.DoWhat;
@@ -21,12 +20,6 @@ public class MainActivity extends Activity {
     setContentView(R.layout.activity_main);
 
 //    DoWhat.setActionMenu(this, R.layout.activity_main);
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.saveButton, menu);
-    return super.onCreateOptionsMenu(menu);
   }
 
   public void onClick(View v) {
