@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 //        DoWhat.setAlarm(this, year, month, date, hour, min, "");
 //        return;
       case R.id.btnSangjin:
-        intent = new Intent(this, DetailActivity.class);
+        intent = new Intent(this, CalendarActivity.class);
         break;
       case R.id.btnKwanwoo:
         intent= new Intent(this, CalendarCoreActivity.class);
