@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -184,6 +185,10 @@ public class DoWhat {
     context.startService(new Intent(context, AlarmService.class));
   } //알람 리셋
 
+
+  public static void setTitleBar(AppCompatActivity activity, String title){
+    activity.getSupportActionBar().setTitle(title);
+  }
 }
 
 /*
