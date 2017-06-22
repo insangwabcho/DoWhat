@@ -184,24 +184,28 @@ public class CalendarActivity extends ListActivity implements Serializable {
                         h2 = String.valueOf(Ehour);
                     }
                     if (Sminute < 10) { //1~9분일경우 앞에 0을 붙임
-                        m2 = "0" + String.valueOf(Sminute);
+                        m1 = "0" + String.valueOf(Sminute);
                     } else {
-                        m2 = String.valueOf(Sminute);
+                        m1 = String.valueOf(Sminute);
                     }
                     if (Eminute < 10) { //1~9분일경우 앞에 0을 붙임
-                        m1 = "0" + String.valueOf(Eminute);
+                        m2 = "0" + String.valueOf(Eminute);
                     } else {
-                        m1 = String.valueOf(Eminute);
+                        m2 = String.valueOf(Eminute);
                     }
-                    if(Shour>12){
+                    if(Shour>12 && Shour<22){
                         setStime = "오후 0"+(Shour-12) + "시 " + m1 +"분";
+                    }else if(Shour>21){
+                        setStime = "오후 "+(Shour-12) + "시 " + m1 +"분";
                     }else if(Shour==12){
                         setStime = "오후 "+h1+"시 "+m1+"분";
                     }else{
                         setStime = "오전 "+h1+"시 "+m1+"분";
                     }
                     if(Ehour>12){
-                        setEtime = "오후 0"+(Ehour-12) + "시 " + m1 +"분";
+                        setEtime = "오후 0"+(Ehour-12) + "시 " + m2 +"분";
+                    }else if(Ehour>21) {
+                        setEtime = "오후 " + (Ehour - 12) + "시 " + m2 + "분";
                     }else if(Shour==12){
                         setEtime = "오후 "+h2+"시 "+m2+"분";
                     }else{

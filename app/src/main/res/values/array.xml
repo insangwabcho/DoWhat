@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="event">
+        <item ></item>
         <item >생일</item>
         <item >공휴일</item>
         <item >기념일</item>

@@ -27,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/border"
             android:gravity="center"
             android:text="일정"
             android:textColor="@android:color/white"
@@ -37,14 +37,15 @@
         <EditText
             android:id="@+id/editTitle"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="4"
-
+            android:background="@drawable/border2"
             android:ems="10"
             android:hint="일정"
             android:inputType="textPersonName"
             android:textAlignment="center"
-            android:textSize="14sp" />
+            android:textColor="@android:color/background_dark"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -58,7 +59,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/border"
             android:gravity="center"
             android:text="분류"
             android:textColor="@android:color/white"
@@ -69,6 +70,7 @@
             android:id="@+id/spinner"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:background="@drawable/border2"
             android:layout_weight="4"
             android:textAlignment="center"
             android:entries="@array/event"/>
@@ -85,7 +87,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/border"
             android:gravity="center"
             android:text="장소"
             android:textColor="@android:color/white"
@@ -99,9 +101,11 @@
             android:layout_weight="4"
             android:ems="10"
             android:hint="장소"
+            android:background="@drawable/border2"
             android:inputType="textPersonName"
             android:textAlignment="center"
-            android:textSize="14sp" />
+            android:textColor="@android:color/background_dark"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
@@ -136,9 +140,11 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="시작일"
+                android:background="#FFFFFFFF"
                 android:inputType="textPersonName"
                 android:textAlignment="center"
-                android:textSize="14sp"
+                android:textColor="@android:color/background_dark"
+                android:textSize="16sp"
                 android:windowSoftInputMode="stateHidden" />
 
             <EditText
@@ -148,9 +154,11 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="시작시간"
+                android:background="#FFFFFFFF"
                 android:inputType="textPersonName"
                 android:textAlignment="center"
-                android:textSize="14sp"
+                android:textColor="@android:color/background_dark"
+                android:textSize="16sp"
                 android:windowSoftInputMode="stateHidden" />
 
         </LinearLayout>
@@ -187,9 +195,11 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="종료일"
+                android:background="#FFFFFFFF"
                 android:inputType="textPersonName"
                 android:textAlignment="center"
-                android:textSize="14sp"
+                android:textColor="@android:color/background_dark"
+                android:textSize="16sp"
                 android:windowSoftInputMode="stateHidden" />
 
             <EditText
@@ -199,9 +209,11 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="종료시간"
+                android:background="#FFFFFFFF"
                 android:inputType="textPersonName"
                 android:textAlignment="center"
-                android:textSize="14sp"
+                android:textColor="@android:color/background_dark"
+                android:textSize="16sp"
                 android:windowSoftInputMode="stateHidden" />
 
         </LinearLayout>
@@ -218,7 +230,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/border"
             android:gravity="center"
             android:text="메모"
             android:textColor="@android:color/white"
@@ -232,9 +244,11 @@
             android:layout_weight="4"
             android:ems="10"
             android:hint="메모 입력"
+            android:background="@drawable/border2"
             android:inputType="textMultiLine"
             android:textAlignment="center"
-            android:textSize="14sp" />
+            android:textColor="@android:color/background_dark"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -248,30 +262,43 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/border"
             android:gravity="center"
             android:text="알람"
             android:textColor="@android:color/white"
             android:textSize="17sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editAlarm"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:background="@drawable/border2"
             android:layout_weight="4"
-            android:ems="10"
-            android:hint="알람"
-            android:inputType="textPersonName"
-            android:textAlignment="center"
-            android:textSize="14sp"
-            android:windowSoftInputMode="stateHidden" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.9" />
+
+            <CheckBox
+                android:id="@+id/cbAlarm"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3.1"
+                android:text="해제"
+                android:textColor="@color/common_google_signin_btn_text_light_default"
+                android:textSize="16sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:background="@drawable/border2"
         android:orientation="horizontal">
 
         <TextView
@@ -279,7 +306,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/border"
             android:gravity="center"
             android:text="반복"
             android:textColor="@android:color/white"
@@ -303,9 +330,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3.1"
-                android:text="반복"
+                android:text="해제"
                 android:textColor="@color/common_google_signin_btn_text_light_default"
-                android:textSize="17sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
     </LinearLayout>
@@ -321,7 +348,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
+            android:background="@drawable/border"
             android:gravity="center"
             android:text="일행"
             android:textColor="@android:color/white"
@@ -335,9 +362,11 @@
             android:layout_weight="4"
             android:ems="10"
             android:hint="일행태그"
+            android:background="@drawable/border2"
             android:inputType="textPersonName"
             android:textAlignment="center"
-            android:textSize="14sp" />
+            android:textColor="@android:color/background_dark"
+            android:textSize="16sp" />
     </LinearLayout>
 
 </LinearLayout>
