@@ -133,28 +133,30 @@
             android:layout_weight="4"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editSdate"
+            <TextView
+                android:id="@+id/txtSdate"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="#FFFFFFFF"
                 android:ems="10"
                 android:hint="시작일"
-                android:background="#FFFFFFFF"
+                android:gravity="center"
                 android:inputType="textPersonName"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_dark"
                 android:textSize="16sp"
                 android:windowSoftInputMode="stateHidden" />
 
-            <EditText
-                android:id="@+id/editStime"
+            <TextView
+                android:id="@+id/txtStime"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="#FFFFFFFF"
                 android:ems="10"
                 android:hint="시작시간"
-                android:background="#FFFFFFFF"
+                android:gravity="center"
                 android:inputType="textPersonName"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_dark"
@@ -188,28 +190,30 @@
             android:layout_weight="4"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editEdate"
+            <TextView
+                android:id="@+id/txtEdate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="#FFFFFFFF"
+                android:gravity="center"
                 android:ems="10"
                 android:hint="종료일"
-                android:background="#FFFFFFFF"
                 android:inputType="textPersonName"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_dark"
                 android:textSize="16sp"
                 android:windowSoftInputMode="stateHidden" />
 
-            <EditText
-                android:id="@+id/editEtime"
+            <TextView
+                android:id="@+id/txtEtime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="#FFFFFFFF"
+                android:gravity="center"
                 android:ems="10"
                 android:hint="종료시간"
-                android:background="#FFFFFFFF"
                 android:inputType="textPersonName"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_dark"
