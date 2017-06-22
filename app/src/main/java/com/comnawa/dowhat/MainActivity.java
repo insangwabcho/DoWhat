@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, LoginActivity.class);
         break;
       case R.id.btnInsang2:
-        Toast.makeText(this, "알람시간 수정", Toast.LENGTH_SHORT).show();
-        DoWhat.resetAlarm(this);
+//        Toast.makeText(this, "알람시간 수정", Toast.LENGTH_SHORT).show();
+//        DoWhat.resetAlarm(this);
         return;
     }
     startActivity(intent);
