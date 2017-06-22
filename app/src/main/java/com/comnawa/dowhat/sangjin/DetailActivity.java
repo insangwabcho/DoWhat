@@ -22,9 +22,10 @@ import com.comnawa.dowhat.insang.DoWhat;
 
 public class DetailActivity extends AppCompatActivity {
     //일정, 장소, 시작일, 종료일, 시작시간, 종료시간, 메모, 알람, 일행
-    EditText editTitle, editPlace, editMemo, editAlarm, editFriend;
+    EditText editTitle, editPlace, editMemo, editFriend;
     TextView txtSdate, txtStime, txtEdate, txtEtime;
-    CheckBox cbRepeat; //반복설정
+    CheckBox cbAlarm, cbRepeat; //알람설정,반복설정
+    int alarm, repeat; //알람, 반복
     DatePicker dp; //데이트피커
     TimePicker tp; //타임피커
     Spinner spinner; //이벤트 스피너
@@ -52,6 +53,7 @@ public class DetailActivity extends AppCompatActivity {
         txtEtime = (TextView) findViewById(R.id.txtEtime);
         editMemo = (EditText) findViewById(R.id.editMemo);
         editFriend = (EditText) findViewById(R.id.editFriend);
+        cbAlarm = (CheckBox) findViewById(R.id.cbAlarm);
         cbRepeat = (CheckBox) findViewById(R.id.cbRepeat);
         dp = (DatePicker) findViewById(R.id.datePicker);
         tp = (TimePicker) findViewById(R.id.timePicker);
@@ -154,6 +156,32 @@ public class DetailActivity extends AppCompatActivity {
                 timeOk = false; //종료시간
                 Ddialog.show(); //다이얼로그 표시
                 return false;
+            }
+        });
+
+        cbAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(cbAlarm.isChecked()){
+                    alarm = 1;
+                    cbAlarm.setText("설정");
+                }else {
+                    alarm = 0;
+                    cbAlarm.setText("해제");
+                }
+            }
+        });
+
+        cbRepeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(cbRepeat.isChecked()){
+                    repeat = 1;
+                    cbRepeat.setText("설정");
+                }else {
+                    repeat = 0;
+                    cbRepeat.setText("해제");
+                }
             }
         });
     }
