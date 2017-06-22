@@ -3,6 +3,8 @@ package com.comnawa.dowhat.sangjin;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -85,8 +87,9 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로로 고정
-        /*getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLUE));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#E47833")));
+        getSupportActionBar().setTitle("파워섹스");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_sangjin);
 
