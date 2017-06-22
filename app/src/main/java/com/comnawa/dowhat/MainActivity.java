@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         for (ScheduleDTO t: items2){
           Log.i("jo", t.getTitle());
         }
-        items2= dbm2.getSchedule("id");
+     //   items2= dbm2.getSchedule("id");
         Log.i(",,",items2.toString());
         runOnUiThread(new Runnable() {
           @Override
