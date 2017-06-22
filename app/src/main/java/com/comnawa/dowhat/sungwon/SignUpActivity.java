@@ -12,18 +12,12 @@ import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Pattern;
+
+import static com.comnawa.dowhat.sungwon.JsonObject.objectType;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -74,14 +68,9 @@ public class SignUpActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 String page = Common.SERVER_URL + "/Dowhat/Member_servlet/idcheck.do";
-                                HttpClient http = new DefaultHttpClient();
-                                ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>();
-                                postData.add(new BasicNameValuePair("id", editId.getText().toString()));
-                                UrlEncodedFormEntity request = new UrlEncodedFormEntity(postData, "utf-8");
-                                HttpPost httpPost = new HttpPost(page);
-                                httpPost.setEntity(request);
-                                HttpResponse response = http.execute(httpPost);
-                                String body = EntityUtils.toString(response.getEntity());
+                                HashMap<String,String> map = new HashMap<String, String>();
+                                map.put("id", editId.getText().toString());
+                                String body = objectType(page,map);
                                 JSONObject jsonObj = new JSONObject(body);
                                 if (jsonObj.get("sendData").equals("success")) {
                                     runOnUiThread(new Runnable() {
@@ -173,16 +162,11 @@ public class SignUpActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 String page = Common.SERVER_URL + "/Dowhat/Member_servlet/signup.do";
-                                HttpClient http = new DefaultHttpClient();
-                                ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>();
-                                postData.add(new BasicNameValuePair("name", editName.getText().toString()));
-                                postData.add(new BasicNameValuePair("id", editId.getText().toString()));
-                                postData.add(new BasicNameValuePair("password", editPwd1.getText().toString()));
-                                UrlEncodedFormEntity request = new UrlEncodedFormEntity(postData, "utf-8");
-                                HttpPost httpPost = new HttpPost(page);
-                                httpPost.setEntity(request);
-                                HttpResponse response = http.execute(httpPost);
-                                String body = EntityUtils.toString(response.getEntity());
+                                HashMap<String,String> map = new HashMap<String, String>();
+                                map.put("name", editName.getText().toString());
+                                map.put("id", editId.getText().toString());
+                                map.put("password", editPwd1.getText().toString());
+                                String body = objectType(page,map);
                                 JSONObject jsonMain = new JSONObject(body);
                                 int result = (int) jsonMain.get("sendData");
 

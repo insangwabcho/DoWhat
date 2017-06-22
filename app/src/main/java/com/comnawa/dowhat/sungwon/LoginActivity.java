@@ -2,11 +2,15 @@ package com.comnawa.dowhat.sungwon;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -29,32 +33,24 @@ import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static android.content.ContentValues.TAG;
+import static com.comnawa.dowhat.sungwon.JsonObject.objectType;
 import static com.kakao.util.helper.Utility.getPackageInfo;
 
 public class LoginActivity extends Activity {
 
     SessionCallback callback;
-
     EditText editid, editpwd;
     Button btnLogin, btnSignUp;
     CheckBox cb;
+    String userid,username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +64,7 @@ public class LoginActivity extends Activity {
         btnSignUp = (Button) findViewById(R.id.btnSignUp);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         cb = (CheckBox)findViewById(R.id.cb);
+        //자동로그인 상태일경우 유저 정보 전송
         if(new PrefManager(this).getAutoLogin()){
             Intent intent = new Intent(LoginActivity.this,CalendarActivity.class);
             HashMap<String,String> map = new PrefManager(this).getUserInfo();
@@ -95,17 +92,10 @@ public class LoginActivity extends Activity {
                     public void run() {
                         try {
                             String page = Common.SERVER_URL + "/Dowhat/Member_servlet/login.do";
-                            Log.i("test", page);
-                            HttpClient http = new DefaultHttpClient();
-                            ArrayList<NameValuePair> postData = new ArrayList<>();
-                            postData.add(new BasicNameValuePair("id", editid.getText().toString()));
-                            postData.add(new BasicNameValuePair("password", editpwd.getText().toString()));
-                            UrlEncodedFormEntity request = new UrlEncodedFormEntity(postData, "utf-8");
-                            HttpPost httpPost = new HttpPost(page);
-                            httpPost.setEntity(request);
-                            HttpResponse response = http.execute(httpPost);
-
-                            String body = EntityUtils.toString(response.getEntity());
+                            HashMap<String,String> map = new HashMap<String, String>();
+                            map.put("id",editid.getText().toString());
+                            map.put("password",editpwd.getText().toString());
+                            String body = objectType(page,map);
                             JSONObject jsonObj = new JSONObject(body);
                             final JSONArray jArray = (JSONArray) jsonObj.get("sendData");
                             if (jArray.length() > 0) {
@@ -158,6 +148,8 @@ public class LoginActivity extends Activity {
         Session.getCurrentSession().addCallback(callback);
     }
     private class SessionCallback implements ISessionCallback {
+
+
         @Override
         public void onSessionOpened() {
 
@@ -185,14 +177,37 @@ public class LoginActivity extends Activity {
                 }
 
                 @Override
-                public void onSuccess(UserProfile userProfile) {
-                    //로그인에 성공하면 로그인한 사용자의 일련번호, 닉네임, 이미지url등을 리턴합니다.
+                public void onSuccess(final UserProfile userProfile) {
                     //사용자 ID는 보안상의 문제로 제공하지 않고 일련번호는 제공합니다.
-                    Log.e("UserProfile", userProfile.toString());
+                   /* Log.e("UserProfile", userProfile.toString());
                     Toast.makeText(LoginActivity.this, userProfile.getId()+"", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);
                     startActivity(intent);
-                    finish();
+                    finish();*/
+                   Thread th = new Thread(new Runnable() {
+                       String page="";
+                       JSONObject jsonMain;
+                       @Override
+                       public void run() {
+                            try {
+                                page = Common.SERVER_URL + "/Dowhat/Member_servlet/kakaocheck.do";
+                                HashMap<String,String> map = new HashMap<String, String>();
+                                userid = String.valueOf(userProfile.getId());
+                                username = userProfile.getNickname();
+                                map.put("kakaotoken",userid);
+                                String body = objectType(page,map);
+                               jsonMain = new JSONObject(body);
+                                if(jsonMain.get("sendData").equals("null")){
+                                    handler.sendEmptyMessage(0);
+                                    Log.i("testdd","asds");
+                                }
+                            }catch (Exception e){
+
+                            }
+                       }
+                   });
+                    th.start();
+
                 }
             });
 
@@ -204,7 +219,30 @@ public class LoginActivity extends Activity {
                 exception.printStackTrace();
             }
         }
+
+
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                new AlertDialog.Builder(LoginActivity.this)
+                        .setTitle("계정확인")
+                        .setMessage("기존에 사용하던 Dowhat 계정이 있습니까?")
+                        .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(LoginActivity.this,confrimActivity.class);
+                                intent.putExtra("id",userid);
+                                intent.putExtra("id",userid);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("아니오",null)
+                        .show();
+                super.handleMessage(msg);
+            }
+        };
     }
+
 
     //앱 내 자바 코드로 키해시 구하기
     public static String getKeyHash(final Context context) {
