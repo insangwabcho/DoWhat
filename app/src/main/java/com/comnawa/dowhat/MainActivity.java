@@ -71,30 +71,29 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, LoginActivity.class);
         break;
       case R.id.btnInsang2:
-        DBManager dbm= new DBManager(this, "schedule.db", null, 1);
+        DBManager dbm= new DBManager(this);
         ScheduleDTO dto= new ScheduleDTO();
-        dto.setNum(1);
         dto.setTitle("title");
         dto.setId("id");
         ArrayList<ScheduleDTO> items= new ArrayList<>();
         items.add(dto);
-        dbm.insertAllSchedules(items);
-        items= dbm.selectAllSchedule();
+        dbm.insertSchedule(dto);
         for (ScheduleDTO t: items) {
           Log.i("zzo", t.getTitle());
         }
         return;
       case R.id.btninsang3:
-        DBManager dbm2= new DBManager(this, "schedule.db", null, 1);
+        DBManager dbm2= new DBManager(this);
         ScheduleDTO dto2= new ScheduleDTO();
         dto2.setNum(1);
-        dto2.setTitle("insang");
-        dto2.setId("insang");
-        dbm2.update(dto2);
-        ArrayList<ScheduleDTO> items2= dbm2.selectAllSchedule();
-        for (ScheduleDTO t2: items2){
-          Log.i("zzo","update:"+t2.toString());
+        dto2.setTitle("jo");
+        ArrayList<ScheduleDTO> items2= new ArrayList<>();
+        items2.add(dto2);
+        for (ScheduleDTO t: items2){
+          Log.i("jo", t.getTitle());
         }
+        items2= dbm2.todaySchedule("id");
+        Log.i(",,",items2.toString());
         runOnUiThread(new Runnable() {
           @Override
           public void run() {
