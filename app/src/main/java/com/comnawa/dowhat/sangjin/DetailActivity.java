@@ -26,7 +26,6 @@ import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.insang.Preferences;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 
 public class DetailActivity extends AppCompatActivity {
@@ -89,7 +88,6 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로로 고정
-        getSupportActionBar().setTitle("파워섹스");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_sangjin);

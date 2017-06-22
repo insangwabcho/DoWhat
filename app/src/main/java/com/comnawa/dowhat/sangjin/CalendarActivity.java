@@ -1,9 +1,12 @@
 package com.comnawa.dowhat.sangjin;
 
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -76,6 +79,9 @@ public class CalendarActivity extends ListActivity implements Serializable {
         final HashMap<String, String> UserInfo=manager.getUserInfo();
         txtDate = (TextView) findViewById(R.id.txtDate);
         btnAdd = (ImageView)findViewById(R.id.btnAdd);
+        Paint paint=new Paint();
+        paint.setColor(Color.parseColor("#E47833"));
+        paint.setAlpha(70);
         calview = (CalendarView) findViewById(R.id.calview);
         Calendar cal=Calendar.getInstance();
         StartDay(calview,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DATE));
