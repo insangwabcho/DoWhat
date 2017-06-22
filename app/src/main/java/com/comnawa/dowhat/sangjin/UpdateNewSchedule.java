@@ -50,6 +50,7 @@ public class UpdateNewSchedule extends Thread {
       }
       HttpClient http = new DefaultHttpClient();
       ArrayList<NameValuePair> postData = new ArrayList<>();
+      postData.add(new BasicNameValuePair("num",dto.getNum()+""));
       postData.add(new BasicNameValuePair("id", dto.getId()));
       postData.add(new BasicNameValuePair("event", dto.getEvent()));
       postData.add(new BasicNameValuePair("startdate", dto.getStartdate()));

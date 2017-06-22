@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -41,6 +42,7 @@ public class DetailActivity extends AppCompatActivity {
     String DBstime, DBetime; //DB에 저장할 시작시간, 종료시간
     int alarm, repeat; //DB에 저장할 알람, 반복
     private boolean check; //신규 , 수정 판별 변수 (true:신규)
+    int Num;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -56,6 +58,7 @@ public class DetailActivity extends AppCompatActivity {
         } else if (item.getItemId()== R.id.menu_select){
 
             ScheduleDTO dto = new ScheduleDTO();
+            dto.setNum(Num);
             dto.setId(new PrefManager(this).getUserInfo().get("id"));
             dto.setTitle(editTitle.getText().toString());
             dto.setEvent(event);
@@ -120,6 +123,7 @@ public class DetailActivity extends AppCompatActivity {
             BasicSet();
         }else{ //수정
             ScheduleDTO dto=CalendarActivity.items.get(index);
+            Num=dto.getNum();
             editTitle.setText(dto.getTitle());
             if(dto.getPlace() != null){
                 editPlace.setText(dto.getPlace());
@@ -339,25 +343,26 @@ public class DetailActivity extends AppCompatActivity {
             } else {
                 m = String.valueOf(minute);
             }
-            String eTime =""; //editText에 출력할 시간
+            String time =""; //txtTime에 출력할 시간
             if(hourOfDay>12 && hourOfDay<22){
-                eTime = "오후 0"+(hourOfDay-12) + "시 " + m +"분";
+                time = "오후 0"+(hourOfDay-12) + "시 " + m +"분";
             }else if(hourOfDay>21){
-                eTime = "오후 "+(hourOfDay-12) +"시 "+ m +"분";
+                time = "오후 "+(hourOfDay-12) +"시 "+ m +"분";
             }else if(hourOfDay==12){
-                eTime = "오후 "+h+"시 "+m+"분";
+                time = "오후 "+h+"시 "+m+"분";
             }else{
-                eTime = "오전 "+h+"시 "+m+"분";
+                time = "오전 "+h+"시 "+m+"분";
             }
             //시작시간, 종료시간, 알람을 구분하여 알맞는 editText에 출력
             //DB에는 시:분 형식으로 저장
             if (timeOk == true) {
                 DBstime=h+":"+m;
-                txtStime.setText(eTime);
+                txtStime.setText(time);
             } else if (timeOk == false) {
                 DBetime=h+":"+m;
-                txtEtime.setText(eTime);
+                txtEtime.setText(time);
             }
+
         }
     };
 

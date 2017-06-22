@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.insang.DoWhat;
+import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.sungwon.Common;
 
 import org.apache.http.HttpResponse;
@@ -36,6 +37,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 
 public class CalendarActivity extends ListActivity implements Serializable {
@@ -70,6 +72,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
         DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로 고정
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_sangjin);
+        PrefManager manager=new PrefManager(this);
+        final HashMap<String, String> UserInfo=manager.getUserInfo();
         txtDate = (TextView) findViewById(R.id.txtDate);
         btnAdd = (ImageView)findViewById(R.id.btnAdd);
         calview = (CalendarView) findViewById(R.id.calview);
@@ -100,7 +104,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         calview.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int day) {
-                id = getIntent().getStringExtra("id");
+                id = UserInfo.get("id");
                 String n=String.valueOf(year);
                 String w=String.valueOf(month+1);
                 String i=String.valueOf(day);
@@ -136,6 +140,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                             for (int i = 0; i < jArray.length(); i++) {
                                 JSONObject row = jArray.getJSONObject(i);
                                 ScheduleDTO dto = new ScheduleDTO();
+                                dto.setNum(row.getInt("num"));
                                 dto.setTitle(row.getString("title"));
                                 dto.setEvent(row.getString("event"));
                                 dto.setStartdate(row.getString("startdate"));
@@ -285,6 +290,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                     for (int i = 0; i < jArray.length(); i++) {
                         JSONObject row = jArray.getJSONObject(i);
                         ScheduleDTO dto = new ScheduleDTO();
+                        dto.setNum(row.getInt("num"));
                         dto.setTitle(row.getString("title"));
                         dto.setEvent(row.getString("event"));
                         dto.setStartdate(row.getString("startdate"));
