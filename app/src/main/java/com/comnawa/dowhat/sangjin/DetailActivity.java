@@ -3,8 +3,6 @@ package com.comnawa.dowhat.sangjin;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -42,6 +40,7 @@ public class DetailActivity extends AppCompatActivity {
     String Sdate,Edate; //DB에 저장할 시작일, 종료일
     String DBstime, DBetime; //DB에 저장할 시작시간, 종료시간
     int alarm, repeat; //DB에 저장할 알람, 반복
+    private boolean check; //신규 , 수정 판별 변수 (true:신규)
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -54,7 +53,9 @@ public class DetailActivity extends AppCompatActivity {
         //저장버튼을 눌렀을때 처리
         if (item.getItemId()== R.id.action_settings) {
             startActivity(new Intent(DetailActivity.this, Preferences.class));
-            ScheduleDTO dto= new ScheduleDTO();
+        } else if (item.getItemId()== R.id.menu_select){
+
+            ScheduleDTO dto = new ScheduleDTO();
             dto.setId(new PrefManager(this).getUserInfo().get("id"));
             dto.setTitle(editTitle.getText().toString());
             dto.setEvent(event);
@@ -66,8 +67,13 @@ public class DetailActivity extends AppCompatActivity {
             dto.setAlarm(alarm);
             dto.setRepeat(repeat);
 
-
-        } else if (item.getItemId()== R.id.menu_select){
+            if (check) { //신규
+              UpdateNewSchedule uns= new UpdateNewSchedule(this,true,dto);
+              uns.start();
+            } else { //수정
+              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
+              uns.start();
+            }
 
         }
         return false;
@@ -76,11 +82,22 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로로 고정
-        /*getSupportActionBar().setTitle("일정추가");
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLUE));
+        /*getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLUE));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_sangjin);
+
+        //신규 , 수정 판별코드
+        if (getIntent().getIntExtra("check",0) == 0){
+            check= true;
+        }
+        /*
+
+        check 변수가 true면 신규 (insert)
+        false일경우 수정 (update)
+
+         */
+
         int index=getIntent().getIntExtra("index",-1);
         editTitle = (EditText) findViewById(R.id.editTitle);
         editPlace = (EditText) findViewById(R.id.editPlace);
@@ -99,9 +116,9 @@ public class DetailActivity extends AppCompatActivity {
         Ddialog = new DatePickerDialog(this, listener2, dp.getYear(), dp.getMonth(), dp.getDayOfMonth());
         //타임피커다이얼로그 생성(액티비티, 리스너, 시, 분, 12시간구분)
         Tdialog = new TimePickerDialog(this, listener, tp.getHour(), tp.getMinute(), false);
-        if(index==-1){
+        if(index==-1){ //신규
             BasicSet();
-        }else{
+        }else{ //수정
             ScheduleDTO dto=CalendarActivity.items.get(index);
             editTitle.setText(dto.getTitle());
             if(dto.getPlace() != null){

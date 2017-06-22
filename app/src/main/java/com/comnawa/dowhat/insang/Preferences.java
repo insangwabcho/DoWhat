@@ -29,6 +29,7 @@ public class Preferences extends android.preference.PreferenceActivity {
     }
   } // 환경설정 화면구현//
 
+
   @Override
   protected void onDestroy() {
     super.onDestroy();

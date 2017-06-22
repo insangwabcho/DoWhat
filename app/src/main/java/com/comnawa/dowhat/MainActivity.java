@@ -4,16 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.comnawa.dowhat.insang.DBManager;
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.kwanwoo.CalendarCoreActivity;
 import com.comnawa.dowhat.sangjin.CalendarActivity;
+import com.comnawa.dowhat.sangjin.ScheduleDTO;
 import com.comnawa.dowhat.sungwon.LoginActivity;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,8 +71,16 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, LoginActivity.class);
         break;
       case R.id.btnInsang2:
-//        Toast.makeText(this, "알람시간 수정", Toast.LENGTH_SHORT).show();
-//        DoWhat.resetAlarm(this);
+        DBManager dbm= new DBManager(this, "schedule.db", null, 0);
+        ScheduleDTO dto= new ScheduleDTO();
+        dto.setNum(1);
+        dto.setTitle("title");
+        dto.setId("id");
+        ArrayList<ScheduleDTO> items= new ArrayList<>();
+        items.add(dto);
+        dbm.insert(items);
+        items= dbm.selectTodaySchedule(this);
+        Log.i("zzo",items.get(0).getTitle());
         return;
     }
     startActivity(intent);

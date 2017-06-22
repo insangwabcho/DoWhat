@@ -55,11 +55,13 @@ public class CalendarActivity extends ListActivity implements Serializable {
         }
     };
 
+    //기존 일정 수정창 띄우기
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("index",position);
+        intent.putExtra("check",1);
         startActivity(intent);
     }
 
@@ -80,6 +82,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CalendarActivity.this, DetailActivity.class);
+                intent.putExtra("check",0);
                 startActivity(intent);
             }
         });

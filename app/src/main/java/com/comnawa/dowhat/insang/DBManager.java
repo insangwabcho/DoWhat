@@ -53,7 +53,7 @@ public class DBManager extends SQLiteOpenHelper {
     String date = (cal.get(Calendar.DATE) + 1 < 10) ? "0" + (cal.get(Calendar.DATE) + 1) : cal.get(Calendar.DATE) + "";
     String today = year + "-" + month + "-" + date;
     String sql = "select * from schedule where id='" + map.get("id") + "' and startdate='" + today + "'";
-    SQLiteDatabase db = getWritableDatabase();
+    SQLiteDatabase db = getReadableDatabase();
     rs = db.rawQuery(sql, null);
     while (!rs.isAfterLast()) {
       ScheduleDTO dto = new ScheduleDTO();
@@ -74,8 +74,27 @@ public class DBManager extends SQLiteOpenHelper {
     return items;
   }
 
-  public void insert() {
-    
+  public void insert(ArrayList<ScheduleDTO> items) {
+    SQLiteDatabase db = getWritableDatabase();
+    for (ScheduleDTO dto : items) {
+      String sql = "insert into schedule values(?,?,?,?,?,?,?,?,?,?,?,?)";
+      String[] args = {
+        dto.getNum() + "",
+        dto.getId(),
+        dto.getStartdate(),
+        dto.getEnddate(),
+        dto.getEnddate(),
+        dto.getStarttime(),
+        dto.getEndtime(),
+        dto.getTitle(),
+        dto.getEvent(),
+        dto.getPlace(),
+        dto.getMemo(),
+        dto.getAlarm() + "",
+        dto.getRepeat() + ""
+      };
+      db.execSQL(sql, args);
+    }
   }
 
   public void update() {
