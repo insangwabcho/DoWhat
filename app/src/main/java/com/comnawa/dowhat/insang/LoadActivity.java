@@ -53,7 +53,7 @@ public class LoadActivity extends AppCompatActivity {
 
       if (params[0] == false) {
         try {
-          Toast.makeText(LoadActivity.this, "인터넷에 연결되어있지 않습니다.", Toast.LENGTH_SHORT).show();
+          //Toast.makeText(LoadActivity.this, "인터넷에 연결되어있지 않습니다.", Toast.LENGTH_SHORT).show();
           Thread.sleep(1500);
         } catch (InterruptedException e) {
           e.printStackTrace();
@@ -64,7 +64,7 @@ public class LoadActivity extends AppCompatActivity {
 
         //여기는 임시작업
         try {
-          Toast.makeText(LoadActivity.this, "인터넷에 연결되어있습니다.", Toast.LENGTH_SHORT).show();
+          //Toast.makeText(LoadActivity.this, "인터넷에 연결되어있습니다.", Toast.LENGTH_SHORT).show();
           Thread.sleep(1500);
         } catch (InterruptedException e) {
           e.printStackTrace();
@@ -93,4 +93,5 @@ public class LoadActivity extends AppCompatActivity {
       finish();
     }
   }
+
 }

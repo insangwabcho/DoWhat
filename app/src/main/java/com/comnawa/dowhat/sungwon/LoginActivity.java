@@ -1,8 +1,13 @@
 package com.comnawa.dowhat.sungwon;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -35,8 +40,13 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static android.content.ContentValues.TAG;
+import static com.kakao.util.helper.Utility.getPackageInfo;
 
 public class LoginActivity extends Activity {
 
@@ -50,6 +60,9 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        //해시 키 출력
+        Log.i("hashkey",getKeyHash(getApplicationContext()));
+
         editid = (EditText) findViewById(R.id.editid);
         editpwd = (EditText) findViewById(R.id.editpwd);
         btnSignUp = (Button) findViewById(R.id.btnSignUp);
@@ -176,6 +189,7 @@ public class LoginActivity extends Activity {
                     //로그인에 성공하면 로그인한 사용자의 일련번호, 닉네임, 이미지url등을 리턴합니다.
                     //사용자 ID는 보안상의 문제로 제공하지 않고 일련번호는 제공합니다.
                     Log.e("UserProfile", userProfile.toString());
+                    Toast.makeText(LoginActivity.this, userProfile.getId()+"", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);
                     startActivity(intent);
                     finish();
@@ -183,13 +197,30 @@ public class LoginActivity extends Activity {
             });
 
         }
-
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
             Log.i("SessionCallback", "Error");
             if(exception != null) {
-                Logger.e(exception);
+                exception.printStackTrace();
             }
         }
     }
+
+    //앱 내 자바 코드로 키해시 구하기
+    public static String getKeyHash(final Context context) {
+        PackageInfo packageInfo = getPackageInfo(context, PackageManager.GET_SIGNATURES);
+        if (packageInfo == null)
+            return null;
+        for (Signature signature : packageInfo.signatures) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                return Base64.encodeToString(md.digest(), Base64.NO_WRAP);
+            } catch (NoSuchAlgorithmException e) {
+                Log.w(TAG, "Unable to get MessageDigest. signature=" + signature, e);
+            }
+        }
+        return null;
+    }
 }
+
