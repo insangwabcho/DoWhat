@@ -24,8 +24,8 @@ public class DBManager {
     dbm = new DBM(context, dbName, null, nowVersion);
   }
 
-  public ArrayList<ScheduleDTO> todaySchedule(String id) {
-    return dbm.selectTodaySchedule(id);
+  public ArrayList<ScheduleDTO> getSchedule(String id, int year, int month, int date) {
+    return dbm.selectSchedule(id, year, month, date);
   }
 
 //  public void syncronizedServer
@@ -76,12 +76,38 @@ public class DBManager {
       super(context, name, null, 1);
     }
 
-    public ArrayList<ScheduleDTO> selectTodaySchedule(String id) {
+    public ArrayList<ScheduleDTO> selectTodaySchedule(String id, String date2) {
       ArrayList<ScheduleDTO> items = new ArrayList<>();
       Calendar cal = Calendar.getInstance();
       String year = cal.get(Calendar.YEAR) + "";
       String month = (cal.get(Calendar.MONTH) + 1 < 10) ? "0" + (cal.get(Calendar.MONTH) + 1) : cal.get(Calendar.MONTH) + "";
       String date = (cal.get(Calendar.DATE) + 1 < 10) ? "0" + (cal.get(Calendar.DATE) + 1) : cal.get(Calendar.DATE) + "";
+      String today = year + "-" + month + "-" + date;
+      String sql = "select * from schedule where id='" + id + "' and startdate='" + today + "'";
+      SQLiteDatabase db = getReadableDatabase();
+      rs = db.rawQuery(sql, null);
+      while (rs.moveToNext()) {
+        ScheduleDTO dto = new ScheduleDTO();
+        dto.setNum(rs.getInt(0));
+        dto.setId(rs.getString(1));
+        dto.setStartdate(rs.getString(2));
+        dto.setEnddate(rs.getString(3));
+        dto.setStarttime(rs.getString(4));
+        dto.setEndtime(rs.getString(5));
+        dto.setTitle(rs.getString(6));
+        dto.setEvent(rs.getString(7));
+        dto.setPlace(rs.getString(8));
+        dto.setMemo(rs.getString(9));
+        dto.setAlarm(rs.getInt(10));
+        dto.setRepeat(rs.getInt(11));
+        items.add(dto);
+      }
+      return items;
+    }
+
+    public ArrayList<ScheduleDTO> selectSchedule(String id, int year, int month, int date) {
+      ArrayList<ScheduleDTO> items = new ArrayList<>();
+      Calendar cal = Calendar.getInstance();
       String today = year + "-" + month + "-" + date;
       String sql = "select * from schedule where id='" + id + "' and startdate='" + today + "'";
       SQLiteDatabase db = getReadableDatabase();

@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         for (ScheduleDTO t: items) {
           Log.i("zzo", t.getTitle());
         }
+
         return;
       case R.id.btninsang3:
         DBManager dbm2= new DBManager(this);
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         for (ScheduleDTO t: items2){
           Log.i("jo", t.getTitle());
         }
-        items2= dbm2.todaySchedule("id");
+        items2= dbm2.getSchedule("id");
         Log.i(",,",items2.toString());
         runOnUiThread(new Runnable() {
           @Override
