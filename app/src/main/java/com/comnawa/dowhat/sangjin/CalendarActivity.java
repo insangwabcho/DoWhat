@@ -84,6 +84,15 @@ public class CalendarActivity extends ListActivity implements Serializable {
             }
         });
 
+        //TTS구현
+        btnAdd.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return false;
+            }
+        });
+
+
         //날짜를 눌렀을 때 목록표시 이벤트
         calview.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override

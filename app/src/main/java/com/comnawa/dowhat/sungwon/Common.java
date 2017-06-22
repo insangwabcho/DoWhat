@@ -5,6 +5,6 @@ package com.comnawa.dowhat.sungwon;
  */
 
 public class Common {
-    //public static final String SERVER_URL = "http://192.168.0.233:8080";
-    public static final String SERVER_URL = "http://192.168.238.1:8080";
+    public static final String SERVER_URL = "http://192.168.0.233:8080";
+    //public static final String SERVER_URL = "http://192.168.238.1:8080";
 }

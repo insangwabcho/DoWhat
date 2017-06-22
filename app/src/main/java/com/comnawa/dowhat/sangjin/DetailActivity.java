@@ -2,10 +2,13 @@ package com.comnawa.dowhat.sangjin;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,9 +18,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.insang.DoWhat;
+import com.comnawa.dowhat.insang.PrefManager;
+import com.comnawa.dowhat.insang.Preferences;
 
 
 public class DetailActivity extends AppCompatActivity {
@@ -25,23 +31,54 @@ public class DetailActivity extends AppCompatActivity {
     EditText editTitle, editPlace, editMemo, editFriend;
     TextView txtSdate, txtStime, txtEdate, txtEtime;
     CheckBox cbAlarm, cbRepeat; //알람설정,반복설정
-    int alarm, repeat; //알람, 반복
     DatePicker dp; //데이트피커
     TimePicker tp; //타임피커
     Spinner spinner; //이벤트 스피너
-    String event; //이벤트를 저장할 변수
     boolean dateOk; //시작일과 종료일을 구분할 변수
     boolean timeOk; //시작시간, 종료시간을 구분할 변수
     DatePickerDialog Ddialog; //데이트피커 다이얼로그
     TimePickerDialog Tdialog; //타임피커 다이얼로그
-    String DBstime, DBetime; //DB에 담을 시간
+    String event; //DB에 저장할 이벤트
+    String Sdate,Edate; //DB에 저장할 시작일, 종료일
+    String DBstime, DBetime; //DB에 저장할 시작시간, 종료시간
+    int alarm, repeat; //DB에 저장할 알람, 반복
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_savebutton, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //저장버튼을 눌렀을때 처리
+        if (item.getItemId()== R.id.action_settings) {
+            startActivity(new Intent(DetailActivity.this, Preferences.class));
+            ScheduleDTO dto= new ScheduleDTO();
+            dto.setId(new PrefManager(this).getUserInfo().get("id"));
+            dto.setTitle(editTitle.getText().toString());
+            dto.setEvent(event);
+            dto.setStartdate(Sdate);
+            dto.setEnddate(Edate);
+            dto.setStarttime(DBstime);
+            dto.setEndtime(DBetime);
+            dto.setMemo(editMemo.getText().toString());
+            dto.setAlarm(alarm);
+            dto.setRepeat(repeat);
+
+
+        } else if (item.getItemId()== R.id.menu_select){
+
+        }
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로로 고정
-        getSupportActionBar().setTitle("일정추가");
+        /*getSupportActionBar().setTitle("일정추가");
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.BLUE));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_sangjin);
         int index=getIntent().getIntExtra("index",-1);
@@ -52,7 +89,7 @@ public class DetailActivity extends AppCompatActivity {
         txtStime = (TextView) findViewById(R.id.txtStime);
         txtEtime = (TextView) findViewById(R.id.txtEtime);
         editMemo = (EditText) findViewById(R.id.editMemo);
-        editFriend = (EditText) findViewById(R.id.editFriend);
+     //   editFriend = (EditText) findViewById(R.id.editFriend);
         cbAlarm = (CheckBox) findViewById(R.id.cbAlarm);
         cbRepeat = (CheckBox) findViewById(R.id.cbRepeat);
         dp = (DatePicker) findViewById(R.id.datePicker);
@@ -67,7 +104,11 @@ public class DetailActivity extends AppCompatActivity {
         }else{
             ScheduleDTO dto=CalendarActivity.items.get(index);
             editTitle.setText(dto.getTitle());
-            editPlace.setText(dto.getPlace());
+            if(dto.getPlace() != null){
+                editPlace.setText(dto.getPlace());
+            }else {
+                editPlace.setText("");
+            }
             txtSdate.setText(dto.getStartdate());
             txtEdate.setText(dto.getEnddate());
             int Shour=Integer.parseInt(dto.getStarttime().substring(0,2));
@@ -124,7 +165,26 @@ public class DetailActivity extends AppCompatActivity {
             }else{
                 spinner.setSelection(0);
             }
-            editMemo.setText(dto.getMemo());
+
+            if(editMemo!=null){
+                editMemo.setText(dto.getMemo());
+            }else{
+                editMemo.setText("");
+            }
+
+            if(dto.getAlarm() == 0){
+                cbAlarm.setText("해제");
+            }else{
+                cbAlarm.setChecked(true);
+                cbAlarm.setText("설정");
+            }
+
+            if(dto.getRepeat() == 0){
+                cbRepeat.setText("해제");
+            }else{
+                cbRepeat.setChecked(true);
+                cbRepeat.setText("설정");
+            }
 
         }
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -165,9 +225,11 @@ public class DetailActivity extends AppCompatActivity {
                 if(cbAlarm.isChecked()){
                     alarm = 1;
                     cbAlarm.setText("설정");
+                    Toast.makeText(DetailActivity.this, "알람이 설정되었습니다", Toast.LENGTH_SHORT).show();
                 }else {
                     alarm = 0;
                     cbAlarm.setText("해제");
+                    Toast.makeText(DetailActivity.this, "해제되었습니다", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -202,9 +264,11 @@ public class DetailActivity extends AppCompatActivity {
             String date = n + "-" + w + "-" + i;
             //시작일 종료일을 구분하여 알맞는 editText에 입력
             if (dateOk) {
+                Sdate=date;
                 txtSdate.setText(date);
             } else {
                 txtEdate.setText(date);
+                Edate=date;
             }
 
             //시작일이 종료일보다 나중일때 처리
