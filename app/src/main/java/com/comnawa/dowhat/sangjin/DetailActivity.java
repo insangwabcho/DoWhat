@@ -30,11 +30,10 @@ public class DetailActivity extends AppCompatActivity {
     Spinner spinner; //이벤트 스피너
     String event; //이벤트를 저장할 변수
     boolean dateOk; //시작일과 종료일을 구분할 변수
-    int timeOk; //시작시간, 종료시간, 알람을 구분할 변수
+    boolean timeOk; //시작시간, 종료시간을 구분할 변수
     DatePickerDialog Ddialog; //데이트피커 다이얼로그
     TimePickerDialog Tdialog; //타임피커 다이얼로그
     String DBstime, DBetime; //DB에 담을 시간
-//    InputMethodManager imm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,43 +136,23 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        //시작일 editText를 눌렀을때
+        //시작일 Textview를 눌렀을때
         txtSdate.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-            //    hideKeyboard();
                 dateOk = true; //시작일
+                timeOk = true; //시작시간
                 Ddialog.show(); //다이얼로그 표시
                 return false;
             }
         });
-        //종료일 editText를 눌렀을때
+        //종료일 Textview를 눌렀을때
         txtEdate.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-            //    hideKeyboard();
                 dateOk = false; //종료일
+                timeOk = false; //종료시간
                 Ddialog.show(); //다이얼로그 표시
-                return false;
-            }
-        });
-        //시작시간 editText를 눌렀을때
-        txtStime.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-           //     hideKeyboard();
-                timeOk = 1; //시작시간
-                Tdialog.show(); //다이얼로그 표시
-                return false;
-            }
-        });
-        //종료시간 editText를 눌렀을때
-        txtEtime.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-            //    hideKeyboard();
-                timeOk = 2; //종료시간
-                Tdialog.show(); //다이얼로그 표시
                 return false;
             }
         });
@@ -228,6 +207,9 @@ public class DetailActivity extends AppCompatActivity {
             }else if(Ey2==Sy2 && Em2==Sm2 && Ed2<Sd2){
                 txtEdate.setText(date);
             }
+
+            //시간 설정 다이얼로그를 띄움
+            Tdialog.show();
         }
     };
 
@@ -260,34 +242,15 @@ public class DetailActivity extends AppCompatActivity {
             }
             //시작시간, 종료시간, 알람을 구분하여 알맞는 editText에 출력
             //DB에는 시:분 형식으로 저장
-            if (timeOk == 1) {
+            if (timeOk == true) {
                 DBstime=h+":"+m;
                 txtStime.setText(eTime);
-            } else if (timeOk == 2) {
+            } else if (timeOk == false) {
                 DBetime=h+":"+m;
                 txtEtime.setText(eTime);
-            } else if (timeOk == 3) {
-                editAlarm.setText(eTime);
             }
         }
     };
-
-/*    private void init(){
-        imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        editSdate = (EditText) findViewById(R.id.editSdate);
-        editEdate = (EditText) findViewById(R.id.editEdate);
-        editStime = (EditText) findViewById(R.id.editStime);
-        editEtime = (EditText) findViewById(R.id.editEtime);
-        editAlarm = (EditText) findViewById(R.id.editAlarm);
-    }
-
-    private void hideKeyboard() {
-        imm.hideSoftInputFromWindow(editSdate.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(editEdate.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(editStime.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(editEtime.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(editAlarm.getWindowToken(), 0);
-    }*/
 
     private void BasicSet(){ //신규일정 등록시 기본 날짜와 시간 세팅
         txtSdate.setText(CalendarActivity.startdate);
