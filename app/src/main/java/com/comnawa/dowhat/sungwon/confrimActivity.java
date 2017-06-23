@@ -3,6 +3,7 @@ package com.comnawa.dowhat.sungwon;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -61,7 +62,8 @@ public class confrimActivity extends Activity {
                                     String pwd="";
                                     String friendid ="";
                                     PrefManager pm = new PrefManager(confrimActivity.this);
-                                    pm.setAutoLogin(id,pwd,name,friendid,kakaotoken,true);
+                                    Log.i("testss",id+pwd+friendid+kakaotoken+name);
+                                    pm.setAutoLogin(id,pwd,name,friendid,kakaotoken,false);
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
