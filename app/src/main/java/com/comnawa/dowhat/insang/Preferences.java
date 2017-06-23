@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
+import com.comnawa.dowhat.sungwon.LoginActivity;
 
 import java.util.HashMap;
 
@@ -29,7 +30,6 @@ public class Preferences extends android.preference.PreferenceActivity {
 
     getFragmentManager().beginTransaction().replace(android.R.id.content, new MyFragment(this, serviceIntent)).commit();
     serviceStatus = new PrefManager(this).getPushAlarm();
-
   } //환경설정 화면구현
 
   public static class MyFragment extends PreferenceFragment {
@@ -42,37 +42,57 @@ public class Preferences extends android.preference.PreferenceActivity {
       this.serviceIntent = serviceIntent;
     }
 
-    SwitchPreference autoSync, autoLogin, pushService;
-    Preference logId, logName, logoutKakao;
+    SwitchPreference autoLogin, pushService;
+    Preference logId, logName, logoutKakao, backup, restore;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       addPreferencesFromResource(R.xml.preference_insang);
 
-      autoSync = (SwitchPreference) findPreference("autoSync");
       autoLogin = (SwitchPreference) findPreference("autoLogin");
       pushService = (SwitchPreference) findPreference("pushService");
       logId = (Preference) findPreference("logId");
       logoutKakao = (Preference) findPreference("logoutKakao");
       logName = (Preference) findPreference("logName");
+      backup= (Preference) findPreference("backup");
+      restore= (Preference) findPreference("restore");
+
+      //백업버튼
+      backup.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+
+          return false;
+        }
+      });
+
+      //복원버튼
+      restore.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+
+          return false;
+        }
+      });
+
+      final PrefManager pm = new PrefManager(ac);
 
       //계정정보구역
-      PrefManager pm = new PrefManager(ac);
       HashMap<String, String> userinfo = pm.getUserInfo();
       logId.setSummary(userinfo.get("id"));
       logName.setSummary(userinfo.get("name"));
-      if (userinfo.get("token")== null || userinfo.get("token").equals("") || userinfo.get("token").equals("not Login")) {
-        logoutKakao.setSummary("카카오계정 미연동");
-        logoutKakao.setEnabled(false);
-      } else {
-        logoutKakao.setEnabled(true);
-      }
 
+      //카카오톡 로그아웃
       logoutKakao.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
         @Override
         public boolean onPreferenceClick(Preference preference) {
-          Toast.makeText(ac, "기능구현중", Toast.LENGTH_SHORT).show();
+          LoginActivity.kakaoLogout();
+          pm.setAutoLogin(null,null,null,null,null,false);
+          Toast.makeText(ac, "계정 로그아웃 완료", Toast.LENGTH_SHORT).show();
+          Intent intent= ac.getPackageManager().getLaunchIntentForPackage("com.comnawa.dowhat");
+          startActivity(intent);
+          ac.finishAndRemoveTask();
           return false;
         }
       });
@@ -89,15 +109,6 @@ public class Preferences extends android.preference.PreferenceActivity {
           return true;
         }
       }); //푸시설정 리스너
-
-      //자동동기화 리스너
-      autoSync.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-          return true;
-        }
-      }); //자동동기화 리스너
 
     }
   } // 환경설정 화면구현//

@@ -28,10 +28,12 @@ public class DBManager {
     return dbm.selectSchedule(id, year, month, date);
   }
 
-//  public void syncronizedServer
+  public void syncronizedServer() {
 
-  public ArrayList<ScheduleDTO> todaySchedule(String id){
-      return dbm.selectTodaySchedule(id);
+  }
+
+  public ArrayList<ScheduleDTO> todaySchedule(String id) {
+    return dbm.selectTodaySchedule(id);
   }
 
   public void updateSchedule(ScheduleDTO dto) {
@@ -39,7 +41,7 @@ public class DBManager {
   }
 
   public void deleteSchedule(ScheduleDTO dto) {
-    Paint p= new Paint();
+    Paint p = new Paint();
     dbm.delete(dto);
   }
 
@@ -55,7 +57,7 @@ public class DBManager {
     public void onCreate(SQLiteDatabase db) {
       String sql =
         "create table schedule(" +
-          "num integer primary key," +
+          "num integer," +
           "id varchar(50)," +
           "startdate varchar(50)," +
           "enddate varchar(50)," +
@@ -196,7 +198,7 @@ public class DBManager {
     //일정 삭제
     public void delete(ScheduleDTO dto) {
       SQLiteDatabase db = getWritableDatabase();
-      String sql = "delete from schedule where=" + dto.getNum();
+      String sql = "delete from schedule where=" + dto.getNum() + "and" + dto.getId();
       db.execSQL(sql);
     }
 

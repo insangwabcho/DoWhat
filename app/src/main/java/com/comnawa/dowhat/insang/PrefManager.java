@@ -45,19 +45,19 @@ public class PrefManager {
 
   public boolean setAutoLogin(String userid, String userpasswd, String namee, String friendid, String kakaoToken, boolean current) {
     Log.i("test", "1");
-    if (userid.equals("") || userid == null) {
+    if (userid== null || userid.equals("")) {
       userid = "not Login";
     }
-    if (userpasswd.equals("") || userpasswd == null) {
+    if (userpasswd== null || userpasswd.equals("")) {
       userpasswd = "not Login";
     }
-    if (namee.equals("") || namee == null) {
+    if (namee== null || namee.equals("")) {
       namee = "not Login";
     }
-    if (friendid.equals("") || friendid == null) {
+    if (friendid == null || friendid.equals("")) {
       friendid = "not Login";
     }
-    if (kakaoToken.equals("") || kakaoToken == null) {
+    if (kakaoToken == null || kakaoToken.equals("")) {
       kakaoToken = "not Login";
     }
 

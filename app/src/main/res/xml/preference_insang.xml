@@ -9,12 +9,20 @@
       android:summaryOn="켜짐"
       android:title="자동로그인 기능"
       />
-    <SwitchPreference
-      android:key="autoSync"
-      android:summaryOff="꺼짐"
-      android:summaryOn="켜짐"
-      android:title="자동 동기화"
-      />
+    <!--<SwitchPreference-->
+      <!--android:key="autoSync"-->
+      <!--android:summaryOff="꺼짐"-->
+      <!--android:summaryOn="켜짐"-->
+      <!--android:title="자동 동기화"-->
+      <!--/>-->
+    <Preference
+      android:title="일정 내보내기"
+      android:key="backup"
+      android:summary="서버에 일정정보 백업"/>
+    <Preference
+      android:title="일정 받아오기"
+      android:key="restore"
+      android:summary="서버에서 일정정보 받아오기"/>
     <PreferenceScreen
       android:title="푸시설정">
       <SwitchPreference

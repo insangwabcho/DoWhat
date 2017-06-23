@@ -85,16 +85,6 @@ public class MainActivity extends AppCompatActivity {
         return;
       case R.id.btninsang3:
         DBManager dbm2= new DBManager(this);
-        ScheduleDTO dto2= new ScheduleDTO();
-        dto2.setNum(1);
-        dto2.setTitle("jo");
-        ArrayList<ScheduleDTO> items2= new ArrayList<>();
-        items2.add(dto2);
-        for (ScheduleDTO t: items2){
-          Log.i("jo", t.getTitle());
-        }
-     //   items2= dbm2.getSchedule("id");
-        Log.i(",,",items2.toString());
         runOnUiThread(new Runnable() {
           @Override
           public void run() {
