@@ -3,13 +3,11 @@ package com.comnawa.dowhat.sungwon;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 
 import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.insang.PrefManager;
@@ -59,17 +57,16 @@ public class confrimActivity extends Activity {
                                 JSONObject jsonObj2 = new JSONObject(body2);
                                 int result =  (int) jsonObj2.get("sendData");
                                 if(result>0){
+                                    String id =editAccount.getText().toString();
+                                    String pwd="";
+                                    String friendid ="";
+                                    PrefManager pm = new PrefManager(confrimActivity.this);
+                                    pm.setAutoLogin(id,pwd,name,friendid,kakaotoken,true);
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             Toast.makeText(confrimActivity.this, "계정이 등록되었습니다.", Toast.LENGTH_SHORT).show();
                                             Intent intent= new Intent(confrimActivity.this, CalendarActivity.class);
-                                            String id =editAccount.getText().toString();
-                                            String pwd="";
-                                            String friendid ="";
-                                            PrefManager pm = new PrefManager(confrimActivity.this);
-                                            pm.setAutoLogin(id,pwd,name,friendid,kakaotoken,true);
-
                                             startActivity(intent);
 
                                         }
