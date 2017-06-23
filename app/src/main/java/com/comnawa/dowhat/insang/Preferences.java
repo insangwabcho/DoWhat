@@ -43,7 +43,7 @@ public class Preferences extends android.preference.PreferenceActivity {
     }
 
     SwitchPreference autoSync, autoLogin, pushService;
-    Preference logId, logName, logKakao, logoutKakao;
+    Preference logId, logName, logoutKakao;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,7 +54,6 @@ public class Preferences extends android.preference.PreferenceActivity {
       autoLogin = (SwitchPreference) findPreference("autoLogin");
       pushService = (SwitchPreference) findPreference("pushService");
       logId = (Preference) findPreference("logId");
-      logKakao = (Preference) findPreference("logKakao");
       logoutKakao = (Preference) findPreference("logoutKakao");
       logName = (Preference) findPreference("logName");
 
@@ -62,8 +61,13 @@ public class Preferences extends android.preference.PreferenceActivity {
       PrefManager pm = new PrefManager(ac);
       HashMap<String, String> userinfo = pm.getUserInfo();
       logId.setSummary(userinfo.get("id"));
-      logKakao.setSummary(userinfo.get("token"));
       logName.setSummary(userinfo.get("name"));
+      if (userinfo.get("token")== null || userinfo.get("token").equals("") || userinfo.get("token").equals("not Login")) {
+        logoutKakao.setSummary("카카오계정 미연동");
+        logoutKakao.setEnabled(false);
+      } else {
+        logoutKakao.setEnabled(true);
+      }
 
       logoutKakao.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
         @Override

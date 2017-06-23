@@ -120,9 +120,10 @@ public class PrefManager {
   public HashMap<String, String> getUserInfo() {
     HashMap<String, String> result = new HashMap<>();
     try {
+      File f= new File("/data/data/"+context.getPackageName()+"/files/log.prop");
+
       Properties prop = new Properties();
-      prop.load(new InputStreamReader(new FileInputStream(
-        new File("/data/data/" + context.getPackageName() + "/files/log.prop"))));
+      prop.load(new InputStreamReader(new FileInputStream(f)));
       String id = prop.getProperty("id").equals("") || prop.getProperty("id") == null ?
         "not Login" : prop.getProperty("id");
       String pwd = prop.getProperty("pwd").equals("") || prop.getProperty("pwd") == null ?

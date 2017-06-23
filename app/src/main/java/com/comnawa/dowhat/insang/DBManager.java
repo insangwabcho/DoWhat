@@ -30,6 +30,10 @@ public class DBManager {
 
 //  public void syncronizedServer
 
+  public ArrayList<ScheduleDTO> todaySchedule(String id){
+      return dbm.selectTodaySchedule(id);
+  }
+
   public void updateSchedule(ScheduleDTO dto) {
     dbm.update(dto);
   }
@@ -76,7 +80,7 @@ public class DBManager {
       super(context, name, null, 1);
     }
 
-    public ArrayList<ScheduleDTO> selectTodaySchedule(String id, String date2) {
+    public ArrayList<ScheduleDTO> selectTodaySchedule(String id) {
       ArrayList<ScheduleDTO> items = new ArrayList<>();
       Calendar cal = Calendar.getInstance();
       String year = cal.get(Calendar.YEAR) + "";
