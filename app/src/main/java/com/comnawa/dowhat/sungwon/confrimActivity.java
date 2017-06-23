@@ -3,13 +3,16 @@ package com.comnawa.dowhat.sungwon;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 import com.comnawa.dowhat.R;
+import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.sangjin.CalendarActivity;
 
 import org.json.JSONObject;
@@ -27,8 +30,8 @@ public class confrimActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.confrim);
 
-        final String token =getIntent().getStringExtra("id");
-        String name = getIntent().getStringExtra("name");
+        final String kakaotoken =getIntent().getStringExtra("id");
+        final String name = getIntent().getStringExtra("name");
 
         editAccount = (EditText)findViewById(R.id.editAccount);
         btnCancel = (Button)findViewById(R.id.btnCancel);
@@ -51,7 +54,7 @@ public class confrimActivity extends Activity {
                                 String page2 = Common.SERVER_URL +"/Dowhat/Member_servlet/tokeninsert.do";
                                 HashMap<String,String> map2 = new HashMap<String, String>();
                                 map2.put("id",editAccount.getText().toString());
-                                map2.put("kakaotoken",token);
+                                map2.put("kakaotoken",kakaotoken);
                                 String body2 = JsonObject.objectType(page2,map2);
                                 JSONObject jsonObj2 = new JSONObject(body2);
                                 int result =  (int) jsonObj2.get("sendData");
@@ -61,7 +64,12 @@ public class confrimActivity extends Activity {
                                         public void run() {
                                             Toast.makeText(confrimActivity.this, "계정이 등록되었습니다.", Toast.LENGTH_SHORT).show();
                                             Intent intent= new Intent(confrimActivity.this, CalendarActivity.class);
-                                            intent.putExtra("id",editAccount.getText().toString());
+                                            String id =editAccount.getText().toString();
+                                            String pwd="";
+                                            String friendid ="";
+                                            PrefManager pm = new PrefManager(confrimActivity.this);
+                                            pm.setAutoLogin(id,pwd,name,friendid,kakaotoken,true);
+
                                             startActivity(intent);
 
                                         }

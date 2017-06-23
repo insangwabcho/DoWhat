@@ -1,7 +1,6 @@
 package com.comnawa.dowhat.sangjin;
 
 
-import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -77,6 +76,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
         setContentView(R.layout.calendar_sangjin);
         PrefManager manager=new PrefManager(this);
         final HashMap<String, String> UserInfo=manager.getUserInfo();
+        manager = new PrefManager(CalendarActivity.this);
+        Log.i("Test2",manager.getUserInfo().toString());
         txtDate = (TextView) findViewById(R.id.txtDate);
         btnAdd = (ImageView)findViewById(R.id.btnAdd);
         Paint paint=new Paint();
