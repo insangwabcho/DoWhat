@@ -123,11 +123,16 @@ public class PrefManager {
       Properties prop = new Properties();
       prop.load(new InputStreamReader(new FileInputStream(
         new File("/data/data/" + context.getPackageName() + "/files/log.prop"))));
-      String id = prop.getProperty("id");
-      String pwd = prop.getProperty("pwd");
-      String name = prop.getProperty("name");
-      String friendid = prop.getProperty("friendid");
-      String token= prop.getProperty("kakaotoken");
+      String id = prop.getProperty("id").equals("") || prop.getProperty("id") == null ?
+        "not Login" : prop.getProperty("id");
+      String pwd = prop.getProperty("pwd").equals("") || prop.getProperty("pwd") == null ?
+        "not Login" : prop.getProperty("pwd");
+      String name = prop.getProperty("name").equals("") || prop.getProperty("name") == null ?
+        "not Login" : prop.getProperty("name");
+      String friendid = prop.getProperty("friendid").equals("") || prop.getProperty("friend") == null ?
+        "not Login" : prop.getProperty("friend");
+      String token = prop.getProperty("kakaotoken").equals("") || prop.getProperty("kakaotoken") == null ?
+        "not Login" : prop.getProperty("kakaotoken");
 
 
       result.put("id", id);
