@@ -1,7 +1,9 @@
 package com.comnawa.dowhat.insang;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -36,6 +38,7 @@ public class Preferences extends android.preference.PreferenceActivity {
 
     Activity ac;
     Intent serviceIntent;
+    String restoreOrBackup;
 
     public MyFragment(Activity content, Intent serviceIntent) {
       ac = content;
@@ -55,14 +58,16 @@ public class Preferences extends android.preference.PreferenceActivity {
       logId = (Preference) findPreference("logId");
       logoutKakao = (Preference) findPreference("logoutKakao");
       logName = (Preference) findPreference("logName");
-      backup= (Preference) findPreference("backup");
-      restore= (Preference) findPreference("restore");
+      backup = (Preference) findPreference("backup");
+      restore = (Preference) findPreference("restore");
 
       //백업버튼
       backup.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
         @Override
         public boolean onPreferenceClick(Preference preference) {
-
+          restoreOrBackup = "백업";
+          Network nw = new Network();
+          nw.execute();
           return false;
         }
       });
@@ -71,7 +76,9 @@ public class Preferences extends android.preference.PreferenceActivity {
       restore.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
         @Override
         public boolean onPreferenceClick(Preference preference) {
-
+          restoreOrBackup = "복원";
+          Network nw = new Network();
+          nw.execute();
           return false;
         }
       });
@@ -88,9 +95,9 @@ public class Preferences extends android.preference.PreferenceActivity {
         @Override
         public boolean onPreferenceClick(Preference preference) {
           LoginActivity.kakaoLogout();
-          pm.setAutoLogin(null,null,null,null,null,false);
+          pm.setAutoLogin(null, null, null, null, null, false);
           Toast.makeText(ac, "계정 로그아웃 완료", Toast.LENGTH_SHORT).show();
-          Intent intent= ac.getPackageManager().getLaunchIntentForPackage("com.comnawa.dowhat");
+          Intent intent = ac.getPackageManager().getLaunchIntentForPackage("com.comnawa.dowhat");
           startActivity(intent);
           ac.finishAndRemoveTask();
           return false;
@@ -110,6 +117,49 @@ public class Preferences extends android.preference.PreferenceActivity {
         }
       }); //푸시설정 리스너
 
+    }
+
+    class Network extends AsyncTask<Void, Void, Void> {
+
+      ProgressDialog dialog = new ProgressDialog(ac);
+
+      @Override
+      protected void onPreExecute() {
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage("일정 " + restoreOrBackup + "중입니다 잠시만 기다려주세요");
+        dialog.show();
+        super.onPreExecute();
+      }
+
+      @Override
+      protected Void doInBackground(Void... params) {
+        if (restoreOrBackup.equals("복원")) {
+          GetSchedule gs = new GetSchedule(ac);
+          gs.start();
+          boolean current = true;
+          try {
+            gs.join();
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+            current = false;
+          }
+          if (current) {
+            Log.i("ac","성공!");
+          } else {
+            Log.i("ac","실패");
+          }
+        } else if (restoreOrBackup.equals("백업")) {
+
+        }
+        return null;
+      }
+
+      @Override
+      protected void onPostExecute(Void aVoid) {
+        dialog.dismiss();
+        Toast.makeText(ac, "완료", Toast.LENGTH_SHORT).show();
+        super.onPostExecute(aVoid);
+      }
     }
   } // 환경설정 화면구현//
 

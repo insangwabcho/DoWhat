@@ -134,8 +134,6 @@ public class PrefManager {
       String token = prop.getProperty("kakaotoken")== null || prop.getProperty("id").equals("") ?
         "not Login" : prop.getProperty("kakaotoken");
 
-      Log.i("zzo",id+pwd+name+friendid);
-
       result.put("id", id);
       result.put("passwd", pwd);
       result.put("name", name);

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Paint;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.comnawa.dowhat.sangjin.ScheduleDTO;
 
@@ -28,8 +28,10 @@ public class DBManager {
     return dbm.selectSchedule(id, year, month, date);
   }
 
-  public void syncronizedServer() {
-
+  public void requestAllScheduleForServer(ArrayList<ScheduleDTO> dto) {
+    Log.i("test","Hello");
+    dbm.deleteAllSchedule();
+    dbm.insertAllSchedules(dto);
   }
 
   public ArrayList<ScheduleDTO> todaySchedule(String id) {
@@ -41,7 +43,6 @@ public class DBManager {
   }
 
   public void deleteSchedule(ScheduleDTO dto) {
-    Paint p = new Paint();
     dbm.delete(dto);
   }
 
@@ -165,7 +166,7 @@ public class DBManager {
     public void insertAllSchedules(ArrayList<ScheduleDTO> items) {
       SQLiteDatabase db = getWritableDatabase();
       for (ScheduleDTO dto : items) {
-        String sql = "insert into schedule values('" + dto.getId() + "','" + dto.getStartdate() + "','" +
+        String sql = "insert into schedule values("+dto.getNum()+",'" + dto.getId() + "','" + dto.getStartdate() + "','" +
           dto.getEnddate() + "','" + dto.getStarttime() + "','" + dto.getEndtime() + "','" +
           dto.getTitle() + "','" + dto.getEvent() + "','" +
           dto.getPlace() + "','" + dto.getMemo() + "'," + dto.getAlarm() + "," + dto.getRepeat() + ")";
