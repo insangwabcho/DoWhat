@@ -43,7 +43,7 @@ public class PrefManager {
     return textSize;
   } // 어플리케이션에 설정되어있는 tetSize 반환
 
-  public boolean setAutoLogin(String userid, String userpasswd, String namee, String friendid, boolean current) {
+  public boolean setAutoLogin(String userid, String userpasswd, String namee, String friendid, String kakaoToken, boolean current) {
     Log.i("test", "1");
     if (userid.equals("") || userid == null) {
       userid = "not Login";
@@ -56,6 +56,9 @@ public class PrefManager {
     }
     if (friendid.equals("") || friendid == null) {
       friendid = "not Login";
+    }
+    if (kakaoToken.equals("") || kakaoToken == null) {
+      kakaoToken = "not Login";
     }
 
     boolean result = false;
@@ -78,6 +81,8 @@ public class PrefManager {
       bw.write("name:" + namee);
       bw.newLine();
       bw.write("friendid:" + friendid);
+      bw.newLine();
+      bw.write("kakaotoken:" + kakaoToken);
       bw.flush();
       bw.close();
       edit.putBoolean("autoLogin", current).apply();
@@ -122,11 +127,14 @@ public class PrefManager {
       String pwd = prop.getProperty("pwd");
       String name = prop.getProperty("name");
       String friendid = prop.getProperty("friendid");
+      String token= prop.getProperty("kakaotoken");
+
 
       result.put("id", id);
       result.put("passwd", pwd);
       result.put("name", name);
       result.put("friendid", friendid);
+      result.put("kakaotoken", token);
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -152,7 +160,7 @@ public class PrefManager {
   } //인상이꺼
 
   public void testAlarm(String content) {
-    Log.i("test",content);
+    Log.i("test", content);
     edit.putString("testAlarm", prefs.getString("testAlarm", null) + content + ",").commit();
     resetScheduleCount();
   }
