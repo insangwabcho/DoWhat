@@ -5,14 +5,11 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.comnawa.dowhat.sangjin.ScheduleDTO;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class AlarmService extends Service {
   boolean isRunning;
@@ -35,29 +32,29 @@ public class AlarmService extends Service {
       preference 에 aCountSchedule 리셋 후 reload진행 :: new PrefManager(this).resetScheduleCount();
      */
 
-    DoWhat.getSchedule(this);
-    Log.i("test", schedules.toString());
-    Calendar cal = Calendar.getInstance();
-    int year = cal.get(Calendar.YEAR);
-    int month = cal.get(Calendar.MONTH);
-    int date = cal.get(Calendar.DATE);
-    int hour = cal.get(Calendar.HOUR_OF_DAY);
-    int min = cal.get(Calendar.MINUTE);
-    int sec = cal.get(Calendar.SECOND);
-
-    for (ScheduleDTO dto : schedules) {
-
-      long dtoTime = Time.valueOf(dto.getStarttime()).getTime();
-      long nowTime = Time.valueOf(hour + ":" + min + ":" + sec).getTime();
-
-      if (dtoTime > nowTime) {
-        String alarmtime = dto.getStarttime();
-        String[] foo = alarmtime.split(":");
-        Log.i("test", foo[0] + "" + foo[1]);
-
-        DoWhat.setAlarm(this, year, month, date, Integer.parseInt(foo[0]), Integer.parseInt(foo[1]), dto.getTitle());
-      }
-    }
+//    DoWhat.getSchedule(this);
+//    Log.i("test", schedules.toString());
+//    Calendar cal = Calendar.getInstance();
+//    int year = cal.get(Calendar.YEAR);
+//    int month = cal.get(Calendar.MONTH);
+//    int date = cal.get(Calendar.DATE);
+//    int hour = cal.get(Calendar.HOUR_OF_DAY);
+//    int min = cal.get(Calendar.MINUTE);
+//    int sec = cal.get(Calendar.SECOND);
+//
+//    for (ScheduleDTO dto : schedules) {
+//
+//      long dtoTime = Time.valueOf(dto.getStarttime()).getTime();
+//      long nowTime = Time.valueOf(hour + ":" + min + ":" + sec).getTime();
+//
+//      if (dtoTime > nowTime) {
+//        String alarmtime = dto.getStarttime();
+//        String[] foo = alarmtime.split(":");
+//        Log.i("test", foo[0] + "" + foo[1]);
+//
+//        DoWhat.setAlarm(this, year, month, date, Integer.parseInt(foo[0]), Integer.parseInt(foo[1]), dto.getTitle());
+//      }
+//    }
 
     isRunning = true;
     Thread th = new Thread(new MyThread());
