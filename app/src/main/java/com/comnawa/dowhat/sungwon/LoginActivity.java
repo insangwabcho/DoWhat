@@ -107,8 +107,6 @@ public class LoginActivity extends Activity {
                                 PrefManager pm = new PrefManager(LoginActivity.this);
                                 if(cb.isChecked()){
                                     pm.setAutoLogin(id,pwd,name,friendid,true);
-                                } else {
-                                    pm.setAutoLogin(id,pwd,name,friendid,false);
                                 }
                                 Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);
                                 intent.putExtra("id", id);
