@@ -104,15 +104,18 @@ public class LoginActivity extends Activity {
                                 String pwd = jlist.get("password").toString();
                                 String name = jlist.get("name").toString();
                                 String friendid = jlist.get("friendid").toString();
+                                String kakaotoken = jlist.get("kakaotoken").toString();
                                 PrefManager pm = new PrefManager(LoginActivity.this);
                                 if(cb.isChecked()){
-                                    pm.setAutoLogin(id,pwd,name,friendid);
+                                    pm.setAutoLogin(id,pwd,name,friendid,kakaotoken,true);
+                                }else{
+                                    pm.setAutoLogin(id,pwd,name,friendid,kakaotoken,false);
                                 }
                                 Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);
-                                intent.putExtra("id", id);
+                                /*intent.putExtra("id", id);
                                 intent.putExtra("password", pwd);
                                 intent.putExtra("name", name);
-                                intent.putExtra("friendid", friendid);
+                                intent.putExtra("friendid", friendid);*/
                                 startActivity(intent);
                                 finish();
                             } else {
@@ -143,7 +146,6 @@ public class LoginActivity extends Activity {
                 //로그아웃 성공 후 하고싶은 내용 코딩 ~
             }
         });
-
         callback = new SessionCallback();
         Session.getCurrentSession().addCallback(callback);
     }
@@ -186,7 +188,7 @@ public class LoginActivity extends Activity {
                     finish();*/
                    Thread th = new Thread(new Runnable() {
                        String page="";
-                       JSONObject jsonMain;
+                       JSONObject jsonObj;
                        @Override
                        public void run() {
                             try {
@@ -196,10 +198,9 @@ public class LoginActivity extends Activity {
                                 username = userProfile.getNickname();
                                 map.put("kakaotoken",userid);
                                 String body = objectType(page,map);
-                               jsonMain = new JSONObject(body);
-                                if(jsonMain.get("sendData").equals("null")){
+                               jsonObj = new JSONObject(body);
+                                if(jsonObj.get("sendData").equals("null")){
                                     handler.sendEmptyMessage(0);
-                                    Log.i("testdd","asds");
                                 }
                             }catch (Exception e){
 
@@ -232,11 +233,16 @@ public class LoginActivity extends Activity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(LoginActivity.this,confrimActivity.class);
                                 intent.putExtra("id",userid);
-                                intent.putExtra("id",userid);
+                                intent.putExtra("name",username);
                                 startActivity(intent);
                             }
                         })
-                        .setNegativeButton("아니오",null)
+                        .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
                         .show();
                 super.handleMessage(msg);
             }
