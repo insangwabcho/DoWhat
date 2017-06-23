@@ -126,8 +126,8 @@ public class PrefManager {
       prop.load(new InputStreamReader(new FileInputStream(f)));
       String id = prop.getProperty("id").equals("") || prop.getProperty("id") == null ?
         "not Login" : prop.getProperty("id");
-      String pwd = prop.getProperty("pwd").equals("") || prop.getProperty("pwd") == null ?
-        "not Login" : prop.getProperty("pwd");
+      String pwd = prop.getProperty("passwd").equals("") || prop.getProperty("passwd") == null ?
+        "not Login" : prop.getProperty("passwd");
       String name = prop.getProperty("name").equals("") || prop.getProperty("name") == null ?
         "not Login" : prop.getProperty("name");
       String friendid = prop.getProperty("friendid").equals("") || prop.getProperty("friend") == null ?
@@ -135,6 +135,7 @@ public class PrefManager {
       String token = prop.getProperty("kakaotoken").equals("") || prop.getProperty("kakaotoken") == null ?
         "not Login" : prop.getProperty("kakaotoken");
 
+      Log.i("zzo",id+pwd+name+friendid);
 
       result.put("id", id);
       result.put("passwd", pwd);
@@ -144,6 +145,7 @@ public class PrefManager {
 
     } catch (Exception e) {
       e.printStackTrace();
+      Log.i("ZZo","error");
     }
     if (result.size() == 0 || result == null) {
       result.put("id", "not Login");
