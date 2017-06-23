@@ -100,7 +100,7 @@ public class LoginActivity extends Activity {
                             String body = objectType(page, map);
                             JSONObject jsonObj = new JSONObject(body);
                             final JSONArray jArray = (JSONArray) jsonObj.get("sendData");
-                            if (jArray.length() > 0) {
+                            if (jArray.length() > 0) {  //로그인 성공
                                 JSONObject jlist = (JSONObject) jArray.get(0);
                                 String id = jlist.get("id").toString();
                                 String pwd = jlist.get("password").toString();
@@ -108,9 +108,9 @@ public class LoginActivity extends Activity {
                                 String friendid = jlist.get("friendid").toString();
                                 String kakaotoken = jlist.get("kakaotoken").toString();
                                 PrefManager pm = new PrefManager(LoginActivity.this);
-                                if (cb.isChecked()) {
+                                if (cb.isChecked()) { //자동로그인이 체크되어있으면
                                     pm.setAutoLogin(id, pwd, name, friendid, kakaotoken, true);
-                                } else {
+                                } else { //체크되어있지않으면
                                     pm.setAutoLogin(id, pwd, name, friendid, kakaotoken, false);
                                 }
                                 Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);
@@ -120,7 +120,7 @@ public class LoginActivity extends Activity {
                                 intent.putExtra("friendid", friendid);*/
                                 startActivity(intent);
                                 finish();
-                            } else {
+                            } else { //로그인 실패
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -128,8 +128,6 @@ public class LoginActivity extends Activity {
                                     }
                                 });
                             }
-
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -144,11 +142,8 @@ public class LoginActivity extends Activity {
     }
 
     private class SessionCallback implements ISessionCallback {
-
-
         @Override
         public void onSessionOpened() {
-
             UserManagement.requestMe(new MeResponseCallback() {
 
                 @Override
@@ -186,7 +181,7 @@ public class LoginActivity extends Activity {
 
                         @Override
                         public void run() {
-                            try {
+                            try {    //카카오톡 로그인 성공시
                                 page = Common.SERVER_URL + "/Dowhat/Member_servlet/kakaocheck.do";
                                 HashMap<String, String> map = new HashMap<String, String>();
                                 userid = String.valueOf(userProfile.getId());
@@ -194,8 +189,26 @@ public class LoginActivity extends Activity {
                                 map.put("kakaotoken", userid);
                                 String body = objectType(page, map);
                                 jsonObj = new JSONObject(body);
-                                if (jsonObj.get("sendData").equals("null")) {
+                                JSONArray jArray = (JSONArray) jsonObj.get("sendData");
+                                JSONObject jlist = (JSONObject) jArray.get(0);
+                                Log.i("kakoCheck",jArray.toString());
+                                if (jlist.get("id").equals("null")) { // 기존계정과 카톡계정이 연동되어있지않으면
                                     handler.sendEmptyMessage(0);
+                                }else{  // 카톡계정이 연동되어있으면
+                                    String id =jlist.get("id").toString();
+                                    String name = jlist.get("name").toString();
+                                    String kakaotoken = jlist.get("kakaotoken").toString();
+                                    String pwd = "";
+                                    String friendid ="";
+                                    PrefManager pm = new PrefManager(LoginActivity.this);
+                                    pm.setAutoLogin(id,pwd,name,friendid,kakaotoken,false);
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Intent intent = new Intent(LoginActivity.this,CalendarActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    });
                                 }
                             } catch (Exception e) {
 
@@ -203,7 +216,7 @@ public class LoginActivity extends Activity {
                         }
                     });
                     th.start();
-
+                    finish();
                 }
             });
 
@@ -217,7 +230,7 @@ public class LoginActivity extends Activity {
             }
         }
 
-
+        //기존 DB에 카톡토큰이 등록되있지않을경우 다이얼로그 생성
         Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -234,6 +247,7 @@ public class LoginActivity extends Activity {
                             }
                         })
                         .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                            //아니오 입력시 임의로 DB에 계정추가
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Thread th = new Thread(new Runnable() {

@@ -36,6 +36,7 @@ public class confrimActivity extends Activity {
         btnCancel = (Button)findViewById(R.id.btnCancel);
 
         btnSearch =(Button)findViewById(R.id.btnSearch);
+        //계정정보 Serch 이벤트
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,20 +50,20 @@ public class confrimActivity extends Activity {
                             map.put("id",editAccount.getText().toString());
                             String body = JsonObject.objectType(page,map);
                             JSONObject jsonObj = new JSONObject(body);
-                            if(!jsonObj.get("sendData").equals("success")){
+                            if(!jsonObj.get("sendData").equals("success")){ //입력한 계정이 DB에 있으면
                                 String page2 = Common.SERVER_URL +"/Dowhat/Member_servlet/tokeninsert.do";
                                 HashMap<String,String> map2 = new HashMap<String, String>();
                                 map2.put("id",editAccount.getText().toString());
                                 map2.put("kakaotoken",kakaotoken);
                                 String body2 = JsonObject.objectType(page2,map2);
-                                JSONObject jsonObj2 = new JSONObject(body2);
+                                JSONObject jsonObj2 = new JSONObject(body2); //기존계정에 토큰추가
                                 int result =  (int) jsonObj2.get("sendData");
-                                if(result>0){
+                                if(result>0){ //기존계정에 토큰추가 성공
                                     String id =editAccount.getText().toString();
                                     String pwd="";
                                     String friendid ="";
                                     PrefManager pm = new PrefManager(confrimActivity.this);
-                                    Log.i("testss",id+pwd+friendid+kakaotoken+name);
+                                    Log.i("tokeninsert",id+pwd+friendid+kakaotoken+name);
                                     pm.setAutoLogin(id,pwd,name,friendid,kakaotoken,false);
                                     runOnUiThread(new Runnable() {
                                         @Override
@@ -75,9 +76,8 @@ public class confrimActivity extends Activity {
                                     });
                                     finish();
 
-                                }else{
                                 }
-                            }else {
+                            }else { //입력한계정이 DB에 없으면
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
