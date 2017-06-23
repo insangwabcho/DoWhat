@@ -121,18 +121,17 @@ public class PrefManager {
     HashMap<String, String> result = new HashMap<>();
     try {
       File f= new File("/data/data/"+context.getPackageName()+"/files/log.prop");
-
       Properties prop = new Properties();
       prop.load(new InputStreamReader(new FileInputStream(f)));
-      String id = prop.getProperty("id").equals("") || prop.getProperty("id") == null ?
+      String id = prop.getProperty("id")== null || prop.getProperty("id").equals("") ?
         "not Login" : prop.getProperty("id");
-      String pwd = prop.getProperty("passwd").equals("") || prop.getProperty("passwd") == null ?
+      String pwd = prop.getProperty("passwd")== null || prop.getProperty("id").equals("") ?
         "not Login" : prop.getProperty("passwd");
-      String name = prop.getProperty("name").equals("") || prop.getProperty("name") == null ?
+      String name = prop.getProperty("name")== null || prop.getProperty("id").equals("") ?
         "not Login" : prop.getProperty("name");
-      String friendid = prop.getProperty("friendid").equals("") || prop.getProperty("friend") == null ?
+      String friendid = prop.getProperty("friend")== null || prop.getProperty("id").equals("") ?
         "not Login" : prop.getProperty("friend");
-      String token = prop.getProperty("kakaotoken").equals("") || prop.getProperty("kakaotoken") == null ?
+      String token = prop.getProperty("kakaotoken")== null || prop.getProperty("id").equals("") ?
         "not Login" : prop.getProperty("kakaotoken");
 
       Log.i("zzo",id+pwd+name+friendid);
