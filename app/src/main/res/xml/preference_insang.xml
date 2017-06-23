@@ -10,25 +10,11 @@
       android:title="자동로그인 기능"
       />
     <SwitchPreference
-      android:key="autoUpdate"
+      android:key="autoSync"
       android:summaryOff="꺼짐"
       android:summaryOn="켜짐"
-      android:title="자동 업데이트"
+      android:title="자동 동기화"
       />
-
-  </PreferenceCategory>
-  <PreferenceCategory>
-
-    <ListPreference
-      android:defaultValue="10"
-      android:dialogTitle="글꼴 크기를 선택하세요"
-      android:entries="@array/font_size"
-      android:entryValues="@array/font_size_value"
-      android:key="fontSize"
-      android:summary="글꼴 크기를 선택합니다"
-      android:title="글꼴 크기"
-      />
-
     <PreferenceScreen
       android:title="푸시설정">
       <SwitchPreference
@@ -39,11 +25,19 @@
     </PreferenceScreen>
 
     <PreferenceScreen
-      android:title="카카오계정 연동"
+      android:title="계정정보">
+      <Preference
+        android:key="logId"
+        android:title="아이디"/>
+      <Preference
+        android:key="logName"
+        android:title="이름"/>
+      <Preference
+        android:key="logoutKakao"
+        android:title="계정 로그아웃"/>
 
+    </PreferenceScreen>
 
-
-      />
 
   </PreferenceCategory>
   <PreferenceCategory>
