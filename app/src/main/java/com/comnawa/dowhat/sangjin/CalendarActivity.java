@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,7 +109,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         //날짜를 눌렀을 때 목록표시 이벤트
         calview.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int day) {
+            public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
                 id = UserInfo.get("id");
                 String n=String.valueOf(year);
                 String w=String.valueOf(month+1);
@@ -260,7 +259,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         }
     }
 
-    public void StartDay(@NonNull CalendarView view, int year, int month, int day){
+    public void StartDay(CalendarView view, int year, int month, int day){
         id = getIntent().getStringExtra("id");
         String n=String.valueOf(year);
         String w=String.valueOf(month+1);
