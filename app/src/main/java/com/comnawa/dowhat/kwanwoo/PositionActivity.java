@@ -5,7 +5,6 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 import com.comnawa.dowhat.R;
@@ -21,9 +20,9 @@ import java.util.List;
 
 public class PositionActivity extends AppCompatActivity implements OnMapReadyCallback {
     EditText editPlace;
-    Button btnSearch;
+
     MapFragment fragment;
-    private GoogleMap map;
+    GoogleMap map;
 
     //GoogleMap
     @Override
@@ -31,9 +30,9 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.position_kwanwoo);
 
-        editPlace = (EditText) findViewById(R.id.fragment1);
+        editPlace = (EditText) findViewById(R.id.editPlace);
         fragment = (MapFragment) getFragmentManager().findFragmentById(R.id.fragment1);
-        //미동기적 방식으로 맵 로딩
+        //비동기적 방식으로 맵 로딩
         fragment.getMapAsync(this);
     }
 
@@ -43,11 +42,13 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
         this.map = map;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         DoWhat.checkPermission(this, DoWhat.access_fine_location, DoWhat.access_coarse_location);
-        map.setMyLocationEnabled(true);
+        map.setMyLocationEnabled(true); //현재위치
+        map.setIndoorEnabled(true); //실내정보
+        map.setBuildingsEnabled(true); //건물정보
 
         map.getUiSettings().setZoomControlsEnabled(true);
     }
-    public void search(View v){
+    public void onClick(View v){
         String place = editPlace.getText().toString();
         Geocoder corder = new Geocoder(this);
         List<Address> list = null;
