@@ -65,6 +65,8 @@ public class ScheduleRestore extends Thread {
       for (int i = 0; i < jArray.length(); i++) {
         JSONObject row = jArray.getJSONObject(i);
         ScheduleDTO dto = new ScheduleDTO();
+        dto.setNum(row.getInt("num"));
+        dto.setId(row.getString("id"));
         dto.setTitle(row.getString("title"));
         dto.setEvent(row.getString("event"));
         dto.setStartdate(row.getString("startdate"));
