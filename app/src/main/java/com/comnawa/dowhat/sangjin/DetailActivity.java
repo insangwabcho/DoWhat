@@ -3,12 +3,8 @@ package com.comnawa.dowhat.sangjin;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -23,6 +19,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
+import com.comnawa.dowhat.insang.DBManager;
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.insang.Preferences;
@@ -73,12 +70,15 @@ public class DetailActivity extends AppCompatActivity {
             dto.setAlarm(alarm);
             dto.setRepeat(repeat);
 
+            DBManager dbManager= new DBManager(this);
             if (check) { //신규
-              UpdateNewSchedule uns= new UpdateNewSchedule(this,true,dto);
-              uns.start();
+                dbManager.insertSchedule(dto);
+//              UpdateNewSchedule uns= new UpdateNewSchedule(this,true,dto);
+//              uns.start();
             } else { //수정
-              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
-              uns.start();
+                dbManager.updateSchedule(dto);
+//              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
+//              uns.start();
             }
 
         }

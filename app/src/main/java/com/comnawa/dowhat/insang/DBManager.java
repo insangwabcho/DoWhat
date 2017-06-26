@@ -193,7 +193,7 @@ public class DBManager {
         dto.getEnddate() + "', starttime='" + dto.getStarttime() + "', endtime='" + dto.getEndtime() + "', title='" +
         dto.getTitle() + "', event='" + dto.getEvent() + "', place='" +
         dto.getPlace() + "',memo='" + dto.getMemo() + "', alarm=" + dto.getAlarm() + ", repeat=" + dto.getRepeat() +
-        " where num=" + dto.getNum();
+        " where Num=" + dto.getNum();
     }
 
     //일정 삭제

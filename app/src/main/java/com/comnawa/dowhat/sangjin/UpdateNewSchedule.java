@@ -11,7 +11,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
@@ -66,8 +65,6 @@ public class UpdateNewSchedule extends Thread {
       HttpPost httpPost = new HttpPost(page);
       httpPost.setEntity(request);
     } catch (UnsupportedEncodingException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
       e.printStackTrace();
     }
   }
