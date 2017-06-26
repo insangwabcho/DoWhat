@@ -76,6 +76,8 @@ public class DetailActivity extends AppCompatActivity {
             if (check) { //신규
                 dbManager.insertSchedule(dto);
                 Toast.makeText(this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
+
+                //신규설정한 날짜 startdate를  putExtra로 넣어서 CalendarActivity에 보내주고 finish()
                 Intent intent= new Intent(this, CalendarActivity.class);
                 intent.putExtra("sdate", txtSdate.getText().toString());
                 startActivity(intent);
@@ -86,6 +88,8 @@ public class DetailActivity extends AppCompatActivity {
             } else { //수정
                 dbManager.updateSchedule(dto);
                 Toast.makeText(this, "수정 되었습니다.", Toast.LENGTH_SHORT).show();
+
+                //수정한 날짜 startdate를 putExtra로 넣어서 CalendarActivity에 보내주고 실행 후 finish()
                 Intent intent= new Intent(this, CalendarActivity.class);
                 intent.putExtra("sdate", txtSdate.getText().toString());
                 startActivity(intent);

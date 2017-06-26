@@ -118,15 +118,22 @@ public class CalendarActivity extends ListActivity implements Serializable {
             e.printStackTrace();
         }
         Calendar cal=Calendar.getInstance();
+        //
+        //calendaractivity 실행 전 액티비티에서 sdate라는 변수명으로 저장해준 값이 없다면
         if (getIntent().getStringExtra("sdate")== null) {
             Log.i("test","null");
+            //오늘날짜로 StartDay() 함수 실행
             StartDay(calview, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-        } else {
+        } else { //그렇지 않다면
             Log.i("test","sdate on");
+            //putExtra로 담아준 sdate변수값 가져오기
             String sdate= getIntent().getStringExtra("sdate");
-            String[] days= sdate.split("-");
+            //넘어온값은 2017-12-12 형식이기때문에 -로 스플릿
+            String[] days= sdate.split("-"); // 년= [0], 월= [1], 일= [2]
+            //받아온 년,월-1,일로 날자 세팅 후 StartDay() 실행
             StartDay(calview, Integer.parseInt(days[0]), Integer.parseInt(days[1])-1, Integer.parseInt(days[2]));
         }
+        //
         btnPlus.setImageResource(R.drawable.plus);
         btnAdd.setImageResource(R.drawable.add);
         btnMic.setImageResource(R.drawable.mic);
