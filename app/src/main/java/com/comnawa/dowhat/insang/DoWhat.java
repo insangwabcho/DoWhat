@@ -153,7 +153,7 @@ public class DoWhat {
   } //서비스에서 호출시 null
 
   public static void getSchedule(Context context) {
-    GetSchedule sc = new GetSchedule(context);
+    ScheduleRestore sc = new ScheduleRestore(context);
     sc.start();
     try {
       sc.join();

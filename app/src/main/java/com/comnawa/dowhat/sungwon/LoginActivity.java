@@ -218,7 +218,7 @@ public class LoginActivity extends Activity {
                                     String pwd = "";
                                     String friendid ="";
                                     PrefManager pm = new PrefManager(LoginActivity.this);
-                                    pm.setAutoLogin(id,pwd,name,friendid,kakaotoken,false);
+                                    pm.setAutoLogin(id,pwd,name,friendid,kakaotoken,true);
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -289,7 +289,7 @@ public class LoginActivity extends Activity {
                                                 PrefManager pm = new PrefManager(LoginActivity.this);
                                                 String friendid = "";
                                                 String passwd = "";
-                                                pm.setAutoLogin(userid, passwd, username, friendid, userid, false);
+                                                pm.setAutoLogin(userid, passwd, username, friendid, userid, true);
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {

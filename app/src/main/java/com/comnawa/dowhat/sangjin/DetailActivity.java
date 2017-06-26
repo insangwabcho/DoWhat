@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -38,7 +39,6 @@ public class DetailActivity extends AppCompatActivity {
     DatePickerDialog Ddialog; //데이트피커 다이얼로그
     TimePickerDialog Tdialog; //타임피커 다이얼로그
     String event; //DB에 저장할 이벤트
-    String Sdate,Edate; //DB에 저장할 시작일, 종료일
     String DBstime, DBetime; //DB에 저장할 시작시간, 종료시간
     int alarm, repeat; //DB에 저장할 알람, 반복
     private boolean check; //신규 , 수정 판별 변수 (true:신규)
@@ -62,8 +62,9 @@ public class DetailActivity extends AppCompatActivity {
             dto.setId(new PrefManager(this).getUserInfo().get("id"));
             dto.setTitle(editTitle.getText().toString());
             dto.setEvent(event);
-            dto.setStartdate(Sdate);
-            dto.setEnddate(Edate);
+            dto.setStartdate(txtSdate.getText().toString());
+            dto.setPlace(editPlace.getText().toString());
+            dto.setEnddate(txtEdate.getText().toString());
             dto.setStarttime(DBstime);
             dto.setEndtime(DBetime);
             dto.setMemo(editMemo.getText().toString());
@@ -73,10 +74,16 @@ public class DetailActivity extends AppCompatActivity {
             DBManager dbManager= new DBManager(this);
             if (check) { //신규
                 dbManager.insertSchedule(dto);
+                Toast.makeText(this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
+                finish();
+
 //              UpdateNewSchedule uns= new UpdateNewSchedule(this,true,dto);
 //              uns.start();
             } else { //수정
                 dbManager.updateSchedule(dto);
+                Toast.makeText(this, "수정 되었습니다.", Toast.LENGTH_SHORT).show();
+                finish();
+
 //              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
 //              uns.start();
             }
@@ -127,9 +134,9 @@ public class DetailActivity extends AppCompatActivity {
             ScheduleDTO dto=CalendarActivity.items.get(index);
             Num=dto.getNum();
             editTitle.setText(dto.getTitle());
-            if(dto.getPlace() != null){
+            if(dto.getPlace()!=null){
                 editPlace.setText(dto.getPlace());
-            }else {
+            }else{
                 editPlace.setText("");
             }
             txtSdate.setText(dto.getStartdate());
@@ -287,11 +294,9 @@ public class DetailActivity extends AppCompatActivity {
             String date = n + "-" + w + "-" + i;
             //시작일 종료일을 구분하여 알맞는 editText에 입력
             if (dateOk) {
-                Sdate=date;
                 txtSdate.setText(date);
             } else {
                 txtEdate.setText(date);
-                Edate=date;
             }
 
             //시작일이 종료일보다 나중일때 처리

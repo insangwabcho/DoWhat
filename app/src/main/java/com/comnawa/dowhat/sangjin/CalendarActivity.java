@@ -2,13 +2,18 @@ package com.comnawa.dowhat.sangjin;
 
 
 import android.app.ListActivity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,26 +23,16 @@ import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.insang.DBManager;
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.PrefManager;
-import com.comnawa.dowhat.sungwon.Common;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 
@@ -47,9 +42,17 @@ public class CalendarActivity extends ListActivity implements Serializable {
     static ArrayList<ScheduleDTO> items; //일정을 담을 리스트
     String id;
     static String startdate; //아이디와 선택 날짜
-    ImageView btnAdd; //일정 추가버튼
+    ImageView btnPlus, btnAdd, btnMic;
     PrefManager manager;
     DBManager dbManager;
+    boolean isClick;
+    int index,Num;
+
+    private static final int RESULT_SPEECH=1;
+
+    private Intent i;
+    private SpeechRecognizer mRecognizer;
+    TextToSpeech tts;
 
     Handler handler = new Handler() {
         @Override
@@ -66,6 +69,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         super.onListItemClick(l, v, position, id);
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("index",position);
+        index=position;
         intent.putExtra("check",1);
         startActivity(intent);
     }
@@ -79,32 +83,57 @@ public class CalendarActivity extends ListActivity implements Serializable {
         final HashMap<String, String> UserInfo=manager.getUserInfo();
         Log.i("Test2",manager.getUserInfo().toString());
         txtDate = (TextView) findViewById(R.id.txtDate);
+        btnPlus = (ImageView)findViewById(R.id.btnPlus);
         btnAdd = (ImageView)findViewById(R.id.btnAdd);
-        Paint paint=new Paint();
-        paint.setColor(Color.parseColor("#E47833"));
-        paint.setAlpha(70);
+        btnMic = (ImageView)findViewById(R.id.btnMic);
         calview = (CalendarView) findViewById(R.id.calview);
         dbManager= new DBManager(this);
-        items= dbManager.todaySchedule(UserInfo.get("id"));
-//        Calendar cal=Calendar.getInstance();
-//        StartDay(calview,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DATE));
-        btnAdd.setImageResource(R.drawable.plus);
+        items= new ArrayList<>();
+        try {
+            items = dbManager.todaySchedule(UserInfo.get("id"));
+        }catch(SQLiteException e){
+            e.printStackTrace();
+        }
+        Calendar cal=Calendar.getInstance();
+        StartDay(calview,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DATE));
+        btnPlus.setImageResource(R.drawable.plus);
+        btnAdd.setImageResource(R.drawable.add);
+        btnMic.setImageResource(R.drawable.mic);
+        btnAdd.setVisibility(View.INVISIBLE);
+        btnMic.setVisibility(View.INVISIBLE);
 
-        //일정 추가버튼을 눌렀을때 이벤트
-        btnAdd.setOnClickListener(new View.OnClickListener() {
+        //플러스 버튼을 눌렀을때 이벤트
+        btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CalendarActivity.this, DetailActivity.class);
-                intent.putExtra("check",0);
-                startActivity(intent);
-            }
-        });
-
-        //TTS구현
-        btnAdd.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return false;
+                if(isClick){
+                    //버튼 2개 표시후 X로 이미지 변경
+                    btnAdd.setVisibility(View.VISIBLE);
+                    btnMic.setVisibility(View.VISIBLE);
+                    btnPlus.setImageResource(R.drawable.x);
+                    isClick=!isClick;
+                    //추가버튼 눌렀을때 이벤트
+                    btnAdd.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(CalendarActivity.this, DetailActivity.class);
+                            intent.putExtra("check",0);
+                            startActivity(intent);
+                        }
+                    });
+                    //음성인식
+                    btnMic.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            STT();
+                        }
+                    });
+                }else{
+                    btnAdd.setVisibility(View.INVISIBLE);
+                    btnMic.setVisibility(View.INVISIBLE);
+                    btnPlus.setImageResource(R.drawable.plus);
+                    isClick=!isClick;
+                }
             }
         });
 
@@ -128,7 +157,12 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 }
                 startdate=n+"-"+w+"-"+i;
                 txtDate.setText(n+"년 "+w+"월 "+i+"일 일정"); //텍스트뷰에 날짜표시
-                items= dbManager.getSchedule(id,nyun,wol,il);
+                items= new ArrayList<ScheduleDTO>();
+                try {
+                    items = dbManager.getSchedule(id, nyun, wol, il);
+                }catch (SQLiteException e){
+                    e.printStackTrace();
+                }
                 handler.sendEmptyMessage(0);
 //                Thread th = new Thread(new Runnable() {
 //                    @Override
@@ -173,9 +207,61 @@ public class CalendarActivity extends ListActivity implements Serializable {
 //                        }
 //                    }
 //                });
-//                th.start();
+//                th.start(); //5
             }
         });
+    }
+
+    private void STT() {
+        i=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        i.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
+        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR");
+        i.putExtra(RecognizerIntent.EXTRA_PROMPT, "일정을 말씀해주세요.");
+
+        Toast.makeText(CalendarActivity.this, "음성인식 시작", Toast.LENGTH_SHORT).show();
+
+        try {
+            startActivityForResult(i, RESULT_SPEECH);
+        }catch (ActivityNotFoundException e) {
+            Toast.makeText(getApplicationContext(), "말하기 기능을 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
+            e.getStackTrace();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK&&(requestCode==RESULT_SPEECH)){
+            ArrayList<String> sstResult=data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+            final String result_stt = sstResult.get(0);
+            Toast.makeText(CalendarActivity.this, result_stt, Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder ab=new AlertDialog.Builder(this);
+            ab.setTitle("녹음 확인");
+            ab.setMessage("일정 : [ "+result_stt+" ]\n일시 : [ "+startdate+" ]")
+              .setCancelable(true)
+                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ScheduleDTO dto=new ScheduleDTO();
+                            dto.setNum(Num);
+                            dto.setId(id);
+                            dto.setTitle(result_stt);
+                            dto.setStartdate(startdate);
+                            dbManager.insertSchedule(dto);
+                            Toast.makeText(CalendarActivity.this, "일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNeutralButton("다시 녹음", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            STT();
+                        }
+                    })
+                    .setNegativeButton("취소", null);
+            AlertDialog alertDialog = ab.create();
+            alertDialog.show();
+        }
     }
 
     class ScheduleAdapter extends ArrayAdapter<ScheduleDTO> {
@@ -257,10 +343,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
                     img1.setImageResource(R.drawable.birthday);
                     img1.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 } else if (event.equals("기념일")) {
-                    img1.setImageResource(R.drawable.heart);
+                    img1.setImageResource(R.drawable.love);
                     img1.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                } else {
-                    img1.setVisibility(View.GONE);
                 }
             }
             return v;
@@ -280,7 +364,17 @@ public class CalendarActivity extends ListActivity implements Serializable {
         }
         startdate=n+"-"+w+"-"+i;
         txtDate.setText(n+"년 "+w+"월 "+i+"일 일정"); //텍스트에 날짜표시
-        Thread th = new Thread(new Runnable() {
+        int nyun= Integer.parseInt(n);
+        int wol= Integer.parseInt(w);
+        int il= Integer.parseInt(i);
+        items= new ArrayList<>();
+        try {
+            items = dbManager.getSchedule(id, nyun, wol, il);
+        }catch (SQLiteException e){
+            e.printStackTrace();
+        }
+        handler.sendEmptyMessage(0);
+        /*Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -323,7 +417,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 }
             }
         });
-        th.start();
+        th.start();*/
     }
 
     public ScheduleDTO getSchedule(int index){

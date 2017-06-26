@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,10 +15,7 @@ import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.kwanwoo.CalendarCoreActivity;
 import com.comnawa.dowhat.sangjin.CalendarActivity;
-import com.comnawa.dowhat.sangjin.ScheduleDTO;
 import com.comnawa.dowhat.sungwon.LoginActivity;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,17 +68,9 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, LoginActivity.class);
         break;
       case R.id.btnInsang2:
-        DBManager dbm= new DBManager(this);
-        ScheduleDTO dto= new ScheduleDTO();
-        dto.setTitle("title");
-        dto.setId("id");
-        ArrayList<ScheduleDTO> items= new ArrayList<>();
-        items.add(dto);
-        dbm.insertSchedule(dto);
-        for (ScheduleDTO t: items) {
-          Log.i("zzo", t.getTitle());
-        }
-
+        DBManager dbManager= new DBManager(this);
+        dbManager.tableDrop();
+        Toast.makeText(this, "성공", Toast.LENGTH_SHORT).show();
         return;
       case R.id.btninsang3:
         PrefManager prefManager= new PrefManager(this);

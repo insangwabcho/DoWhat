@@ -134,7 +134,7 @@ public class Preferences extends android.preference.PreferenceActivity {
       @Override
       protected Void doInBackground(Void... params) {
         if (restoreOrBackup.equals("복원")) {
-          GetSchedule gs = new GetSchedule(ac);
+          ScheduleRestore gs = new ScheduleRestore(ac);
           gs.start();
           boolean current = true;
           try {
@@ -149,7 +149,20 @@ public class Preferences extends android.preference.PreferenceActivity {
             Log.i("ac","실패");
           }
         } else if (restoreOrBackup.equals("백업")) {
-
+          ScheduleBackup b= new ScheduleBackup(ac);
+          b.start();
+          boolean current= true;
+          try{
+            b.join();
+          }catch (InterruptedException e){
+            e.printStackTrace();
+            current= false;
+          }
+          if (current){
+            Log.i("ac","성공");
+          }else {
+            Log.i("ac","실패");
+          }
         }
         return null;
       }
@@ -162,10 +175,6 @@ public class Preferences extends android.preference.PreferenceActivity {
       }
     }
   } // 환경설정 화면구현//
-
-  public void onClick(Preference p) {
-    Log.i("insang", p.toString());
-  }
 
   @Override
   protected void onDestroy() {
