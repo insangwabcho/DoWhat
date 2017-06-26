@@ -231,7 +231,7 @@ public class DBManager {
     //일정 삭제
     public void delete(ScheduleDTO dto) {
       SQLiteDatabase db = getWritableDatabase();
-      String sql = "delete from schedule where=" + dto.getNum() + " and" + dto.getId();
+      String sql = "delete from schedule where num=" + dto.getNum() + " and" + dto.getId();
       db.execSQL(sql);
     }
 
