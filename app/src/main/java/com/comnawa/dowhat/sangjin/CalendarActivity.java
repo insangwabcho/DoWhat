@@ -121,11 +121,13 @@ public class CalendarActivity extends ListActivity implements Serializable {
         if (getIntent().getStringExtra("sdate")== null) {
             Log.i("test","null");
             StartDay(calview, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+            SettingListview();
         } else {
             Log.i("test","sdate on");
             String sdate= getIntent().getStringExtra("sdate");
             String[] days= sdate.split("-");
             StartDay(calview, Integer.parseInt(days[0]), Integer.parseInt(days[1]), Integer.parseInt(days[2]));
+            SettingListview();
         }
         btnPlus.setImageResource(R.drawable.plus);
         btnAdd.setImageResource(R.drawable.add);

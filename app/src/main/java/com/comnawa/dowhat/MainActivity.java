@@ -69,8 +69,9 @@ public class MainActivity extends AppCompatActivity {
         break;
       case R.id.btnInsang2:
         DBManager dbManager= new DBManager(this);
-        dbManager.tableDrop();
-        Toast.makeText(this, "성공", Toast.LENGTH_SHORT).show();
+        dbManager.testDelete(1);
+        dbManager.testDelete(2);
+
         return;
       case R.id.btninsang3:
         PrefManager prefManager= new PrefManager(this);
