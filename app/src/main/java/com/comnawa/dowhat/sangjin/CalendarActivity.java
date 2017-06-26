@@ -47,7 +47,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
     ScheduleAdapter adapter;
     boolean isClick;
 
-    private static final int RESULT_SPEECH=1;
+    private static final int RESULT_SPEECH = 1;
 
     private Intent i;
     private SpeechRecognizer mRecognizer;
@@ -60,24 +60,28 @@ public class CalendarActivity extends ListActivity implements Serializable {
         this.getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final ScheduleDTO dto=items.get(position);
-                AlertDialog.Builder dialog= new AlertDialog.Builder(CalendarActivity.this);
+                final ScheduleDTO dto = items.get(position);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(CalendarActivity.this);
                 dialog.setTitle("일정삭제")
-                  .setMessage("일정을 삭제하시겠습니까?")
-                  .setPositiveButton("네", new DialogInterface.OnClickListener() {
-                      @Override
-                      public void onClick(DialogInterface dialog, int which) {
-                          new DBManager(CalendarActivity.this).deleteSchedule(dto);
-                          Toast.makeText(CalendarActivity.this, "삭제되었습니다.", Toast.LENGTH_SHORT).show();
-                      }
-                  })
-                  .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
-                      @Override
-                      public void onClick(DialogInterface dialog, int which) {
-                          Toast.makeText(CalendarActivity.this, "삭제가 취소되었습니다.", Toast.LENGTH_SHORT).show();
-                      }
-                  })
-                  .create().show();
+                        .setMessage("일정을 삭제하시겠습니까?")
+                        .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                new DBManager(CalendarActivity.this).deleteSchedule(dto);
+                                Toast.makeText(CalendarActivity.this, "삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                                DoWhat.resetAlarm(CalendarActivity.this);
+                                Calendar cal = Calendar.getInstance();
+                                String[] days = startdate.split("-"); // 년= [0], 월= [1], 일= [2]
+                                StartDay(calview, Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
+                            }
+                        })
+                        .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(CalendarActivity.this, "삭제가 취소되었습니다.", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .create().show();
                 return true;
             }
         });
@@ -88,12 +92,11 @@ public class CalendarActivity extends ListActivity implements Serializable {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra("index",position);
-        intent.putExtra("check",1);
+        intent.putExtra("index", position);
+        intent.putExtra("check", 1);
         startActivity(intent);
         finish();
     }
-
 
 
     @Override
@@ -101,36 +104,45 @@ public class CalendarActivity extends ListActivity implements Serializable {
         DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로 고정
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_sangjin);
-        manager=new PrefManager(this);
-        final HashMap<String, String> UserInfo=manager.getUserInfo();
-        Log.i("Test2",manager.getUserInfo().toString());
+        manager = new PrefManager(this);
+        final HashMap<String, String> UserInfo = manager.getUserInfo();
+        Log.i("Test2", manager.getUserInfo().toString());
         txtDate = (TextView) findViewById(R.id.txtDate);
-        btnPlus = (ImageView)findViewById(R.id.btnPlus);
-        btnAdd = (ImageView)findViewById(R.id.btnAdd);
-        btnMic = (ImageView)findViewById(R.id.btnMic);
+        btnPlus = (ImageView) findViewById(R.id.btnPlus);
+        btnAdd = (ImageView) findViewById(R.id.btnAdd);
+        btnMic = (ImageView) findViewById(R.id.btnMic);
         calview = (CalendarView) findViewById(R.id.calview);
-        dbManager= new DBManager(this);
-        items= new ArrayList<>();
+        dbManager = new DBManager(this);
+        items = new ArrayList<>();
         try {
             items = dbManager.todaySchedule(UserInfo.get("id"));
-        }catch(SQLiteException e){
+        } catch (SQLiteException e) {
             e.printStackTrace();
         }
-        Calendar cal=Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
         //
         //calendaractivity 실행 전 액티비티에서 sdate라는 변수명으로 저장해준 값이 없다면
-        if (getIntent().getStringExtra("sdate")== null) {
-            Log.i("test","null");
+        if (getIntent().getStringExtra("sdate") == null || getIntent().getStringExtra("sdate").equals("null")) {
+            Log.i("test", "null");
             //오늘날짜로 StartDay() 함수 실행
             StartDay(calview, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
         } else { //그렇지 않다면
-            Log.i("test","sdate on");
+            Log.i("test", "sdate on");
             //putExtra로 담아준 sdate변수값 가져오기
-            String sdate= getIntent().getStringExtra("sdate");
+            String sdate = getIntent().getStringExtra("sdate");
             //넘어온값은 2017-12-12 형식이기때문에 -로 스플릿
-            String[] days= sdate.split("-"); // 년= [0], 월= [1], 일= [2]
+            String[] days = sdate.split("-"); // 년= [0], 월= [1], 일= [2]
             //받아온 년,월-1,일로 날자 세팅 후 StartDay() 실행
-            StartDay(calview, Integer.parseInt(days[0]), Integer.parseInt(days[1])-1, Integer.parseInt(days[2]));
+            int year = Integer.parseInt(days[0]);
+            int month = Integer.parseInt(days[1])-1;
+            int day = Integer.parseInt(days[2]);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month);
+            calendar.set(Calendar.DAY_OF_MONTH, day);
+            long setdate = calendar.getTimeInMillis();
+            calview.setDate(setdate, true, true);
+            StartDay(calview, Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
         }
         //
         btnPlus.setImageResource(R.drawable.plus);
@@ -143,18 +155,18 @@ public class CalendarActivity extends ListActivity implements Serializable {
         btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isClick){
+                if (isClick) {
                     //버튼 2개 표시후 X로 이미지 변경
                     btnAdd.setVisibility(View.VISIBLE);
                     btnMic.setVisibility(View.VISIBLE);
                     btnPlus.setImageResource(R.drawable.x);
-                    isClick=!isClick;
+                    isClick = !isClick;
                     //추가버튼 눌렀을때 이벤트
                     btnAdd.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(CalendarActivity.this, DetailActivity.class);
-                            intent.putExtra("check",0);
+                            intent.putExtra("check", 0);
                             startActivity(intent);
                             finish();
                         }
@@ -166,11 +178,11 @@ public class CalendarActivity extends ListActivity implements Serializable {
                             STT();
                         }
                     });
-                }else{
+                } else {
                     btnAdd.setVisibility(View.INVISIBLE);
                     btnMic.setVisibility(View.INVISIBLE);
                     btnPlus.setImageResource(R.drawable.plus);
-                    isClick=!isClick;
+                    isClick = !isClick;
                 }
             }
         });
@@ -181,24 +193,24 @@ public class CalendarActivity extends ListActivity implements Serializable {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
                 id = UserInfo.get("id");
-                String n=String.valueOf(year);
-                String w=String.valueOf(month+1);
-                String i=String.valueOf(day);
-                int nyun= Integer.parseInt(n);
-                int wol= Integer.parseInt(w);
-                int il= Integer.parseInt(i);
-                if((month+1)< 10) { //1~9월에는 앞에 0을 붙임
+                String n = String.valueOf(year);
+                String w = String.valueOf(month + 1);
+                String i = String.valueOf(day);
+                int nyun = Integer.parseInt(n);
+                int wol = Integer.parseInt(w);
+                int il = Integer.parseInt(i);
+                if ((month + 1) < 10) { //1~9월에는 앞에 0을 붙임
                     w = "0" + String.valueOf(month + 1);
                 }
-                if(day<10){ //1~9일에는 앞에 0을 붙임
+                if (day < 10) { //1~9일에는 앞에 0을 붙임
                     i = "0" + String.valueOf(day);
                 }
-                startdate=n+"-"+w+"-"+i;
-                txtDate.setText(n+"년 "+w+"월 "+i+"일 일정"); //텍스트뷰에 날짜표시
-                items= new ArrayList<ScheduleDTO>();
+                startdate = n + "-" + w + "-" + i;
+                txtDate.setText(n + "년 " + w + "월 " + i + "일 일정"); //텍스트뷰에 날짜표시
+                items = new ArrayList<ScheduleDTO>();
                 try {
                     items = dbManager.getSchedule(id, nyun, wol, il);
-                }catch (SQLiteException e){
+                } catch (SQLiteException e) {
                     e.printStackTrace();
                 }
                 SettingListview();
@@ -251,16 +263,16 @@ public class CalendarActivity extends ListActivity implements Serializable {
     }
 
     private void STT() {
-        i=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         i.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
-        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR");
+        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
         i.putExtra(RecognizerIntent.EXTRA_PROMPT, "일정을 말씀해주세요.");
 
         Toast.makeText(CalendarActivity.this, "음성인식 시작", Toast.LENGTH_SHORT).show();
 
         try {
             startActivityForResult(i, RESULT_SPEECH);
-        }catch (ActivityNotFoundException e) {
+        } catch (ActivityNotFoundException e) {
             Toast.makeText(getApplicationContext(), "말하기 기능을 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
             e.getStackTrace();
         }
@@ -269,19 +281,19 @@ public class CalendarActivity extends ListActivity implements Serializable {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK&&(requestCode==RESULT_SPEECH)){
-            ArrayList<String> sstResult=data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+        if (resultCode == RESULT_OK && (requestCode == RESULT_SPEECH)) {
+            ArrayList<String> sstResult = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
             final String result_stt = sstResult.get(0);
-            AlertDialog.Builder ab=new AlertDialog.Builder(this);
+            AlertDialog.Builder ab = new AlertDialog.Builder(this);
             ab.setTitle("녹음 확인");
-            ab.setMessage("일정 : [ "+result_stt+" ]\n일시 : [ "+startdate+" ]")
-              .setCancelable(true)
+            ab.setMessage("일정 : [ " + result_stt + " ]\n일시 : [ " + startdate + " ]")
+                    .setCancelable(true)
                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ScheduleDTO dto=new ScheduleDTO();
-                            id=new PrefManager(CalendarActivity.this).getUserInfo().get("id");
+                            ScheduleDTO dto = new ScheduleDTO();
+                            id = new PrefManager(CalendarActivity.this).getUserInfo().get("id");
                             dto.setId(id);
                             dto.setTitle(result_stt);
                             dto.setStarttime("08:00");
@@ -290,7 +302,9 @@ public class CalendarActivity extends ListActivity implements Serializable {
                             dto.setEnddate(startdate);
                             dbManager.insertSchedule(dto);
                             Toast.makeText(CalendarActivity.this, "일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
-                            adapter.notifyDataSetChanged();
+                            DoWhat.resetAlarm(CalendarActivity.this);
+                            String[] days = startdate.split("-"); // 년= [0], 월= [1], 일= [2]
+                            StartDay(calview, Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
                         }
                     })
                     .setNeutralButton("다시 녹음", new DialogInterface.OnClickListener() {
@@ -320,17 +334,17 @@ public class CalendarActivity extends ListActivity implements Serializable {
             ScheduleDTO dto = items.get(position);
             if (dto != null) {
                 TextView txtSchedule = (TextView) v.findViewById(R.id.txtSchedule);
-                TextView txtStartTime = (TextView)v.findViewById(R.id.txtStarttime);
+                TextView txtStartTime = (TextView) v.findViewById(R.id.txtStarttime);
                 ImageView img1 = (ImageView) v.findViewById(R.id.img1);
                 //일정 표시
                 txtSchedule.setText(dto.getTitle());
-                if(!dto.getStarttime().equals("")){
+                if (!dto.getStarttime().equals("")) {
                     //내용이있으면 시간표시
-                    int Shour=Integer.parseInt(dto.getStarttime().substring(0,2));
-                    int Sminute=Integer.parseInt(dto.getStarttime().substring(3));
-                    int Ehour=Integer.parseInt(dto.getEndtime().substring(0,2));
-                    int Eminute=Integer.parseInt(dto.getEndtime().substring(3));
-                    String h1,h2,m1,m2,setStime,setEtime;
+                    int Shour = Integer.parseInt(dto.getStarttime().substring(0, 2));
+                    int Sminute = Integer.parseInt(dto.getStarttime().substring(3));
+                    int Ehour = Integer.parseInt(dto.getEndtime().substring(0, 2));
+                    int Eminute = Integer.parseInt(dto.getEndtime().substring(3));
+                    String h1, h2, m1, m2, setStime, setEtime;
                     if (Shour < 10) { //0~9시일경우 앞에 0을 붙임
                         h1 = "0" + String.valueOf(Shour);
                     } else {
@@ -351,32 +365,32 @@ public class CalendarActivity extends ListActivity implements Serializable {
                     } else {
                         m2 = String.valueOf(Eminute);
                     }
-                    if(Shour>12 && Shour<22){
-                        setStime = "오후 0"+(Shour-12) + "시 " + m1 +"분";
-                    }else if(Shour>21){
-                        setStime = "오후 "+(Shour-12) + "시 " + m1 +"분";
-                    }else if(Shour==12){
-                        setStime = "오후 "+h1+"시 "+m1+"분";
-                    }else{
-                        setStime = "오전 "+h1+"시 "+m1+"분";
+                    if (Shour > 12 && Shour < 22) {
+                        setStime = "오후 0" + (Shour - 12) + "시 " + m1 + "분";
+                    } else if (Shour > 21) {
+                        setStime = "오후 " + (Shour - 12) + "시 " + m1 + "분";
+                    } else if (Shour == 12) {
+                        setStime = "오후 " + h1 + "시 " + m1 + "분";
+                    } else {
+                        setStime = "오전 " + h1 + "시 " + m1 + "분";
                     }
-                    if(Ehour>12){
-                        setEtime = "오후 0"+(Ehour-12) + "시 " + m2 +"분";
-                    }else if(Ehour>21) {
+                    if (Ehour > 12) {
+                        setEtime = "오후 0" + (Ehour - 12) + "시 " + m2 + "분";
+                    } else if (Ehour > 21) {
                         setEtime = "오후 " + (Ehour - 12) + "시 " + m2 + "분";
-                    }else if(Shour==12){
-                        setEtime = "오후 "+h2+"시 "+m2+"분";
-                    }else{
-                        setEtime = "오전 "+h2+"시 "+m2+"분";
+                    } else if (Shour == 12) {
+                        setEtime = "오후 " + h2 + "시 " + m2 + "분";
+                    } else {
+                        setEtime = "오전 " + h2 + "시 " + m2 + "분";
                     }
-                    String time=setStime+" - "+setEtime;
+                    String time = setStime + " - " + setEtime;
                     txtStartTime.setText(time);
-                }else{
+                } else {
                     //내용이 없으면 하루종일로 표시
                     txtStartTime.setText("하루종일");
                 }
                 String event = dto.getEvent();
-                    //이벤트가 있으면 이미지표시
+                //이벤트가 있으면 이미지표시
                 if (event.equals("공휴일")) {
                     img1.setImageResource(R.drawable.holiday);
                     img1.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -392,27 +406,27 @@ public class CalendarActivity extends ListActivity implements Serializable {
         }
     }
 
-    public void StartDay(CalendarView view, int year, int month, int day){
-        Log.i("kkkkkk",year+""+month+""+day);
-        final String id= manager.getUserInfo().get("id");
-        String n=String.valueOf(year);
-        String w=String.valueOf(month+1);
-        String i=String.valueOf(day);
-        if((month+1)< 10) {
+    public void StartDay(CalendarView view, int year, int month, int day) {
+        Log.i("kkkkkk", year + "" + month + "" + day);
+        final String id = manager.getUserInfo().get("id");
+        String n = String.valueOf(year);
+        String w = String.valueOf(month + 1);
+        String i = String.valueOf(day);
+        if ((month + 1) < 10) {
             w = "0" + String.valueOf(month + 1);
         }
-        if(day<10){
+        if (day < 10) {
             i = "0" + String.valueOf(day);
         }
-        startdate=n+"-"+w+"-"+i;
-        txtDate.setText(n+"년 "+w+"월 "+i+"일 일정"); //텍스트에 날짜표시
-        int nyun= Integer.parseInt(n);
-        int wol= Integer.parseInt(w);
-        int il= Integer.parseInt(i);
-        items= new ArrayList<>();
+        startdate = n + "-" + w + "-" + i;
+        txtDate.setText(n + "년 " + w + "월 " + i + "일 일정"); //텍스트에 날짜표시
+        int nyun = Integer.parseInt(n);
+        int wol = Integer.parseInt(w);
+        int il = Integer.parseInt(i);
+        items = new ArrayList<>();
         try {
             items = dbManager.getSchedule(id, nyun, wol, il);
-        }catch (SQLiteException e){
+        } catch (SQLiteException e) {
             e.printStackTrace();
         }
         SettingListview();
@@ -462,7 +476,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         th.start();*/
     }
 
-    public ScheduleDTO getSchedule(int index){
+    public ScheduleDTO getSchedule(int index) {
         return items.get(index);
     }
 
