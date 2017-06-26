@@ -193,8 +193,8 @@ public class DetailActivity extends AppCompatActivity {
             }
             txtStime.setText(setStime);
             txtEtime.setText(setEtime);
-            DBstime=Shour+":"+Sminute;
-            DBetime=Ehour+":"+Eminute;
+            DBstime=dto.getStarttime();
+            DBetime=dto.getEndtime();
             if(dto.getEvent().equals("생일")) {
                 spinner.setSelection(1);
             }else if(dto.getEvent().equals("공휴일")){
