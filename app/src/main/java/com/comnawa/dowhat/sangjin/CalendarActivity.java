@@ -234,6 +234,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                             dto.setTitle(result_stt);
                             dto.setStartdate(startdate);
                             dbManager.insertSchedule(dto);
+                            Toast.makeText(CalendarActivity.this, "일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .setNeutralButton("다시 녹음", new DialogInterface.OnClickListener() {
@@ -327,10 +328,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
                     img1.setImageResource(R.drawable.birthday);
                     img1.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 } else if (event.equals("기념일")) {
-                    img1.setImageResource(R.drawable.heart);
+                    img1.setImageResource(R.drawable.love);
                     img1.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                } else {
-                    img1.setVisibility(View.GONE);
                 }
             }
             return v;
