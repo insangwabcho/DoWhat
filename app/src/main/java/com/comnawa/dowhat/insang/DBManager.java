@@ -35,6 +35,8 @@ public class DBManager {
     dbm.insertAllSchedules(dto);
   }
 
+
+
   public void tableDrop(){
     dbm.tableDrop();
   }
@@ -53,6 +55,10 @@ public class DBManager {
 
   public void deleteSchedule(ScheduleDTO dto) {
     dbm.delete(dto);
+  }
+
+  public void testDelete(int idx){
+    dbm.testDelete(idx);
   }
 
   public void insertSchedule(ScheduleDTO dto) {
@@ -231,7 +237,7 @@ public class DBManager {
     //일정 삭제
     public void delete(ScheduleDTO dto) {
       SQLiteDatabase db = getWritableDatabase();
-      String sql = "delete from schedule where num=" + dto.getNum() + " and id=" + dto.getId();
+      String sql = "delete from schedule where num=" + dto.getNum() + " and id='" + dto.getId()+"'";
       db.execSQL(sql);
     }
 
@@ -241,9 +247,9 @@ public class DBManager {
       db.execSQL(sql);
     }
 
-    public void test() {
+    public void testDelete(int idx) {
       SQLiteDatabase db = getWritableDatabase();
-      String sql = "drop table schedule";
+      String sql = "delete from schedule where num="+idx;
       db.execSQL(sql);
     }
   }

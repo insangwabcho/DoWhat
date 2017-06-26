@@ -61,9 +61,25 @@ public class CalendarActivity extends ListActivity implements Serializable {
         this.getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                ScheduleDTO dto=items.get(position);
-                dbManager.deleteSchedule(dto);
-                return false;
+                final ScheduleDTO dto=items.get(position);
+                AlertDialog.Builder dialog= new AlertDialog.Builder(CalendarActivity.this);
+                dialog.setTitle("일정삭제")
+                  .setMessage("일정을 삭제하시겠습니까?")
+                  .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialog, int which) {
+                          new DBManager(CalendarActivity.this).deleteSchedule(dto);
+                          Toast.makeText(CalendarActivity.this, "삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                      }
+                  })
+                  .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialog, int which) {
+                          Toast.makeText(CalendarActivity.this, "삭제가 취소되었습니다.", Toast.LENGTH_SHORT).show();
+                      }
+                  })
+                  .create().show();
+                return true;
             }
         });
     }
@@ -76,7 +92,9 @@ public class CalendarActivity extends ListActivity implements Serializable {
         intent.putExtra("index",position);
         intent.putExtra("check",1);
         startActivity(intent);
+        finish();
     }
+
 
 
     @Override
@@ -100,7 +118,15 @@ public class CalendarActivity extends ListActivity implements Serializable {
             e.printStackTrace();
         }
         Calendar cal=Calendar.getInstance();
-        StartDay(calview,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DATE));
+        if (getIntent().getStringExtra("sdate")== null) {
+            Log.i("test","null");
+            StartDay(calview, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+        } else {
+            Log.i("test","sdate on");
+            String sdate= getIntent().getStringExtra("sdate");
+            String[] days= sdate.split("-");
+            StartDay(calview, Integer.parseInt(days[0]), Integer.parseInt(days[1]), Integer.parseInt(days[2]));
+        }
         btnPlus.setImageResource(R.drawable.plus);
         btnAdd.setImageResource(R.drawable.add);
         btnMic.setImageResource(R.drawable.mic);
@@ -124,6 +150,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                             Intent intent = new Intent(CalendarActivity.this, DetailActivity.class);
                             intent.putExtra("check",0);
                             startActivity(intent);
+                            finish();
                         }
                     });
                     //음성인식

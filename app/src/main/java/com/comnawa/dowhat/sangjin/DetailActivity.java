@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -44,6 +43,7 @@ public class DetailActivity extends AppCompatActivity {
     int alarm, repeat; //DB에 저장할 알람, 반복
     private boolean check; //신규 , 수정 판별 변수 (true:신규)
     int Num;
+    int year, month, date;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,6 +76,9 @@ public class DetailActivity extends AppCompatActivity {
             if (check) { //신규
                 dbManager.insertSchedule(dto);
                 Toast.makeText(this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
+                Intent intent= new Intent(this, CalendarActivity.class);
+                intent.putExtra("sdate", txtSdate.getText().toString());
+                startActivity(intent);
                 finish();
 
 //              UpdateNewSchedule uns= new UpdateNewSchedule(this,true,dto);
@@ -83,6 +86,9 @@ public class DetailActivity extends AppCompatActivity {
             } else { //수정
                 dbManager.updateSchedule(dto);
                 Toast.makeText(this, "수정 되었습니다.", Toast.LENGTH_SHORT).show();
+                Intent intent= new Intent(this, CalendarActivity.class);
+                intent.putExtra("sdate", txtSdate.getText().toString());
+                startActivity(intent);
                 finish();
 
 //              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
