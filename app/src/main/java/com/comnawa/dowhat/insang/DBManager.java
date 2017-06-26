@@ -34,6 +34,10 @@ public class DBManager {
     dbm.insertAllSchedules(dto);
   }
 
+  public void tableDrop(){
+    dbm.tableDrop();
+  }
+
   public ArrayList<ScheduleDTO> getAllSchedule(String id){
     return dbm.selectAllSchedule(id);
   }
@@ -60,22 +64,23 @@ public class DBManager {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-      String sql =
-        "create table schedule(" +
-          "num integer," +
-          "id varchar(50)," +
-          "startdate varchar(50)," +
-          "enddate varchar(50)," +
-          "starttime varchar(50)," +
-          "endtime varchar(50)," +
-          "title varchar(50)," +
-          "event varchar(50)," +
-          "place varchar(50)," +
-          "memo varchar(50)," +
-          "alarm integer," +
-          "repeat integer)";
-//    String sql="drop table schedule";
+//      String sql =
+//        "create table schedule(" +
+//          "num integer primary key," +
+//          "id varchar(50)," +
+//          "startdate varchar(50)," +
+//          "enddate varchar(50)," +
+//          "starttime varchar(50)," +
+//          "endtime varchar(50)," +
+//          "title varchar(50)," +
+//          "event varchar(50)," +
+//          "place varchar(50)," +
+//          "memo varchar(50)," +
+//          "alarm integer," +
+//          "repeat integer)";
+    String sql="drop table schedule";
       db.execSQL(sql);
+      Log.i("test","삭제완료");
     }
 
     @Override
@@ -87,12 +92,20 @@ public class DBManager {
       super(context, name, null, 1);
     }
 
+    public void tableDrop(){
+      SQLiteDatabase db= getWritableDatabase();
+      String sql="drop table schedule";
+      db.execSQL(sql);
+    }
+
     public ArrayList<ScheduleDTO> selectTodaySchedule(String id) {
       ArrayList<ScheduleDTO> items = new ArrayList<>();
       Calendar cal = Calendar.getInstance();
       String year = cal.get(Calendar.YEAR) + "";
-      String month = (cal.get(Calendar.MONTH) + 1 < 10) ? "0" + (cal.get(Calendar.MONTH) + 1) : cal.get(Calendar.MONTH) + "";
-      String date = (cal.get(Calendar.DATE) + 1 < 10) ? "0" + (cal.get(Calendar.DATE) + 1) : cal.get(Calendar.DATE) + "";
+      String month = (cal.get(Calendar.MONTH) + 1 < 10) ?
+        "0" + (cal.get(Calendar.MONTH) + 1) : cal.get(Calendar.MONTH) + "";
+      String date = (cal.get(Calendar.DATE) + 1 < 10) ?
+        "0" + (cal.get(Calendar.DATE) + 1) : cal.get(Calendar.DATE) + "";
       String today = year + "-" + month + "-" + date;
       String sql = "select * from schedule where id='" + id + "' and startdate='" + today + "'";
       SQLiteDatabase db = getReadableDatabase();

@@ -151,6 +151,18 @@ public class Preferences extends android.preference.PreferenceActivity {
         } else if (restoreOrBackup.equals("백업")) {
           ScheduleBackup b= new ScheduleBackup(ac);
           b.start();
+          boolean current= true;
+          try{
+            b.join();
+          }catch (InterruptedException e){
+            e.printStackTrace();
+            current= false;
+          }
+          if (current){
+            Log.i("ac","성공");
+          }else {
+            Log.i("ac","실패");
+          }
         }
         return null;
       }
@@ -163,10 +175,6 @@ public class Preferences extends android.preference.PreferenceActivity {
       }
     }
   } // 환경설정 화면구현//
-
-  public void onClick(Preference p) {
-    Log.i("insang", p.toString());
-  }
 
   @Override
   protected void onDestroy() {

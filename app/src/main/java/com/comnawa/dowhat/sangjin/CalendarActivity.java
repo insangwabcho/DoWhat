@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -87,7 +88,12 @@ public class CalendarActivity extends ListActivity implements Serializable {
         btnMic = (ImageView)findViewById(R.id.btnMic);
         calview = (CalendarView) findViewById(R.id.calview);
         dbManager= new DBManager(this);
-        items= dbManager.todaySchedule(UserInfo.get("id"));
+        items= new ArrayList<>();
+        try {
+            items = dbManager.todaySchedule(UserInfo.get("id"));
+        }catch(SQLiteException e){
+            e.printStackTrace();
+        }
         Calendar cal=Calendar.getInstance();
         StartDay(calview,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DATE));
         btnPlus.setImageResource(R.drawable.plus);
@@ -151,7 +157,12 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 }
                 startdate=n+"-"+w+"-"+i;
                 txtDate.setText(n+"년 "+w+"월 "+i+"일 일정"); //텍스트뷰에 날짜표시
-                items= dbManager.getSchedule(id,nyun,wol,il);
+                items= new ArrayList<ScheduleDTO>();
+                try {
+                    items = dbManager.getSchedule(id, nyun, wol, il);
+                }catch (SQLiteException e){
+                    e.printStackTrace();
+                }
                 handler.sendEmptyMessage(0);
 //                Thread th = new Thread(new Runnable() {
 //                    @Override
@@ -356,7 +367,12 @@ public class CalendarActivity extends ListActivity implements Serializable {
         int nyun= Integer.parseInt(n);
         int wol= Integer.parseInt(w);
         int il= Integer.parseInt(i);
-        items= dbManager.getSchedule(id,nyun,wol,il);
+        items= new ArrayList<>();
+        try {
+            items = dbManager.getSchedule(id, nyun, wol, il);
+        }catch (SQLiteException e){
+            e.printStackTrace();
+        }
         handler.sendEmptyMessage(0);
         /*Thread th = new Thread(new Runnable() {
             @Override
