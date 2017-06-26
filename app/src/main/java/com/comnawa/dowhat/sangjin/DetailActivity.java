@@ -26,6 +26,7 @@ import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.insang.Preferences;
 
 
+
 public class DetailActivity extends AppCompatActivity {
     //일정, 장소, 시작일, 종료일, 시작시간, 종료시간, 메모, 알람, 일행
     EditText editTitle, editPlace, editMemo, editFriend;
@@ -186,6 +187,8 @@ public class DetailActivity extends AppCompatActivity {
             }
             txtStime.setText(setStime);
             txtEtime.setText(setEtime);
+/*            DBstime=;
+            DBetime=;*/
             if(dto.getEvent().equals("생일")) {
                 spinner.setSelection(1);
             }else if(dto.getEvent().equals("공휴일")){

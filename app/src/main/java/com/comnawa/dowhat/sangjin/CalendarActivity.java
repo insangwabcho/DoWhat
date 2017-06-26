@@ -8,8 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
@@ -18,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.ImageView;
@@ -45,6 +44,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
     ImageView btnPlus, btnAdd, btnMic;
     PrefManager manager;
     DBManager dbManager;
+    ScheduleAdapter adapter;
     boolean isClick;
     int index,Num;
 
@@ -54,14 +54,19 @@ public class CalendarActivity extends ListActivity implements Serializable {
     private SpeechRecognizer mRecognizer;
     TextToSpeech tts;
 
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            ScheduleAdapter adapter = new ScheduleAdapter(CalendarActivity.this, R.layout.layout, items);
-            setListAdapter(adapter);
-        }
-    };
+    private void SettingListview() {
+        adapter = new ScheduleAdapter(CalendarActivity.this, R.layout.layout, items);
+        setListAdapter(adapter);
+        this.getListView().setLongClickable(true);
+        this.getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                ScheduleDTO dto=items.get(position);
+                dbManager.deleteSchedule(dto);
+                return false;
+            }
+        });
+    }
 
     //기존 일정 수정창 띄우기
     @Override
@@ -69,10 +74,10 @@ public class CalendarActivity extends ListActivity implements Serializable {
         super.onListItemClick(l, v, position, id);
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("index",position);
-        index=position;
         intent.putExtra("check",1);
         startActivity(intent);
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +168,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 }catch (SQLiteException e){
                     e.printStackTrace();
                 }
-                handler.sendEmptyMessage(0);
+                SettingListview();
 //                Thread th = new Thread(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -373,7 +378,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         }catch (SQLiteException e){
             e.printStackTrace();
         }
-        handler.sendEmptyMessage(0);
+        SettingListview();
         /*Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
