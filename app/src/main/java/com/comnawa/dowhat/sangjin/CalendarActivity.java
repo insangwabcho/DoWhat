@@ -46,7 +46,6 @@ public class CalendarActivity extends ListActivity implements Serializable {
     DBManager dbManager;
     ScheduleAdapter adapter;
     boolean isClick;
-    int index,Num;
 
     private static final int RESULT_SPEECH=1;
 
@@ -274,7 +273,6 @@ public class CalendarActivity extends ListActivity implements Serializable {
             ArrayList<String> sstResult=data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
             final String result_stt = sstResult.get(0);
-            Toast.makeText(CalendarActivity.this, result_stt, Toast.LENGTH_SHORT).show();
             AlertDialog.Builder ab=new AlertDialog.Builder(this);
             ab.setTitle("녹음 확인");
             ab.setMessage("일정 : [ "+result_stt+" ]\n일시 : [ "+startdate+" ]")
@@ -283,12 +281,16 @@ public class CalendarActivity extends ListActivity implements Serializable {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ScheduleDTO dto=new ScheduleDTO();
-                            dto.setNum(Num);
+                            id=new PrefManager(CalendarActivity.this).getUserInfo().get("id");
                             dto.setId(id);
                             dto.setTitle(result_stt);
+                            dto.setStarttime("08:00");
+                            dto.setEndtime("09:00");
                             dto.setStartdate(startdate);
+                            dto.setEnddate(startdate);
                             dbManager.insertSchedule(dto);
                             Toast.makeText(CalendarActivity.this, "일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                            adapter.notifyDataSetChanged();
                         }
                     })
                     .setNeutralButton("다시 녹음", new DialogInterface.OnClickListener() {

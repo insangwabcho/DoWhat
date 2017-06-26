@@ -145,10 +145,10 @@ public class DetailActivity extends AppCompatActivity {
             ScheduleDTO dto=CalendarActivity.items.get(index);
             Num=dto.getNum();
             editTitle.setText(dto.getTitle());
-            if(dto.getPlace()!=null){
-                editPlace.setText(dto.getPlace());
-            }else{
+            if(dto.getPlace()==null || dto.getPlace().equals("null")){
                 editPlace.setText("");
+            }else{
+                editPlace.setText(dto.getPlace());
             }
             txtSdate.setText(dto.getStartdate());
             txtEdate.setText(dto.getEnddate());
@@ -209,10 +209,10 @@ public class DetailActivity extends AppCompatActivity {
                 spinner.setSelection(0);
             }
 
-            if(editMemo!=null){
-                editMemo.setText(dto.getMemo());
-            }else{
+            if(dto.getMemo()==null || dto.getMemo().equals("null")){
                 editMemo.setText("");
+            }else{
+                editMemo.setText(dto.getMemo());
             }
 
             if(dto.getAlarm() == 0){
