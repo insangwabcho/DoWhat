@@ -119,9 +119,11 @@ public class DBManager {
     public ArrayList<ScheduleDTO> selectSchedule(String id, int year, int month, int date) {
       ArrayList<ScheduleDTO> items = new ArrayList<>();
       String monthly= month<10 ? "0"+month : month+"";
-      String today = year + "-" + monthly + "-" + date;
+      String dately= date<10 ? "0"+date : date+"";
+      String today = year + "-" + monthly + "-" + dately;
       Log.i("test",id+today);
       String sql = "select * from schedule where id='" + id + "' and startdate='" + today + "'";
+      Log.i("query",sql);
       SQLiteDatabase db = getReadableDatabase();
       rs = db.rawQuery(sql, null);
       while (rs.moveToNext()) {
@@ -138,6 +140,7 @@ public class DBManager {
         dto.setMemo(rs.getString(9));
         dto.setAlarm(rs.getInt(10));
         dto.setRepeat(rs.getInt(11));
+        Log.i("dto",dto.toString());
         items.add(dto);
       }
       return items;
@@ -175,6 +178,7 @@ public class DBManager {
           dto.getEnddate() + "','" + dto.getStarttime() + "','" + dto.getEndtime() + "','" +
           dto.getTitle() + "','" + dto.getEvent() + "','" +
           dto.getPlace() + "','" + dto.getMemo() + "'," + dto.getAlarm() + "," + dto.getRepeat() + ")";
+        Log.i("insert",dto.toString());
         db.execSQL(sql);
       }
     }
@@ -188,6 +192,7 @@ public class DBManager {
         dto.getTitle() + "','" + dto.getEvent() + "','" +
         dto.getPlace() + "','" + dto.getMemo() + "'," + dto.getAlarm() + "," + dto.getRepeat() + ")";
       String sql = sql1 + sql2;
+      Log.i("insert",sql);
       db.execSQL(sql);
     }
 

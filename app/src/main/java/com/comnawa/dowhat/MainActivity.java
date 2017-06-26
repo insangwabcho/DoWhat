@@ -72,17 +72,9 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, LoginActivity.class);
         break;
       case R.id.btnInsang2:
-        DBManager dbm= new DBManager(this);
-        ScheduleDTO dto= new ScheduleDTO();
-        dto.setTitle("title");
-        dto.setId("id");
-        ArrayList<ScheduleDTO> items= new ArrayList<>();
-        items.add(dto);
-        dbm.insertSchedule(dto);
-        for (ScheduleDTO t: items) {
-          Log.i("zzo", t.getTitle());
-        }
-
+        DBManager dbManager= new DBManager(this);
+        ArrayList<ScheduleDTO> items= dbManager.getAllSchedule("dowhat@dowhat.com");
+        Log.i("test",items.toString());
         return;
       case R.id.btninsang3:
         PrefManager prefManager= new PrefManager(this);
