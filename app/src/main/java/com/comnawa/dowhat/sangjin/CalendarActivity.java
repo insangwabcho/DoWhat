@@ -118,7 +118,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                     btnMic.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            SST();
+                            STT();
                         }
                     });
                 }else{
@@ -200,7 +200,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         });
     }
 
-    private void SST() {
+    private void STT() {
         i=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         i.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
         i.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR");
@@ -222,17 +222,17 @@ public class CalendarActivity extends ListActivity implements Serializable {
         if(resultCode == RESULT_OK&&(requestCode==RESULT_SPEECH)){
             ArrayList<String> sstResult=data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-            final String result_sst = sstResult.get(0);
-            Toast.makeText(CalendarActivity.this, result_sst, Toast.LENGTH_SHORT).show();
+            final String result_stt = sstResult.get(0);
+            Toast.makeText(CalendarActivity.this, result_stt, Toast.LENGTH_SHORT).show();
             AlertDialog.Builder ab=new AlertDialog.Builder(this);
             ab.setTitle("녹음 확인");
-            ab.setMessage("일정 : [ "+result_sst+" ]")
+            ab.setMessage("일정 : [ "+result_stt+" ]")
               .setCancelable(false)
                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ScheduleDTO dto=new ScheduleDTO();
-                            dto.setTitle(result_sst);
+                            dto.setTitle(result_stt);
                             dto.setStartdate(startdate);
                             dbManager.insertSchedule(dto);
                         }
@@ -240,7 +240,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                     .setNegativeButton("다시 녹음", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            SST();
+                            STT();
                         }
                     });
             AlertDialog alertDialog = ab.create();
