@@ -62,8 +62,8 @@ public class DetailActivity extends AppCompatActivity {
             dto.setId(new PrefManager(this).getUserInfo().get("id"));
             dto.setTitle(editTitle.getText().toString());
             dto.setEvent(event);
-            dto.setStartdate(Sdate);
-            dto.setEnddate(Edate);
+            dto.setStartdate(txtSdate.getText().toString());
+            dto.setEnddate(txtEdate.getText().toString());
             dto.setStarttime(DBstime);
             dto.setEndtime(DBetime);
             dto.setMemo(editMemo.getText().toString());
