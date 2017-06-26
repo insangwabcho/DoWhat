@@ -38,7 +38,6 @@ public class DetailActivity extends AppCompatActivity {
     DatePickerDialog Ddialog; //데이트피커 다이얼로그
     TimePickerDialog Tdialog; //타임피커 다이얼로그
     String event; //DB에 저장할 이벤트
-    String Sdate,Edate; //DB에 저장할 시작일, 종료일
     String DBstime, DBetime; //DB에 저장할 시작시간, 종료시간
     int alarm, repeat; //DB에 저장할 알람, 반복
     private boolean check; //신규 , 수정 판별 변수 (true:신규)
@@ -291,11 +290,9 @@ public class DetailActivity extends AppCompatActivity {
             String date = n + "-" + w + "-" + i;
             //시작일 종료일을 구분하여 알맞는 editText에 입력
             if (dateOk) {
-                Sdate=date;
                 txtSdate.setText(date);
             } else {
                 txtEdate.setText(date);
-                Edate=date;
             }
 
             //시작일이 종료일보다 나중일때 처리
