@@ -64,7 +64,7 @@ public class confrimActivity extends Activity {
                                     String friendid ="";
                                     PrefManager pm = new PrefManager(confrimActivity.this);
                                     Log.i("tokeninsert",id+pwd+friendid+kakaotoken+name);
-                                    pm.setAutoLogin(id,pwd,name,friendid,kakaotoken,false);
+                                    pm.setAutoLogin(id,pwd,name,friendid,kakaotoken,true);
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
