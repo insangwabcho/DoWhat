@@ -134,7 +134,7 @@ public class Preferences extends android.preference.PreferenceActivity {
       @Override
       protected Void doInBackground(Void... params) {
         if (restoreOrBackup.equals("복원")) {
-          GetSchedule gs = new GetSchedule(ac);
+          ScheduleRestore gs = new ScheduleRestore(ac);
           gs.start();
           boolean current = true;
           try {
@@ -149,7 +149,8 @@ public class Preferences extends android.preference.PreferenceActivity {
             Log.i("ac","실패");
           }
         } else if (restoreOrBackup.equals("백업")) {
-
+          ScheduleBackup b= new ScheduleBackup(ac);
+          b.start();
         }
         return null;
       }

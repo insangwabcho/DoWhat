@@ -34,6 +34,10 @@ public class DBManager {
     dbm.insertAllSchedules(dto);
   }
 
+  public ArrayList<ScheduleDTO> getAllSchedule(String id){
+    return dbm.selectAllSchedule(id);
+  }
+
   public ArrayList<ScheduleDTO> todaySchedule(String id) {
     return dbm.selectTodaySchedule(id);
   }
@@ -114,8 +118,9 @@ public class DBManager {
 
     public ArrayList<ScheduleDTO> selectSchedule(String id, int year, int month, int date) {
       ArrayList<ScheduleDTO> items = new ArrayList<>();
-      Calendar cal = Calendar.getInstance();
-      String today = year + "-" + month + "-" + date;
+      String monthly= month<10 ? "0"+month : month+"";
+      String today = year + "-" + monthly + "-" + date;
+      Log.i("test",id+today);
       String sql = "select * from schedule where id='" + id + "' and startdate='" + today + "'";
       SQLiteDatabase db = getReadableDatabase();
       rs = db.rawQuery(sql, null);
@@ -138,9 +143,9 @@ public class DBManager {
       return items;
     }
 
-    public ArrayList<ScheduleDTO> selectAllSchedule() {
+    public ArrayList<ScheduleDTO> selectAllSchedule(String id) {
       ArrayList<ScheduleDTO> items = new ArrayList<>();
-      String sql = "select * from schedule";
+      String sql = "select * from schedule where id='"+id+"'";
       SQLiteDatabase db = getReadableDatabase();
       rs = db.rawQuery(sql, null);
       while (rs.moveToNext()) {
