@@ -76,12 +76,14 @@ public class DetailActivity extends AppCompatActivity {
                 dbManager.insertSchedule(dto);
                 Toast.makeText(this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
                 finish();
+
 //              UpdateNewSchedule uns= new UpdateNewSchedule(this,true,dto);
 //              uns.start();
             } else { //수정
                 dbManager.updateSchedule(dto);
                 Toast.makeText(this, "수정 되었습니다.", Toast.LENGTH_SHORT).show();
                 finish();
+
 //              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
 //              uns.start();
             }
