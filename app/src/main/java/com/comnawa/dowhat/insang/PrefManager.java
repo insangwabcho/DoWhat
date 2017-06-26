@@ -43,19 +43,22 @@ public class PrefManager {
     return textSize;
   } // 어플리케이션에 설정되어있는 tetSize 반환
 
-  public boolean setAutoLogin(String userid, String userpasswd, String namee, String friendid) {
+  public boolean setAutoLogin(String userid, String userpasswd, String namee, String friendid, String kakaoToken, boolean current) {
     Log.i("test", "1");
-    if (userid.equals("") || userid == null) {
+    if (userid== null || userid.equals("")) {
       userid = "not Login";
     }
-    if (userpasswd.equals("") || userpasswd == null) {
+    if (userpasswd== null || userpasswd.equals("")) {
       userpasswd = "not Login";
     }
-    if (namee.equals("") || namee == null) {
+    if (namee== null || namee.equals("")) {
       namee = "not Login";
     }
-    if (friendid.equals("") || friendid == null) {
+    if (friendid == null || friendid.equals("")) {
       friendid = "not Login";
+    }
+    if (kakaoToken == null || kakaoToken.equals("")) {
+      kakaoToken = "not Login";
     }
 
     boolean result = false;
@@ -78,9 +81,11 @@ public class PrefManager {
       bw.write("name:" + namee);
       bw.newLine();
       bw.write("friendid:" + friendid);
+      bw.newLine();
+      bw.write("kakaotoken:" + kakaoToken);
       bw.flush();
       bw.close();
-      edit.putBoolean("autoLogin", true).apply();
+      edit.putBoolean("autoLogin", current).apply();
       edit.commit();
       Log.i("test", "2");
     } catch (Exception e) {
@@ -115,21 +120,29 @@ public class PrefManager {
   public HashMap<String, String> getUserInfo() {
     HashMap<String, String> result = new HashMap<>();
     try {
+      File f= new File("/data/data/"+context.getPackageName()+"/files/log.prop");
       Properties prop = new Properties();
-      prop.load(new InputStreamReader(new FileInputStream(
-        new File("/data/data/" + context.getPackageName() + "/files/log.prop"))));
-      String id = prop.getProperty("id");
-      String pwd = prop.getProperty("pwd");
-      String name = prop.getProperty("name");
-      String friendid = prop.getProperty("friendid");
+      prop.load(new InputStreamReader(new FileInputStream(f)));
+      String id = prop.getProperty("id")== null || prop.getProperty("id").equals("") ?
+        "not Login" : prop.getProperty("id");
+      String pwd = prop.getProperty("passwd")== null || prop.getProperty("id").equals("") ?
+        "not Login" : prop.getProperty("passwd");
+      String name = prop.getProperty("name")== null || prop.getProperty("id").equals("") ?
+        "not Login" : prop.getProperty("name");
+      String friendid = prop.getProperty("friend")== null || prop.getProperty("id").equals("") ?
+        "not Login" : prop.getProperty("friend");
+      String token = prop.getProperty("kakaotoken")== null || prop.getProperty("id").equals("") ?
+        "not Login" : prop.getProperty("kakaotoken");
 
       result.put("id", id);
       result.put("passwd", pwd);
       result.put("name", name);
       result.put("friendid", friendid);
+      result.put("kakaotoken", token);
 
     } catch (Exception e) {
       e.printStackTrace();
+      Log.i("ZZo","error");
     }
     if (result.size() == 0 || result == null) {
       result.put("id", "not Login");
@@ -152,7 +165,7 @@ public class PrefManager {
   } //인상이꺼
 
   public void testAlarm(String content) {
-    Log.i("test",content);
+    Log.i("test", content);
     edit.putString("testAlarm", prefs.getString("testAlarm", null) + content + ",").commit();
     resetScheduleCount();
   }

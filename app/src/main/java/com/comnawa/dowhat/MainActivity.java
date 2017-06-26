@@ -71,16 +71,26 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(this, LoginActivity.class);
         break;
       case R.id.btnInsang2:
-        DBManager dbm= new DBManager(this, "schedule.db", null, 0);
+        DBManager dbm= new DBManager(this);
         ScheduleDTO dto= new ScheduleDTO();
-        dto.setNum(1);
         dto.setTitle("title");
         dto.setId("id");
         ArrayList<ScheduleDTO> items= new ArrayList<>();
         items.add(dto);
-        dbm.insert(items);
-        items= dbm.selectTodaySchedule(this);
-        Log.i("zzo",items.get(0).getTitle());
+        dbm.insertSchedule(dto);
+        for (ScheduleDTO t: items) {
+          Log.i("zzo", t.getTitle());
+        }
+
+        return;
+      case R.id.btninsang3:
+        DBManager dbm2= new DBManager(this);
+        runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            Toast.makeText(MainActivity.this, "삭제완료", Toast.LENGTH_SHORT).show();
+          }
+        });
         return;
     }
     startActivity(intent);

@@ -189,6 +189,7 @@ public class DoWhat {
   public static void setTitleBar(AppCompatActivity activity, String title){
     activity.getSupportActionBar().setTitle(title);
   }
+
 }
 
 /*

@@ -4,10 +4,11 @@ package com.comnawa.dowhat.sangjin;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,8 +75,13 @@ public class CalendarActivity extends ListActivity implements Serializable {
         setContentView(R.layout.calendar_sangjin);
         PrefManager manager=new PrefManager(this);
         final HashMap<String, String> UserInfo=manager.getUserInfo();
+        manager = new PrefManager(CalendarActivity.this);
+        Log.i("Test2",manager.getUserInfo().toString());
         txtDate = (TextView) findViewById(R.id.txtDate);
         btnAdd = (ImageView)findViewById(R.id.btnAdd);
+        Paint paint=new Paint();
+        paint.setColor(Color.parseColor("#E47833"));
+        paint.setAlpha(70);
         calview = (CalendarView) findViewById(R.id.calview);
         Calendar cal=Calendar.getInstance();
         StartDay(calview,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DATE));
@@ -103,7 +109,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         //날짜를 눌렀을 때 목록표시 이벤트
         calview.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int day) {
+            public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
                 id = UserInfo.get("id");
                 String n=String.valueOf(year);
                 String w=String.valueOf(month+1);
@@ -253,7 +259,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         }
     }
 
-    public void StartDay(@NonNull CalendarView view, int year, int month, int day){
+    public void StartDay(CalendarView view, int year, int month, int day){
         id = getIntent().getStringExtra("id");
         String n=String.valueOf(year);
         String w=String.valueOf(month+1);

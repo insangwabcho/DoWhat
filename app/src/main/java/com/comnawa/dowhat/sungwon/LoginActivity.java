@@ -1,6 +1,7 @@
 package com.comnawa.dowhat.sungwon;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,7 +11,6 @@ import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +39,7 @@ import org.json.JSONObject;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.Random;
 
 import static android.content.ContentValues.TAG;
 import static com.comnawa.dowhat.sungwon.JsonObject.objectType;
@@ -50,28 +51,29 @@ public class LoginActivity extends Activity {
     EditText editid, editpwd;
     Button btnLogin, btnSignUp;
     CheckBox cb;
-    String userid,username;
+    String userid, username;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         //해시 키 출력
-        Log.i("hashkey",getKeyHash(getApplicationContext()));
+        Log.i("hashkey", getKeyHash(getApplicationContext()));
 
         editid = (EditText) findViewById(R.id.editid);
         editpwd = (EditText) findViewById(R.id.editpwd);
         btnSignUp = (Button) findViewById(R.id.btnSignUp);
         btnLogin = (Button) findViewById(R.id.btnLogin);
-        cb = (CheckBox)findViewById(R.id.cb);
+        cb = (CheckBox) findViewById(R.id.cb);
         //자동로그인 상태일경우 유저 정보 전송
-        if(new PrefManager(this).getAutoLogin()){
-            Intent intent = new Intent(LoginActivity.this,CalendarActivity.class);
-            HashMap<String,String> map = new PrefManager(this).getUserInfo();
-            intent.putExtra("id",map.get("id"));
-            intent.putExtra("password",map.get("password"));
-            intent.putExtra("name",map.get("name"));
-            intent.putExtra("friendid",map.get("friendid"));
+        if (new PrefManager(this).getAutoLogin()) {
+            Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);
+            HashMap<String, String> map = new PrefManager(this).getUserInfo();
+            intent.putExtra("id", map.get("id"));
+            intent.putExtra("password", map.get("password"));
+            intent.putExtra("name", map.get("name"));
+            intent.putExtra("friendid", map.get("friendid"));
             startActivity(intent);
             finish();
         }
@@ -92,30 +94,33 @@ public class LoginActivity extends Activity {
                     public void run() {
                         try {
                             String page = Common.SERVER_URL + "/Dowhat/Member_servlet/login.do";
-                            HashMap<String,String> map = new HashMap<String, String>();
-                            map.put("id",editid.getText().toString());
-                            map.put("password",editpwd.getText().toString());
-                            String body = objectType(page,map);
+                            HashMap<String, String> map = new HashMap<String, String>();
+                            map.put("id", editid.getText().toString());
+                            map.put("password", editpwd.getText().toString());
+                            String body = objectType(page, map);
                             JSONObject jsonObj = new JSONObject(body);
                             final JSONArray jArray = (JSONArray) jsonObj.get("sendData");
-                            if (jArray.length() > 0) {
+                            if (jArray.length() > 0) {  //로그인 성공
                                 JSONObject jlist = (JSONObject) jArray.get(0);
                                 String id = jlist.get("id").toString();
                                 String pwd = jlist.get("password").toString();
                                 String name = jlist.get("name").toString();
                                 String friendid = jlist.get("friendid").toString();
+                                String kakaotoken = jlist.get("kakaotoken").toString();
                                 PrefManager pm = new PrefManager(LoginActivity.this);
-                                if(cb.isChecked()){
-                                    pm.setAutoLogin(id,pwd,name,friendid);
+                                if (cb.isChecked()) { //자동로그인이 체크되어있으면
+                                    pm.setAutoLogin(id, pwd, name, friendid, kakaotoken, true);
+                                } else { //체크되어있지않으면
+                                    pm.setAutoLogin(id, pwd, name, friendid, kakaotoken, false);
                                 }
                                 Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);
-                                intent.putExtra("id", id);
+                                /*intent.putExtra("id", id);
                                 intent.putExtra("password", pwd);
                                 intent.putExtra("name", name);
-                                intent.putExtra("friendid", friendid);
+                                intent.putExtra("friendid", friendid);*/
                                 startActivity(intent);
                                 finish();
-                            } else {
+                            } else { //로그인 실패
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -123,8 +128,6 @@ public class LoginActivity extends Activity {
                                     }
                                 });
                             }
-
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -134,25 +137,13 @@ public class LoginActivity extends Activity {
             }
         });
 
-        /**카카오톡 로그아웃 요청**/
-        //한번 로그인이 성공하면 세션 정보가 남아있어서 로그인창이 뜨지 않고 바로 onSuccess()메서드를 호출합니다.
-        //테스트 하시기 편하라고 매번 로그아웃 요청을 수행하도록 코드를 넣었습니다 ^^
-        UserManagement.requestLogout(new LogoutResponseCallback() {
-            @Override
-            public void onCompleteLogout() {
-                //로그아웃 성공 후 하고싶은 내용 코딩 ~
-            }
-        });
-
         callback = new SessionCallback();
         Session.getCurrentSession().addCallback(callback);
     }
+
     private class SessionCallback implements ISessionCallback {
-
-
         @Override
         public void onSessionOpened() {
-
             UserManagement.requestMe(new MeResponseCallback() {
 
                 @Override
@@ -184,44 +175,63 @@ public class LoginActivity extends Activity {
                     Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);
                     startActivity(intent);
                     finish();*/
-                   Thread th = new Thread(new Runnable() {
-                       String page="";
-                       JSONObject jsonMain;
-                       @Override
-                       public void run() {
-                            try {
+                    Thread th = new Thread(new Runnable() {
+                        String page = "";
+                        JSONObject jsonObj;
+
+                        @Override
+                        public void run() {
+                            try {    //카카오톡 로그인 성공시
                                 page = Common.SERVER_URL + "/Dowhat/Member_servlet/kakaocheck.do";
-                                HashMap<String,String> map = new HashMap<String, String>();
+                                HashMap<String, String> map = new HashMap<String, String>();
                                 userid = String.valueOf(userProfile.getId());
                                 username = userProfile.getNickname();
-                                map.put("kakaotoken",userid);
-                                String body = objectType(page,map);
-                               jsonMain = new JSONObject(body);
-                                if(jsonMain.get("sendData").equals("null")){
+                                map.put("kakaotoken", userid);
+                                String body = objectType(page, map);
+                                jsonObj = new JSONObject(body);
+                                JSONArray jArray = (JSONArray) jsonObj.get("sendData");
+                                JSONObject jlist = (JSONObject) jArray.get(0);
+                                Log.i("kakoCheck",jArray.toString());
+                                if (jlist.get("id").equals("null")) { // 기존계정과 카톡계정이 연동되어있지않으면
                                     handler.sendEmptyMessage(0);
-                                    Log.i("testdd","asds");
+                                }else{  // 카톡계정이 연동되어있으면
+                                    String id =jlist.get("id").toString();
+                                    String name = jlist.get("name").toString();
+                                    String kakaotoken = jlist.get("kakaotoken").toString();
+                                    String pwd = "";
+                                    String friendid ="";
+                                    PrefManager pm = new PrefManager(LoginActivity.this);
+                                    pm.setAutoLogin(id,pwd,name,friendid,kakaotoken,false);
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Intent intent = new Intent(LoginActivity.this,CalendarActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    });
                                 }
-                            }catch (Exception e){
+                            } catch (Exception e) {
 
                             }
-                       }
-                   });
+                        }
+                    });
                     th.start();
-
+                    finish();
                 }
             });
 
         }
+
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
             Log.i("SessionCallback", "Error");
-            if(exception != null) {
+            if (exception != null) {
                 exception.printStackTrace();
             }
         }
 
-
-        Handler handler = new Handler(){
+        //기존 DB에 카톡토큰이 등록되있지않을경우 다이얼로그 생성
+        Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 new AlertDialog.Builder(LoginActivity.this)
@@ -230,13 +240,52 @@ public class LoginActivity extends Activity {
                         .setPositiveButton("예", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(LoginActivity.this,confrimActivity.class);
-                                intent.putExtra("id",userid);
-                                intent.putExtra("id",userid);
+                                Intent intent = new Intent(LoginActivity.this, confrimActivity.class);
+                                intent.putExtra("id", userid);
+                                intent.putExtra("name", username);
                                 startActivity(intent);
                             }
                         })
-                        .setNegativeButton("아니오",null)
+                        .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                            //아니오 입력시 임의로 DB에 계정추가
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Thread th = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            String page = Common.SERVER_URL + "/Dowhat/Member_servlet/addAccount.do";
+                                            HashMap<String, String> map = new HashMap<String, String>();
+                                            Random rnd = new Random();
+                                            String rndpwd = String.valueOf(rnd.nextInt(99999999) + 1000000);
+                                            map.put("id", userid);
+                                            map.put("password", rndpwd);
+                                            map.put("kakaotoken", userid);
+                                            map.put("name", username);
+                                            String body = objectType(page, map);
+                                            JSONObject jsonObject = new JSONObject(body);
+                                            int result = (int) jsonObject.get("sendData");
+                                            if (result > 0) {
+                                                PrefManager pm = new PrefManager(LoginActivity.this);
+                                                String friendid = "";
+                                                String passwd = "";
+                                                pm.setAutoLogin(userid, passwd, username, friendid, userid, false);
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);
+                                                        startActivity(intent);
+                                                    }
+                                                });
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                                th.start();
+                            }
+                        })
                         .show();
                 super.handleMessage(msg);
             }
@@ -259,6 +308,18 @@ public class LoginActivity extends Activity {
             }
         }
         return null;
+    }
+
+    /**카카오톡 로그아웃 요청**/
+    //한번 로그인이 성공하면 세션 정보가 남아있어서 로그인창이 뜨지 않고 바로 onSuccess()메서드를 호출합니다.
+    //테스트 하시기 편하라고 매번 로그아웃 요청을 수행하도록 코드를 넣었습니다 ^^
+    public static void kakaoLogout() {
+        UserManagement.requestLogout(new LogoutResponseCallback() {
+            @Override
+            public void onCompleteLogout() {
+                //로그아웃 성공 후 하고싶은 내용 코딩 ~
+            }
+        });
     }
 }
 

@@ -35,7 +35,11 @@ public class AlarmService extends Service {
       preference 에 aCountSchedule 리셋 후 reload진행 :: new PrefManager(this).resetScheduleCount();
      */
 
-    DoWhat.getSchedule(this);
+    //브로드캐스트리시버가 자정을 인지하여 서비스를 리스타트 하고
+    //리스타트된 서버는 당일 날짜로 설정되어있는 알람을 가져옴
+    DBManager dbManager = new DBManager(this);
+    ArrayList<ScheduleDTO> lists = dbManager.todaySchedule(new PrefManager(this).getUserInfo().get("id"));
+
     Log.i("test", schedules.toString());
     Calendar cal = Calendar.getInstance();
     int year = cal.get(Calendar.YEAR);
