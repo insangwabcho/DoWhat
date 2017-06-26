@@ -47,9 +47,10 @@ public class CalendarActivity extends ListActivity implements Serializable {
     static ArrayList<ScheduleDTO> items; //일정을 담을 리스트
     String id;
     static String startdate; //아이디와 선택 날짜
-    ImageView btnAdd; //일정 추가버튼
+    ImageView btnPlus, btnAdd, btnMic;
     PrefManager manager;
     DBManager dbManager;
+    boolean isClick;
 
     Handler handler = new Handler() {
         @Override
@@ -79,24 +80,36 @@ public class CalendarActivity extends ListActivity implements Serializable {
         final HashMap<String, String> UserInfo=manager.getUserInfo();
         Log.i("Test2",manager.getUserInfo().toString());
         txtDate = (TextView) findViewById(R.id.txtDate);
+        btnPlus = (ImageView)findViewById(R.id.btnPlus);
         btnAdd = (ImageView)findViewById(R.id.btnAdd);
-        Paint paint=new Paint();
-        paint.setColor(Color.parseColor("#E47833"));
-        paint.setAlpha(70);
+        btnMic = (ImageView)findViewById(R.id.btnMic);
         calview = (CalendarView) findViewById(R.id.calview);
         dbManager= new DBManager(this);
         items= dbManager.todaySchedule(UserInfo.get("id"));
 //        Calendar cal=Calendar.getInstance();
 //        StartDay(calview,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DATE));
-        btnAdd.setImageResource(R.drawable.plus);
+        btnPlus.setImageResource(R.drawable.plus);
+        btnAdd.setImageResource(R.drawable.add);
+        btnMic.setImageResource(R.drawable.mic);
+        btnAdd.setVisibility(View.INVISIBLE);
+        btnMic.setVisibility(View.INVISIBLE);
 
         //일정 추가버튼을 눌렀을때 이벤트
-        btnAdd.setOnClickListener(new View.OnClickListener() {
+        btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CalendarActivity.this, DetailActivity.class);
+                if(isClick){
+                    btnAdd.setVisibility(View.VISIBLE);
+                    btnMic.setVisibility(View.VISIBLE);
+                    isClick=!isClick;
+                }else{
+                    btnAdd.setVisibility(View.INVISIBLE);
+                    btnMic.setVisibility(View.INVISIBLE);
+                    isClick=!isClick;
+                }
+                /*Intent intent = new Intent(CalendarActivity.this, DetailActivity.class);
                 intent.putExtra("check",0);
-                startActivity(intent);
+                startActivity(intent);*/
             }
         });
 
