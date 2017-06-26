@@ -101,10 +101,12 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 if(isClick){
                     btnAdd.setVisibility(View.VISIBLE);
                     btnMic.setVisibility(View.VISIBLE);
+                    btnPlus.setImageResource(R.drawable.x);
                     isClick=!isClick;
                 }else{
                     btnAdd.setVisibility(View.INVISIBLE);
                     btnMic.setVisibility(View.INVISIBLE);
+                    btnPlus.setImageResource(R.drawable.plus);
                     isClick=!isClick;
                 }
                 /*Intent intent = new Intent(CalendarActivity.this, DetailActivity.class);
