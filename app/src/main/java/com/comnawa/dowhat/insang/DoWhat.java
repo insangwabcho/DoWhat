@@ -98,6 +98,13 @@ public class DoWhat {
   }
   //권한체크 (Manifest.xml 에 먼저 정의해둔것만 실행됨)
 
+  public static boolean setAlarm(Context context, String date, int hour, int min, String subject){
+    String[] arr= date.split("-");
+    return setAlarm(
+      context,Integer.parseInt(arr[0]),Integer.parseInt(arr[1]),Integer.parseInt(arr[2]),hour,min,subject
+    );
+  }
+
   public static boolean setAlarm
     (final Context context, int year, int month, int date, int hour, int min, String subject) {
     PrefManager pm = new PrefManager(context);

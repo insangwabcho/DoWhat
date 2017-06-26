@@ -61,6 +61,10 @@ public class DBManager {
     dbm.testDelete(idx);
   }
 
+  public void setRequestCode(ScheduleDTO dto, int requestCode){
+    dbm.setRequestCode(dto, requestCode);
+  }
+
   public void insertSchedule(ScheduleDTO dto) {
     dbm.insert(dto);
   }
@@ -94,7 +98,8 @@ public class DBManager {
           "place varchar(50)," +
           "memo varchar(50)," +
           "alarm integer," +
-          "repeat integer)";
+          "repeat integer" +
+          "requestcode integer)";
 //    String sql="drop table schedule";
       SQLiteDatabase db= getWritableDatabase();
       try {
@@ -250,6 +255,12 @@ public class DBManager {
     public void testDelete(int idx) {
       SQLiteDatabase db = getWritableDatabase();
       String sql = "delete from schedule where num="+idx;
+      db.execSQL(sql);
+    }
+
+    public void setRequestCode(ScheduleDTO dto, int requestCode){
+      SQLiteDatabase db= getWritableDatabase();
+      String sql= "updqte schedule set requestcode="+requestCode+" where num="+dto.getNum()+" and id='"+dto.getId()+"'";
       db.execSQL(sql);
     }
   }
