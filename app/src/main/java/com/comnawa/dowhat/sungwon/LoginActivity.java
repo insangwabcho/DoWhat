@@ -1,7 +1,6 @@
 package com.comnawa.dowhat.sungwon;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +10,7 @@ import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -50,9 +50,8 @@ public class LoginActivity extends Activity {
     SessionCallback callback;
     EditText editid, editpwd;
     Button btnLogin, btnSignUp;
-    CheckBox cb;
     String userid, username;
-
+    CheckBox cb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +140,24 @@ public class LoginActivity extends Activity {
         Session.getCurrentSession().addCallback(callback);
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //간편로그인시 호출 ,없으면 간편로그인시 로그인 성공화면으로 넘어가지 않음
+        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        //화면이 종료되면 세션을 초기화시킴
+        super.onDestroy();
+        Session.getCurrentSession().removeCallback(callback);
+    }
+
     private class SessionCallback implements ISessionCallback {
         @Override
         public void onSessionOpened() {
@@ -161,6 +178,7 @@ public class LoginActivity extends Activity {
 
                 @Override
                 public void onSessionClosed(ErrorResult errorResult) {
+                    errorResult.getErrorMessage();
                 }
 
                 @Override
@@ -170,31 +188,30 @@ public class LoginActivity extends Activity {
                 @Override
                 public void onSuccess(final UserProfile userProfile) {
                     //사용자 ID는 보안상의 문제로 제공하지 않고 일련번호는 제공합니다.
-                   /* Log.e("UserProfile", userProfile.toString());
+                    /*Log.e("UserProfile", userProfile.toString());
                     Toast.makeText(LoginActivity.this, userProfile.getId()+"", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);
+                    Log.i("intent","테스트");
                     startActivity(intent);
                     finish();*/
                     Thread th = new Thread(new Runnable() {
-                        String page = "";
-                        JSONObject jsonObj;
-
                         @Override
                         public void run() {
                             try {    //카카오톡 로그인 성공시
-                                page = Common.SERVER_URL + "/Dowhat/Member_servlet/kakaocheck.do";
+                                String page = Common.SERVER_URL + "/Dowhat/Member_servlet/kakaocheck.do";
                                 HashMap<String, String> map = new HashMap<String, String>();
                                 userid = String.valueOf(userProfile.getId());
                                 username = userProfile.getNickname();
                                 map.put("kakaotoken", userid);
                                 String body = objectType(page, map);
-                                jsonObj = new JSONObject(body);
-                                JSONArray jArray = (JSONArray) jsonObj.get("sendData");
+                                JSONObject jsonObj1 = new JSONObject(body);
+                                JSONArray jArray = (JSONArray) jsonObj1.get("sendData");
                                 JSONObject jlist = (JSONObject) jArray.get(0);
-                                Log.i("kakoCheck",jArray.toString());
+                                Log.i("kakoCheck",jlist.toString());
                                 if (jlist.get("id").equals("null")) { // 기존계정과 카톡계정이 연동되어있지않으면
                                     handler.sendEmptyMessage(0);
-                                }else{  // 카톡계정이 연동되어있으면
+                                    Log.i("intent",jlist.get("id").toString());
+                                }else if(!jlist.get("id").equals("null")){  // 카톡계정이 연동되어있으면
                                     String id =jlist.get("id").toString();
                                     String name = jlist.get("name").toString();
                                     String kakaotoken = jlist.get("kakaotoken").toString();
@@ -207,17 +224,19 @@ public class LoginActivity extends Activity {
                                         public void run() {
                                             Intent intent = new Intent(LoginActivity.this,CalendarActivity.class);
                                             startActivity(intent);
+                                            Log.i("intent","계정연동되있음");
+                                            finish();
                                         }
                                     });
                                 }
                             } catch (Exception e) {
-
+                                e.printStackTrace();
                             }
                         }
                     });
                     th.start();
-                    finish();
                 }
+
             });
 
         }
@@ -243,11 +262,12 @@ public class LoginActivity extends Activity {
                                 Intent intent = new Intent(LoginActivity.this, confrimActivity.class);
                                 intent.putExtra("id", userid);
                                 intent.putExtra("name", username);
+                                Log.i("intent","기존에 사용하던계정");
                                 startActivity(intent);
+                                finish();
                             }
                         })
-                        .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
-                            //아니오 입력시 임의로 DB에 계정추가
+                        .setNegativeButton("아니오", new DialogInterface.OnClickListener() { //아니오 입력시 임의로 DB에 계정추가
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Thread th = new Thread(new Runnable() {
@@ -275,6 +295,8 @@ public class LoginActivity extends Activity {
                                                     public void run() {
                                                         Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);
                                                         startActivity(intent);
+                                                        Log.i("intent","연동안함");
+                                                        finish();
                                                     }
                                                 });
                                             }
