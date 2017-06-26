@@ -4,6 +4,7 @@ package com.comnawa.dowhat.sangjin;
 import android.app.ListActivity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -116,19 +118,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                     btnMic.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            i=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                            i.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
-                            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR");
-                            i.putExtra(RecognizerIntent.EXTRA_PROMPT, "일정을 말씀해주세요.");
-
-                            Toast.makeText(CalendarActivity.this, "음성인식 시작", Toast.LENGTH_SHORT).show();
-
-                            try {
-                                startActivityForResult(i, RESULT_SPEECH);
-                            }catch (ActivityNotFoundException e) {
-                                Toast.makeText(getApplicationContext(), "말하기 기능을 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
-                                e.getStackTrace();
-                            }
+                            SST();
                         }
                     });
                 }else{
@@ -210,14 +200,51 @@ public class CalendarActivity extends ListActivity implements Serializable {
         });
     }
 
+    private void SST() {
+        i=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        i.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
+        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR");
+        i.putExtra(RecognizerIntent.EXTRA_PROMPT, "일정을 말씀해주세요.");
+
+        Toast.makeText(CalendarActivity.this, "음성인식 시작", Toast.LENGTH_SHORT).show();
+
+        try {
+            startActivityForResult(i, RESULT_SPEECH);
+        }catch (ActivityNotFoundException e) {
+            Toast.makeText(getApplicationContext(), "말하기 기능을 사용할 수 없습니다.", Toast.LENGTH_SHORT).show();
+            e.getStackTrace();
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK&&(requestCode==RESULT_SPEECH)){
             ArrayList<String> sstResult=data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-            String result_sst = sstResult.get(0);
+            final String result_sst = sstResult.get(0);
             Toast.makeText(CalendarActivity.this, result_sst, Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder ab=new AlertDialog.Builder(this);
+            ab.setTitle("녹음 확인");
+            ab.setMessage("일정 : [ "+result_sst+" ]")
+              .setCancelable(false)
+                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ScheduleDTO dto=new ScheduleDTO();
+                            dto.setTitle(result_sst);
+                            dto.setStartdate(startdate);
+                            dbManager.insertSchedule(dto);
+                        }
+                    })
+                    .setNegativeButton("다시 녹음", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SST();
+                        }
+                    });
+            AlertDialog alertDialog = ab.create();
+            alertDialog.show();
         }
     }
 
