@@ -226,8 +226,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
             Toast.makeText(CalendarActivity.this, result_stt, Toast.LENGTH_SHORT).show();
             AlertDialog.Builder ab=new AlertDialog.Builder(this);
             ab.setTitle("녹음 확인");
-            ab.setMessage("일정 : [ "+result_stt+" ]")
-              .setCancelable(false)
+            ab.setMessage("일정 : [ "+result_stt+" ]\n일시 : [ "+startdate+" ]")
+              .setCancelable(true)
                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -237,12 +237,13 @@ public class CalendarActivity extends ListActivity implements Serializable {
                             dbManager.insertSchedule(dto);
                         }
                     })
-                    .setNegativeButton("다시 녹음", new DialogInterface.OnClickListener() {
+                    .setNeutralButton("다시 녹음", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             STT();
                         }
-                    });
+                    })
+                    .setNegativeButton("취소", null);
             AlertDialog alertDialog = ab.create();
             alertDialog.show();
         }
