@@ -70,12 +70,11 @@ public class confrimActivity extends Activity {
                                         public void run() {
                                             Toast.makeText(confrimActivity.this, "계정이 등록되었습니다.", Toast.LENGTH_SHORT).show();
                                             Intent intent= new Intent(confrimActivity.this, CalendarActivity.class);
+                                            Log.i("intent","처음추가");
                                             startActivity(intent);
-
+                                            finish();
                                         }
                                     });
-                                    finish();
-
                                 }
                             }else { //입력한계정이 DB에 없으면
                                 runOnUiThread(new Runnable() {
