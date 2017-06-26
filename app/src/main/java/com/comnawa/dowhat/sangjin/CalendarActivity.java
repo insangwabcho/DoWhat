@@ -94,24 +94,31 @@ public class CalendarActivity extends ListActivity implements Serializable {
         btnAdd.setVisibility(View.INVISIBLE);
         btnMic.setVisibility(View.INVISIBLE);
 
-        //일정 추가버튼을 눌렀을때 이벤트
+        //플러스 버튼을 눌렀을때 이벤트
         btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(isClick){
+                    //버튼 2개 표시후 X로 이미지 변경
                     btnAdd.setVisibility(View.VISIBLE);
                     btnMic.setVisibility(View.VISIBLE);
                     btnPlus.setImageResource(R.drawable.x);
                     isClick=!isClick;
+                    //추가버튼 눌렀을때 이벤트
+                    btnAdd.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(CalendarActivity.this, DetailActivity.class);
+                            intent.putExtra("check",0);
+                            startActivity(intent);
+                        }
+                    });
                 }else{
                     btnAdd.setVisibility(View.INVISIBLE);
                     btnMic.setVisibility(View.INVISIBLE);
                     btnPlus.setImageResource(R.drawable.plus);
                     isClick=!isClick;
                 }
-                /*Intent intent = new Intent(CalendarActivity.this, DetailActivity.class);
-                intent.putExtra("check",0);
-                startActivity(intent);*/
             }
         });
 
@@ -188,7 +195,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
 //                        }
 //                    }
 //                });
-//                th.start(); //
+//                th.start(); //5
             }
         });
     }
