@@ -188,7 +188,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
 //                        }
 //                    }
 //                });
-//                th.start();
+//                th.start(); //
             }
         });
     }
