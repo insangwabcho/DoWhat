@@ -63,6 +63,7 @@ public class DetailActivity extends AppCompatActivity {
             dto.setTitle(editTitle.getText().toString());
             dto.setEvent(event);
             dto.setStartdate(txtSdate.getText().toString());
+            dto.setPlace(editPlace.getText().toString());
             dto.setEnddate(txtEdate.getText().toString());
             dto.setStarttime(DBstime);
             dto.setEndtime(DBetime);
@@ -131,9 +132,9 @@ public class DetailActivity extends AppCompatActivity {
             ScheduleDTO dto=CalendarActivity.items.get(index);
             Num=dto.getNum();
             editTitle.setText(dto.getTitle());
-            if(dto.getPlace() != null){
+            if(dto.getPlace()!=null){
                 editPlace.setText(dto.getPlace());
-            }else {
+            }else{
                 editPlace.setText("");
             }
             txtSdate.setText(dto.getStartdate());

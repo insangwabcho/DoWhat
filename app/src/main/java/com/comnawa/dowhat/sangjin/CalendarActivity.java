@@ -45,6 +45,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
     PrefManager manager;
     DBManager dbManager;
     boolean isClick;
+    int index,Num;
 
     private static final int RESULT_SPEECH=1;
 
@@ -67,6 +68,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         super.onListItemClick(l, v, position, id);
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("index",position);
+        index=position;
         intent.putExtra("check",1);
         startActivity(intent);
     }
@@ -231,6 +233,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ScheduleDTO dto=new ScheduleDTO();
+                            dto.setNum(Num);
+                            dto.setId(id);
                             dto.setTitle(result_stt);
                             dto.setStartdate(startdate);
                             dbManager.insertSchedule(dto);
