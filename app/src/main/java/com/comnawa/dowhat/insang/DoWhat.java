@@ -180,7 +180,11 @@ public class DoWhat {
 
   public static void resetAlarm(final Activity context, @Nullable final Intent finIntent, final boolean check) {
     PrefManager pm = new PrefManager(context);
-    if (!pm.getPushAlarm() && finIntent.getStringExtra("cbAlarm").equals("설정")) {
+    String cbAlarm= "";
+    if (finIntent.getStringExtra("cbAlarm")!= null){
+      cbAlarm= finIntent.getStringExtra("cbAlarm");
+    }
+    if (!pm.getPushAlarm() && cbAlarm.equals("설정")) {
       AlertDialog.Builder dialog = new AlertDialog.Builder(context);
       dialog.setTitle("알람설정").setMessage("알람을 설정하시기 위해서는 \n 푸시알람설정을 켜주셔야 합니다. \n 알람설정을 켜시겠습니까?")
         .setPositiveButton("네", new DialogInterface.OnClickListener() {
