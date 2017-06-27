@@ -273,31 +273,37 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 txtSchedule.setText(dto.getTitle());
                 if (!dto.getStarttime().equals("")) {
                     //내용이있으면 시간표시
-                    int Shour = Integer.parseInt(dto.getStarttime().substring(0, 2));
-                    int Sminute = Integer.parseInt(dto.getStarttime().substring(3));
-                    int Ehour = Integer.parseInt(dto.getEndtime().substring(0, 2));
-                    int Eminute = Integer.parseInt(dto.getEndtime().substring(3));
+                    String[] Stimes = dto.getStarttime().split(":");
+                    String[] Etimes = dto.getEndtime().split(":");
+                    int Shour = Integer.parseInt(Stimes[0]);
+                    int Sminute = Integer.parseInt(Stimes[1]);
+                    int Ehour = Integer.parseInt(Etimes[0]);
+                    int Eminute = Integer.parseInt(Etimes[1]);
                     String h1, h2, m1, m2, setStime, setEtime;
                     if (Shour < 10) { //0~9시일경우 앞에 0을 붙임
                         h1 = "0" + String.valueOf(Shour);
                     } else {
                         h1 = String.valueOf(Shour);
                     }
+                    Log.i("시작시간 : ",h1);
                     if (Ehour < 10) { //0~9시일경우 앞에 0을 붙임
                         h2 = "0" + String.valueOf(Ehour);
                     } else {
                         h2 = String.valueOf(Ehour);
                     }
+                    Log.i("종료시간 : ",h2);
                     if (Sminute < 10) { //1~9분일경우 앞에 0을 붙임
                         m1 = "0" + String.valueOf(Sminute);
                     } else {
                         m1 = String.valueOf(Sminute);
                     }
+                    Log.i("시작분 : ",m1);
                     if (Eminute < 10) { //1~9분일경우 앞에 0을 붙임
                         m2 = "0" + String.valueOf(Eminute);
                     } else {
                         m2 = String.valueOf(Eminute);
                     }
+                    Log.i("종료분 : ",m2);
                     if (Shour > 12 && Shour < 22) {
                         setStime = "오후 0" + (Shour - 12) + "시 " + m1 + "분";
                     } else if (Shour > 21) {
@@ -307,7 +313,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                     } else {
                         setStime = "오전 " + h1 + "시 " + m1 + "분";
                     }
-                    if (Ehour > 12) {
+                    if (Ehour > 12 && Ehour < 22) {
                         setEtime = "오후 0" + (Ehour - 12) + "시 " + m2 + "분";
                     } else if (Ehour > 21) {
                         setEtime = "오후 " + (Ehour - 12) + "시 " + m2 + "분";
