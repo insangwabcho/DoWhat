@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.speech.SpeechRecognizer;
-import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,8 +48,6 @@ public class CalendarActivity extends ListActivity implements Serializable {
     private static final int RESULT_SPEECH = 1;
 
     private Intent i;
-    private SpeechRecognizer mRecognizer;
-    TextToSpeech tts;
 
     private void SettingListview() {
         adapter = new ScheduleAdapter(CalendarActivity.this, R.layout.layout, items);
@@ -134,7 +130,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
             String[] days = sdate.split("-"); // 년= [0], 월= [1], 일= [2]
             //받아온 년,월-1,일로 날자 세팅 후 StartDay() 실행
             int year = Integer.parseInt(days[0]);
-            int month = Integer.parseInt(days[1])-1;
+            int month = Integer.parseInt(days[1]) - 1;
             int day = Integer.parseInt(days[2]);
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, year);
@@ -214,50 +210,6 @@ public class CalendarActivity extends ListActivity implements Serializable {
                     e.printStackTrace();
                 }
                 SettingListview();
-//                Thread th = new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        try {
-//                            items = new ArrayList<ScheduleDTO>();
-//                            String page = Common.SERVER_URL + "/Dowhat/Schedule_servlet/simple.do";
-//                            HttpClient http = new DefaultHttpClient();
-//                            ArrayList<NameValuePair> postData = new ArrayList<>();
-//                            //postData에 id와 시작날짜를 붙임
-//                            postData.add(new BasicNameValuePair("id", id));
-//                            postData.add(new BasicNameValuePair("startdate", startdate));
-//                            //한글, 특수문자 등이 잘 전달될 수 있도록 인코딩
-//                            final UrlEncodedFormEntity request = new UrlEncodedFormEntity(postData, "utf-8");
-//                            //post 방식으로 데이터 전달
-//                            HttpPost httpPost = new HttpPost(page);
-//                            httpPost.setEntity(request);
-//                            HttpResponse response = http.execute(httpPost);
-//                            String body = EntityUtils.toString(response.getEntity());
-//                            JSONObject jsonObj = new JSONObject(body);
-//                            JSONArray jArray = (JSONArray) jsonObj.get("sendData");
-//                            //JArray에서 받아온 자료를 dto에 담은후 ArrayList에 저장
-//                            for (int i = 0; i < jArray.length(); i++) {
-//                                JSONObject row = jArray.getJSONObject(i);
-//                                ScheduleDTO dto = new ScheduleDTO();
-//                                dto.setNum(row.getInt("num"));
-//                                dto.setTitle(row.getString("title"));
-//                                dto.setEvent(row.getString("event"));
-//                                dto.setStartdate(row.getString("startdate"));
-//                                dto.setEnddate(row.getString("enddate"));
-//                                dto.setStarttime(row.getString("starttime"));
-//                                dto.setEndtime(row.getString("endtime"));
-//                                dto.setPlace(row.getString("place"));
-//                                dto.setMemo(row.getString("memo"));
-//                                dto.setAlarm(row.getInt("alarm"));
-//                                dto.setRepeat(row.getInt("repeat"));
-//                                items.add(dto);
-//                            }
-//                            handler.sendEmptyMessage(0);
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
-//                th.start(); //5
             }
         });
     }
@@ -430,50 +382,6 @@ public class CalendarActivity extends ListActivity implements Serializable {
             e.printStackTrace();
         }
         SettingListview();
-        /*Thread th = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    items = new ArrayList<ScheduleDTO>();
-                    String page = Common.SERVER_URL + "/Dowhat/Schedule_servlet/simple.do";
-                    HttpClient http = new DefaultHttpClient();
-                    ArrayList<NameValuePair> postData = new ArrayList<>();
-                    postData.add(new BasicNameValuePair("id", id));
-                    postData.add(new BasicNameValuePair("startdate", startdate)); //아이디와 날짜를 넘김
-                    //한글, 특수문자 등이 잘 전달될 수 있도록 인코딩
-                    final UrlEncodedFormEntity request = new UrlEncodedFormEntity(postData, "utf-8");
-                    //post 방식으로 데이터 전달
-                    HttpPost httpPost = new HttpPost(page);
-                    httpPost.setEntity(request);
-                    HttpResponse response = http.execute(httpPost);
-                    String body = EntityUtils.toString(response.getEntity());
-                    JSONObject jsonObj = new JSONObject(body);
-                    JSONArray jArray = (JSONArray) jsonObj.get("sendData");
-                    Log.i("test",jsonObj+"");
-                    Log.i("tes",jArray+"");
-                    for (int i = 0; i < jArray.length(); i++) {
-                        JSONObject row = jArray.getJSONObject(i);
-                        ScheduleDTO dto = new ScheduleDTO();
-                        dto.setNum(row.getInt("num"));
-                        dto.setTitle(row.getString("title"));
-                        dto.setEvent(row.getString("event"));
-                        dto.setStartdate(row.getString("startdate"));
-                        dto.setEnddate(row.getString("enddate"));
-                        dto.setStarttime(row.getString("starttime"));
-                        dto.setEndtime(row.getString("endtime"));
-                        dto.setPlace(row.getString("place"));
-                        dto.setMemo(row.getString("memo"));
-                        dto.setAlarm(row.getInt("alarm"));
-                        dto.setRepeat(row.getInt("repeat"));
-                        items.add(dto);
-                    }
-                    handler.sendEmptyMessage(0);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        th.start();*/
     }
 
     public ScheduleDTO getSchedule(int index) {
