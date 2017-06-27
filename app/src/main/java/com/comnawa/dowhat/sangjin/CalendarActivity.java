@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
@@ -136,6 +137,34 @@ public class CalendarActivity extends ListActivity implements Serializable {
         btnAdd = (ImageView) findViewById(R.id.btnAdd);
         btnMic = (ImageView) findViewById(R.id.btnMic);
         calview = (CalendarView) findViewById(R.id.calview);
+
+
+/*        calview.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
+            @Override
+            public void onGlobalFocusChanged(View oldFocus, View newFocus) {
+                //필요한 작업
+
+                //리스너 해제
+                calview.getViewTreeObserver().removeOnGlobalFocusChangeListener(this);
+            }
+        });
+
+        calview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                //뷰의 생성된 후 크기와 위치 구하기
+                calview.getWidth();
+                calview.getHeight();
+                calview.getX();
+                calview.getY();
+
+
+                //리스너 해제
+                calview.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });*/
+
+
         dbManager = new DBManager(this);
         items = new ArrayList<>();
         try {
