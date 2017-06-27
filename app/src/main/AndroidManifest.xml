@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".sungwon.GlobalApplication"
@@ -39,8 +40,7 @@
         <activity android:name=".insang.Preferences" />
         <activity android:name=".kwanwoo.CalendarCoreActivity" />
         <activity android:name=".kwanwoo.ColorChoice" />
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".sangjin.DetailActivity" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".sangjin.CalendarActivity" />
         <activity android:name=".sungwon.LoginActivity" />
         <activity android:name=".sungwon.SignUpActivity" />
@@ -58,12 +58,12 @@
         <receiver
             android:name=".insang.AlarmBroadcast"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
 
         <service
             android:name=".insang.AlarmService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <receiver
             android:name=".insang.DateChangedReceiver"
@@ -75,7 +75,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".sungwon.confrimActivity"></activity>
+        <activity android:name=".sungwon.confrimActivity" />
+        <activity android:name=".sangjin.DetailActivity"></activity>
+
     </application>
 
 </manifest>
