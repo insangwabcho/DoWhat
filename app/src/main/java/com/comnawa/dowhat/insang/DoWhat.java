@@ -180,64 +180,65 @@ public class DoWhat {
 
   public static void resetAlarm(final Activity context, @Nullable final Intent finIntent, final boolean check) {
     PrefManager pm = new PrefManager(context);
-    String cbAlarm= "";
-    if (finIntent.getStringExtra("cbAlarm")!= null){
-      cbAlarm= finIntent.getStringExtra("cbAlarm");
-    }
-    if (!pm.getPushAlarm() && cbAlarm.equals("설정")) {
-      AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-      dialog.setTitle("알람설정").setMessage("알람을 설정하시기 위해서는 \n 푸시알람설정을 켜주셔야 합니다. \n 알람설정을 켜시겠습니까?")
-        .setPositiveButton("네", new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            resettAlarm(context, finIntent);
+    String cbAlarm = "";
+    if (finIntent.getStringExtra("cbAlarm") != null) {
+      cbAlarm = finIntent.getStringExtra("cbAlarm");
 
-            if (finIntent == null) {
+      if (!pm.getPushAlarm() && cbAlarm.equals("설정")) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle("알람설정").setMessage("알람을 설정하시기 위해서는 \n 푸시알람설정을 켜주셔야 합니다. \n 알람설정을 켜시겠습니까?")
+          .setPositiveButton("네", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              resettAlarm(context, finIntent);
+
+              if (finIntent == null) {
+                return;
+              }
+              if (finIntent.getBooleanExtra("newMod", false)) {
+                Toast.makeText(context, "저장되었습니다.", Toast.LENGTH_SHORT).show();
+              } else if (!finIntent.getBooleanExtra("newMod", false)) {
+                Toast.makeText(context, "수정되었습니다.", Toast.LENGTH_SHORT).show();
+              }
               return;
             }
-            if (finIntent.getBooleanExtra("newMod", false)) {
-              Toast.makeText(context, "저장되었습니다.", Toast.LENGTH_SHORT).show();
-            } else if (!finIntent.getBooleanExtra("newMod", false)) {
-              Toast.makeText(context, "수정되었습니다.", Toast.LENGTH_SHORT).show();
+          })
+          .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              Toast.makeText(context, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
+              context.startActivity(finIntent);
+              context.finish();
+              return;
             }
-            return;
-          }
-        })
-        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            Toast.makeText(context, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
-            context.startActivity(finIntent);
-            context.finish();
-            return;
-          }
-        })
-        .create().show();
-    } else {
-      if (finIntent.getStringExtra("cbAlarm").equals("설정")) {
-        resettAlarm(context, finIntent);
-        if (!check){
-          Toast.makeText(context, "수정되었습니다.", Toast.LENGTH_SHORT).show();
-        } else {
-          Toast.makeText(context, "저장되었습니다.", Toast.LENGTH_SHORT).show();
-        }
+          })
+          .create().show();
       } else {
-        boolean t= new PrefManager(context).getPushAlarm();
-        resettAlarm(context,finIntent);
-        if (!t){
-          new PrefManager(context).setPushAlarm(false);
-        }
-        if (!t) {
-          context.stopService(new Intent(context, AlarmService.class));
-        }
-        if (!check){
-          Toast.makeText(context, "수정되었습니다.", Toast.LENGTH_SHORT).show();
+        if (finIntent.getStringExtra("cbAlarm").equals("설정")) {
+          resettAlarm(context, finIntent);
+          if (!check) {
+            Toast.makeText(context, "수정되었습니다.", Toast.LENGTH_SHORT).show();
+          } else {
+            Toast.makeText(context, "저장되었습니다.", Toast.LENGTH_SHORT).show();
+          }
         } else {
-          Toast.makeText(context, "저장되었습니다.", Toast.LENGTH_SHORT).show();
+          boolean t = new PrefManager(context).getPushAlarm();
+          resettAlarm(context, finIntent);
+          if (!t) {
+            new PrefManager(context).setPushAlarm(false);
+          }
+          if (!t) {
+            context.stopService(new Intent(context, AlarmService.class));
+          }
+          if (!check) {
+            Toast.makeText(context, "수정되었습니다.", Toast.LENGTH_SHORT).show();
+          } else {
+            Toast.makeText(context, "저장되었습니다.", Toast.LENGTH_SHORT).show();
+          }
         }
       }
     }
-  } //알람 리셋
+  }
 
   private static void resettAlarm(final Activity context, @Nullable final Intent finIntent) {
     final PrefManager pm = new PrefManager(context);
