@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -70,6 +71,7 @@ public class DetailActivity extends AppCompatActivity {
             dto.setMemo(editMemo.getText().toString());
             dto.setAlarm(alarm);
             dto.setRepeat(repeat);
+            Log.i("test:",dto.toString());
 
             DBManager dbManager= new DBManager(this);
             if (check) { //신규
@@ -179,16 +181,20 @@ public class DetailActivity extends AppCompatActivity {
 
             if(dto.getAlarm() == 0){
                 cbAlarm.setText("해제");
+                alarm=0;
             }else{
                 cbAlarm.setChecked(true);
                 cbAlarm.setText("설정");
+                alarm=1;
             }
 
             if(dto.getRepeat() == 0){
                 cbRepeat.setText("해제");
+                repeat=0;
             }else{
                 cbRepeat.setChecked(true);
                 cbRepeat.setText("설정");
+                repeat=1;
             }
 
         }

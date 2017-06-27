@@ -217,9 +217,10 @@ public class CalendarActivity extends ListActivity implements Serializable {
             ArrayList<String> sstResult = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
             final String result_stt = sstResult.get(0);
+            final String[] Place_Title=result_stt.split("에서");
             AlertDialog.Builder ab = new AlertDialog.Builder(this);
             ab.setTitle("녹음 확인");
-            ab.setMessage("일정 : [ " + result_stt + " ]\n일시 : [ " + startdate + " ]")
+            ab.setMessage("일정 : [ " + Place_Title[1] + " ]\n일시 : [ " + startdate + " ]\n장소 : [ " + Place_Title[0]+ " ]")
                     .setCancelable(true)
                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
@@ -227,17 +228,17 @@ public class CalendarActivity extends ListActivity implements Serializable {
                             ScheduleDTO dto = new ScheduleDTO();
                             id = new PrefManager(CalendarActivity.this).getUserInfo().get("id");
                             dto.setId(id);
-                            dto.setTitle(result_stt);
+                            dto.setTitle(Place_Title[1]);
+                            dto.setPlace(Place_Title[0]);
                             dto.setStarttime("08:00");
                             dto.setEndtime("09:00");
                             dto.setStartdate(startdate);
                             dto.setEnddate(startdate);
                             dbManager.insertSchedule(dto);
                             Toast.makeText(CalendarActivity.this, "일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
-                            DoWhat.resetAlarm(CalendarActivity.this, null, true);
+//                            DoWhat.resetAlarm(CalendarActivity.this, asdf, true);
                             String[] days = startdate.split("-"); // 년= [0], 월= [1], 일= [2]
                             SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
-
                         }
                     })
                     .setNeutralButton("다시 녹음", new DialogInterface.OnClickListener() {
