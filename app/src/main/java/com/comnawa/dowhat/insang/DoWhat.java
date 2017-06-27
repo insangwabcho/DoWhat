@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -98,10 +99,10 @@ public class DoWhat {
   }
   //권한체크 (Manifest.xml 에 먼저 정의해둔것만 실행됨)
 
-  public static boolean setAlarm(Context context, String date, int hour, int min, String subject){
-    String[] arr= date.split("-");
+  public static boolean setAlarm(Context context, String date, int hour, int min, String subject) {
+    String[] arr = date.split("-");
     return setAlarm(
-      context,Integer.parseInt(arr[0]),Integer.parseInt(arr[1]),Integer.parseInt(arr[2]),hour,min,subject
+      context, Integer.parseInt(arr[0]), Integer.parseInt(arr[1]), Integer.parseInt(arr[2]), hour, min, subject
     );
   }
 
@@ -170,9 +171,29 @@ public class DoWhat {
     Log.i("test", "완료");
   } //스케쥴 일정 서버에서 받아오기
 
-  public static void resetAlarm(Context context) {
+  public static void resetAlarm(final Activity context, @Nullable Intent finIntent) {
 
     PrefManager pm = new PrefManager(context);
+    if (!pm.getPushAlarm()) {
+      AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+      dialog.setTitle("알람설정").setMessage("알람을 설정하시기 위해서는 \n 푸시알람설정이 필요합니다.\n  환경설정으로 이동하시겠습니까?")
+        .setPositiveButton("이동", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            Intent intent = new Intent(context, Preferences.class);
+            intent.putExtra("msg", "hello");
+            Toast.makeText(context, "푸시설정 -> 알람설정 을 켜주세요", Toast.LENGTH_SHORT).show();
+            context.startActivity(intent);
+          }
+        })
+        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            Toast.makeText(context, "현재 푸시알람기능이 켜져있지 않습니다", Toast.LENGTH_LONG).show();
+          }
+        })
+        .create().show();
+    }
 
     Log.i("test", pm.getScheduleCount() + "");
     for (int i = 1; i <= pm.getScheduleCount(); i++) {
@@ -190,10 +211,15 @@ public class DoWhat {
 
     context.stopService(new Intent(context, AlarmService.class));
     context.startService(new Intent(context, AlarmService.class));
+
+    if (finIntent != null) {
+      context.startActivity(finIntent);
+      context.finish();
+    }
   } //알람 리셋
 
 
-  public static void setTitleBar(AppCompatActivity activity, String title){
+  public static void setTitleBar(AppCompatActivity activity, String title) {
     activity.getSupportActionBar().setTitle(title);
   }
 

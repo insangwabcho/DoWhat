@@ -78,11 +78,9 @@ public class DetailActivity extends AppCompatActivity {
                 Toast.makeText(this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
 
                 //신규설정한 날짜 startdate를  putExtra로 넣어서 CalendarActivity에 보내주고 finish()
-                DoWhat.resetAlarm(this);
                 Intent intent= new Intent(this, CalendarActivity.class);
                 intent.putExtra("sdate", txtSdate.getText().toString());
-                startActivity(intent);
-                finish();
+                DoWhat.resetAlarm(this, intent);
 
 //              UpdateNewSchedule uns= new UpdateNewSchedule(this,true,dto);
 //              uns.start();
@@ -91,11 +89,9 @@ public class DetailActivity extends AppCompatActivity {
                 Toast.makeText(this, "수정 되었습니다.", Toast.LENGTH_SHORT).show();
 
                 //수정한 날짜 startdate를 putExtra로 넣어서 CalendarActivity에 보내주고 실행 후 finish()
-                DoWhat.resetAlarm(this);
                 Intent intent= new Intent(this, CalendarActivity.class);
                 intent.putExtra("sdate", txtSdate.getText().toString());
-                startActivity(intent);
-                finish();
+                DoWhat.resetAlarm(this, intent);
 
 //              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
 //              uns.start();
