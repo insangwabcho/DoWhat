@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -75,23 +74,25 @@ public class DetailActivity extends AppCompatActivity {
             DBManager dbManager= new DBManager(this);
             if (check) { //신규
                 dbManager.insertSchedule(dto);
-                Toast.makeText(this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
 
                 //신규설정한 날짜 startdate를  putExtra로 넣어서 CalendarActivity에 보내주고 finish()
                 Intent intent= new Intent(this, CalendarActivity.class);
                 intent.putExtra("sdate", txtSdate.getText().toString());
-                DoWhat.resetAlarm(this, intent);
+                intent.putExtra("newMod", true);
+                DoWhat.resetAlarm(this, intent, check);
+                Toast.makeText(this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
 
 //              UpdateNewSchedule uns= new UpdateNewSchedule(this,true,dto);
 //              uns.start();
             } else { //수정
                 dbManager.updateSchedule(dto);
-                Toast.makeText(this, "수정 되었습니다.", Toast.LENGTH_SHORT).show();
 
                 //수정한 날짜 startdate를 putExtra로 넣어서 CalendarActivity에 보내주고 실행 후 finish()
                 Intent intent= new Intent(this, CalendarActivity.class);
                 intent.putExtra("sdate", txtSdate.getText().toString());
-                DoWhat.resetAlarm(this, intent);
+                intent.putExtra("newMod", false);
+                DoWhat.resetAlarm(this, intent, check);
+                Toast.makeText(this, "수정 되었습니다.", Toast.LENGTH_SHORT).show();
 
 //              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
 //              uns.start();
@@ -243,11 +244,11 @@ public class DetailActivity extends AppCompatActivity {
                 if(cbAlarm.isChecked()){
                     alarm = 1;
                     cbAlarm.setText("설정");
-                    Toast.makeText(DetailActivity.this, "알람이 설정되었습니다", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(DetailActivity.this, "알람이 설정되었습니다", Toast.LENGTH_SHORT).show();
                 }else {
                     alarm = 0;
                     cbAlarm.setText("해제");
-                    Toast.makeText(DetailActivity.this, "해제되었습니다", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(DetailActivity.this, "해제되었습니다", Toast.LENGTH_SHORT).show();
                 }
             }
         });

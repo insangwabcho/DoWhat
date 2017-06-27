@@ -65,7 +65,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                             public void onClick(DialogInterface dialog, int which) {
                                 new DBManager(CalendarActivity.this).deleteSchedule(dto);
                                 Toast.makeText(CalendarActivity.this, "삭제되었습니다.", Toast.LENGTH_SHORT).show();
-                                DoWhat.resetAlarm(CalendarActivity.this, null);
+                                DoWhat.delAlarm(CalendarActivity.this);
                                 Calendar cal = Calendar.getInstance();
                                 String[] days = startdate.split("-"); // 년= [0], 월= [1], 일= [2]
                                 SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
@@ -234,7 +234,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                             dto.setEnddate(startdate);
                             dbManager.insertSchedule(dto);
                             Toast.makeText(CalendarActivity.this, "일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
-                            DoWhat.resetAlarm(CalendarActivity.this, null);
+                            DoWhat.resetAlarm(CalendarActivity.this, null, true);
                             String[] days = startdate.split("-"); // 년= [0], 월= [1], 일= [2]
                             SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
 

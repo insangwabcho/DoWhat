@@ -171,29 +171,49 @@ public class DoWhat {
     Log.i("test", "완료");
   } //스케쥴 일정 서버에서 받아오기
 
-  public static void resetAlarm(final Activity context, @Nullable Intent finIntent) {
+  public static void delAlarm(final Activity context) {
+    resettAlarm(context, null);
+    if (!new PrefManager(context).getPushAlarm()) {
+      context.stopService(new Intent(context, AlarmService.class));
+    }
+  }
 
-    PrefManager pm = new PrefManager(context);
+  public static void resetAlarm(final Activity context, @Nullable final Intent finIntent, final boolean check) {
+    final PrefManager pm = new PrefManager(context);
     if (!pm.getPushAlarm()) {
       AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-      dialog.setTitle("알람설정").setMessage("알람을 설정하시기 위해서는 \n 푸시알람설정이 필요합니다.\n  환경설정으로 이동하시겠습니까?")
-        .setPositiveButton("이동", new DialogInterface.OnClickListener() {
+      dialog.setTitle("알람설정").setMessage("알람을 설정하시기 위해서는 \n 푸시알람설정을 켜주셔야 합니다. \n 알람설정을 켜시겠습니까?")
+        .setPositiveButton("네", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            Intent intent = new Intent(context, Preferences.class);
-            intent.putExtra("msg", "hello");
-            Toast.makeText(context, "푸시설정 -> 알람설정 을 켜주세요", Toast.LENGTH_SHORT).show();
-            context.startActivity(intent);
+            resettAlarm(context, finIntent);
+
+            if (finIntent == null) {
+              return;
+            }
+            if (finIntent.getBooleanExtra("newMod", false)) {
+              Toast.makeText(context, "저장되었습니다.", Toast.LENGTH_SHORT).show();
+            } else if (!finIntent.getBooleanExtra("newMod", false)) {
+              Toast.makeText(context, "수정되었습니다.", Toast.LENGTH_SHORT).show();
+            }
+            return;
           }
         })
         .setNegativeButton("취소", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            Toast.makeText(context, "현재 푸시알람기능이 켜져있지 않습니다", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "푸시알람기능이 켜져있지 않기때문에 \n 알람이 작동하지 않을 수 있습니다.", Toast.LENGTH_LONG).show();
+            return;
           }
         })
         .create().show();
+    } else {
+      resettAlarm(context, finIntent);
     }
+  } //알람 리셋
+
+  private static void resettAlarm(final Activity context, @Nullable final Intent finIntent) {
+    final PrefManager pm = new PrefManager(context);
 
     Log.i("test", pm.getScheduleCount() + "");
     for (int i = 1; i <= pm.getScheduleCount(); i++) {
@@ -216,7 +236,8 @@ public class DoWhat {
       context.startActivity(finIntent);
       context.finish();
     }
-  } //알람 리셋
+    pm.setPushAlarm(true);
+  }
 
 
   public static void setTitleBar(AppCompatActivity activity, String title) {
