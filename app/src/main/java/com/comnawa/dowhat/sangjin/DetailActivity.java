@@ -9,6 +9,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.WindowDecorActionBar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -109,8 +110,6 @@ public class DetailActivity extends AppCompatActivity {
                     finish();
                 }
 
-//              UpdateNewSchedule uns= new UpdateNewSchedule(this,true,dto);
-//              uns.start();
             } else { //수정
                 dbManager.updateSchedule(dto);
 
@@ -120,9 +119,6 @@ public class DetailActivity extends AppCompatActivity {
                 intent.putExtra("newMod", false);
                 intent.putExtra("cbAlarm",cbAlarm.getText().toString());
                 DoWhat.resetAlarm(this, intent, check);
-
-//              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
-//              uns.start();
             }
 
         }
@@ -130,22 +126,8 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                Intent intent=new Intent(this, CalendarActivity.class);
-                startActivity(intent);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로로 고정
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_sangjin);
 
@@ -288,11 +270,9 @@ public class DetailActivity extends AppCompatActivity {
                 if(cbAlarm.isChecked()){
                     alarm = 1;
                     cbAlarm.setText("설정");
-//                    Toast.makeText(DetailActivity.this, "알람이 설정되었습니다", Toast.LENGTH_SHORT).show();
                 }else {
                     alarm = 0;
                     cbAlarm.setText("해제");
-//                    Toast.makeText(DetailActivity.this, "해제되었습니다", Toast.LENGTH_SHORT).show();
                 }
             }
         });
