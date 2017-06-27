@@ -47,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
     switch (v.getId()) {
       case R.id.btnInsang:
         Toast.makeText(this, "테스트중인거없습니다 ㅡ ㅡ", Toast.LENGTH_SHORT).show();
-//        intent = new Intent(this, Preferences.class);
+//        intent = add Intent(this, Preferences.class);
 //        break;
-//        new PrefManager(this).resetScheduleCount();
+//        add PrefManager(this).resetScheduleCount();
 //        Calendar cal = Calendar.getInstance();
 //        int year = cal.get(Calendar.YEAR);
 //        int month = 6;
