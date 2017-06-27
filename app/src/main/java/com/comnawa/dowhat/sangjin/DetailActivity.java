@@ -79,8 +79,14 @@ public class DetailActivity extends AppCompatActivity {
                 Intent intent= new Intent(this, CalendarActivity.class);
                 intent.putExtra("sdate", txtSdate.getText().toString());
                 intent.putExtra("newMod", true);
-                DoWhat.resetAlarm(this, intent, check);
-                Toast.makeText(this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
+                intent.putExtra("cbAlarm","설정");
+                if (cbAlarm.getText().toString().equals("설정")) {
+                    DoWhat.resetAlarm(this, intent, check);
+                } else {
+                    Toast.makeText(this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
+                    startActivity(intent);
+                    finish();
+                }
 
 //              UpdateNewSchedule uns= new UpdateNewSchedule(this,true,dto);
 //              uns.start();
@@ -91,8 +97,8 @@ public class DetailActivity extends AppCompatActivity {
                 Intent intent= new Intent(this, CalendarActivity.class);
                 intent.putExtra("sdate", txtSdate.getText().toString());
                 intent.putExtra("newMod", false);
+                intent.putExtra("cbAlarm",cbAlarm.getText().toString());
                 DoWhat.resetAlarm(this, intent, check);
-                Toast.makeText(this, "수정 되었습니다.", Toast.LENGTH_SHORT).show();
 
 //              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
 //              uns.start();
