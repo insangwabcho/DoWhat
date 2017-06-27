@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.speech.SpeechRecognizer;
-import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,8 +48,6 @@ public class CalendarActivity extends ListActivity implements Serializable {
     private static final int RESULT_SPEECH = 1;
 
     private Intent i;
-    private SpeechRecognizer mRecognizer;
-    TextToSpeech tts;
 
     private void SettingListview() {
         adapter = new ScheduleAdapter(CalendarActivity.this, R.layout.layout, items);
@@ -72,7 +68,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                                 DoWhat.resetAlarm(CalendarActivity.this);
                                 Calendar cal = Calendar.getInstance();
                                 String[] days = startdate.split("-"); // 년= [0], 월= [1], 일= [2]
-                                StartDay(calview, Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
+                                SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
                             }
                         })
                         .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
@@ -120,12 +116,13 @@ public class CalendarActivity extends ListActivity implements Serializable {
             e.printStackTrace();
         }
         Calendar cal = Calendar.getInstance();
-        //
+
         //calendaractivity 실행 전 액티비티에서 sdate라는 변수명으로 저장해준 값이 없다면
         if (getIntent().getStringExtra("sdate") == null || getIntent().getStringExtra("sdate").equals("null")) {
-            Log.i("test", "null");
+            Log.i("test", "nulljhjhjhjhjh");
             //오늘날짜로 StartDay() 함수 실행
-            StartDay(calview, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+            SetYMD(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+
         } else { //그렇지 않다면
             Log.i("test", "sdate on");
             //putExtra로 담아준 sdate변수값 가져오기
@@ -134,7 +131,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
             String[] days = sdate.split("-"); // 년= [0], 월= [1], 일= [2]
             //받아온 년,월-1,일로 날자 세팅 후 StartDay() 실행
             int year = Integer.parseInt(days[0]);
-            int month = Integer.parseInt(days[1])-1;
+            int month = Integer.parseInt(days[1]) - 1;
             int day = Integer.parseInt(days[2]);
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, year);
@@ -142,7 +139,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
             calendar.set(Calendar.DAY_OF_MONTH, day);
             long setdate = calendar.getTimeInMillis();
             calview.setDate(setdate, true, true);
-            StartDay(calview, Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
+            SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
         }
         //
         btnPlus.setImageResource(R.drawable.plus);
@@ -192,72 +189,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         calview.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
-                id = UserInfo.get("id");
-                String n = String.valueOf(year);
-                String w = String.valueOf(month + 1);
-                String i = String.valueOf(day);
-                int nyun = Integer.parseInt(n);
-                int wol = Integer.parseInt(w);
-                int il = Integer.parseInt(i);
-                if ((month + 1) < 10) { //1~9월에는 앞에 0을 붙임
-                    w = "0" + String.valueOf(month + 1);
-                }
-                if (day < 10) { //1~9일에는 앞에 0을 붙임
-                    i = "0" + String.valueOf(day);
-                }
-                startdate = n + "-" + w + "-" + i;
-                txtDate.setText(n + "년 " + w + "월 " + i + "일 일정"); //텍스트뷰에 날짜표시
-                items = new ArrayList<ScheduleDTO>();
-                try {
-                    items = dbManager.getSchedule(id, nyun, wol, il);
-                } catch (SQLiteException e) {
-                    e.printStackTrace();
-                }
-                SettingListview();
-//                Thread th = new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        try {
-//                            items = new ArrayList<ScheduleDTO>();
-//                            String page = Common.SERVER_URL + "/Dowhat/Schedule_servlet/simple.do";
-//                            HttpClient http = new DefaultHttpClient();
-//                            ArrayList<NameValuePair> postData = new ArrayList<>();
-//                            //postData에 id와 시작날짜를 붙임
-//                            postData.add(new BasicNameValuePair("id", id));
-//                            postData.add(new BasicNameValuePair("startdate", startdate));
-//                            //한글, 특수문자 등이 잘 전달될 수 있도록 인코딩
-//                            final UrlEncodedFormEntity request = new UrlEncodedFormEntity(postData, "utf-8");
-//                            //post 방식으로 데이터 전달
-//                            HttpPost httpPost = new HttpPost(page);
-//                            httpPost.setEntity(request);
-//                            HttpResponse response = http.execute(httpPost);
-//                            String body = EntityUtils.toString(response.getEntity());
-//                            JSONObject jsonObj = new JSONObject(body);
-//                            JSONArray jArray = (JSONArray) jsonObj.get("sendData");
-//                            //JArray에서 받아온 자료를 dto에 담은후 ArrayList에 저장
-//                            for (int i = 0; i < jArray.length(); i++) {
-//                                JSONObject row = jArray.getJSONObject(i);
-//                                ScheduleDTO dto = new ScheduleDTO();
-//                                dto.setNum(row.getInt("num"));
-//                                dto.setTitle(row.getString("title"));
-//                                dto.setEvent(row.getString("event"));
-//                                dto.setStartdate(row.getString("startdate"));
-//                                dto.setEnddate(row.getString("enddate"));
-//                                dto.setStarttime(row.getString("starttime"));
-//                                dto.setEndtime(row.getString("endtime"));
-//                                dto.setPlace(row.getString("place"));
-//                                dto.setMemo(row.getString("memo"));
-//                                dto.setAlarm(row.getInt("alarm"));
-//                                dto.setRepeat(row.getInt("repeat"));
-//                                items.add(dto);
-//                            }
-//                            handler.sendEmptyMessage(0);
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
-//                th.start(); //5
+                SetYMD(year, month, day);
             }
         });
     }
@@ -304,7 +236,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
                             Toast.makeText(CalendarActivity.this, "일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
                             DoWhat.resetAlarm(CalendarActivity.this);
                             String[] days = startdate.split("-"); // 년= [0], 월= [1], 일= [2]
-                            StartDay(calview, Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
+                            SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
+
                         }
                     })
                     .setNeutralButton("다시 녹음", new DialogInterface.OnClickListener() {
@@ -406,78 +339,34 @@ public class CalendarActivity extends ListActivity implements Serializable {
         }
     }
 
-    public void StartDay(CalendarView view, int year, int month, int day) {
-        Log.i("kkkkkk", year + "" + month + "" + day);
-        final String id = manager.getUserInfo().get("id");
+    public ScheduleDTO getSchedule(int index) {
+        return items.get(index);
+    }
+
+    //날짜세팅 메소드
+    private void SetYMD(int year, int month, int day){
+        final String id = new PrefManager(CalendarActivity.this).getUserInfo().get("id");
         String n = String.valueOf(year);
         String w = String.valueOf(month + 1);
         String i = String.valueOf(day);
-        if ((month + 1) < 10) {
-            w = "0" + String.valueOf(month + 1);
-        }
-        if (day < 10) {
-            i = "0" + String.valueOf(day);
-        }
-        startdate = n + "-" + w + "-" + i;
-        txtDate.setText(n + "년 " + w + "월 " + i + "일 일정"); //텍스트에 날짜표시
         int nyun = Integer.parseInt(n);
         int wol = Integer.parseInt(w);
         int il = Integer.parseInt(i);
-        items = new ArrayList<>();
+        if ((month + 1) < 10) { //1~9월에는 앞에 0을 붙임
+            w = "0" + String.valueOf(month + 1);
+        }
+        if (day < 10) { //1~9일에는 앞에 0을 붙임
+            i = "0" + String.valueOf(day);
+        }
+        startdate = n + "-" + w + "-" + i;
+        txtDate.setText(n + "년 " + w + "월 " + i + "일 일정"); //텍스트뷰에 날짜표시
+        items = new ArrayList<ScheduleDTO>();
         try {
             items = dbManager.getSchedule(id, nyun, wol, il);
         } catch (SQLiteException e) {
             e.printStackTrace();
         }
         SettingListview();
-        /*Thread th = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    items = new ArrayList<ScheduleDTO>();
-                    String page = Common.SERVER_URL + "/Dowhat/Schedule_servlet/simple.do";
-                    HttpClient http = new DefaultHttpClient();
-                    ArrayList<NameValuePair> postData = new ArrayList<>();
-                    postData.add(new BasicNameValuePair("id", id));
-                    postData.add(new BasicNameValuePair("startdate", startdate)); //아이디와 날짜를 넘김
-                    //한글, 특수문자 등이 잘 전달될 수 있도록 인코딩
-                    final UrlEncodedFormEntity request = new UrlEncodedFormEntity(postData, "utf-8");
-                    //post 방식으로 데이터 전달
-                    HttpPost httpPost = new HttpPost(page);
-                    httpPost.setEntity(request);
-                    HttpResponse response = http.execute(httpPost);
-                    String body = EntityUtils.toString(response.getEntity());
-                    JSONObject jsonObj = new JSONObject(body);
-                    JSONArray jArray = (JSONArray) jsonObj.get("sendData");
-                    Log.i("test",jsonObj+"");
-                    Log.i("tes",jArray+"");
-                    for (int i = 0; i < jArray.length(); i++) {
-                        JSONObject row = jArray.getJSONObject(i);
-                        ScheduleDTO dto = new ScheduleDTO();
-                        dto.setNum(row.getInt("num"));
-                        dto.setTitle(row.getString("title"));
-                        dto.setEvent(row.getString("event"));
-                        dto.setStartdate(row.getString("startdate"));
-                        dto.setEnddate(row.getString("enddate"));
-                        dto.setStarttime(row.getString("starttime"));
-                        dto.setEndtime(row.getString("endtime"));
-                        dto.setPlace(row.getString("place"));
-                        dto.setMemo(row.getString("memo"));
-                        dto.setAlarm(row.getInt("alarm"));
-                        dto.setRepeat(row.getInt("repeat"));
-                        items.add(dto);
-                    }
-                    handler.sendEmptyMessage(0);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        th.start();*/
-    }
-
-    public ScheduleDTO getSchedule(int index) {
-        return items.get(index);
     }
 
 }
