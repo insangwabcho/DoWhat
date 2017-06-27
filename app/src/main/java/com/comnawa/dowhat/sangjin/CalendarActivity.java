@@ -14,6 +14,8 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,6 +30,7 @@ import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.insang.DBManager;
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.PrefManager;
+import com.comnawa.dowhat.insang.Preferences;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -111,6 +114,21 @@ public class CalendarActivity extends ListActivity implements Serializable {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_pref, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //저장버튼을 눌렀을때 처리
+        if (item.getItemId() == R.id.action_settings) {
+            startActivity(new Intent(CalendarActivity.this, Preferences.class));
+        }
+        return true;
     }
 
     //기존 일정 수정창 띄우기
