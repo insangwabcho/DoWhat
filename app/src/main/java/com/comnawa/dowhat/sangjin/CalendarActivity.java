@@ -51,7 +51,6 @@ public class CalendarActivity extends ListActivity implements Serializable {
     boolean isClick;
 
     private static final int RESULT_SPEECH = 1;
-
     private Intent i;
 
     private void SettingListview() {
@@ -167,12 +166,10 @@ public class CalendarActivity extends ListActivity implements Serializable {
 
         //calendaractivity 실행 전 액티비티에서 sdate라는 변수명으로 저장해준 값이 없다면
         if (getIntent().getStringExtra("sdate") == null || getIntent().getStringExtra("sdate").equals("null")) {
-            Log.i("test", "nulljhjhjhjhjh");
             //오늘날짜로 StartDay() 함수 실행
             SetYMD(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
 
         } else { //그렇지 않다면
-            Log.i("test", "sdate on");
             //putExtra로 담아준 sdate변수값 가져오기
             String sdate = getIntent().getStringExtra("sdate");
             //넘어온값은 2017-12-12 형식이기때문에 -로 스플릿
