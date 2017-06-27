@@ -231,7 +231,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         });
     }
 
-    private void STT() {
+    private void STT() { //
         i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         i.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
         i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
