@@ -6,11 +6,13 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +83,34 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 return true;
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        //빽(취소)키가 눌렸을때 종료여부를 묻는 다이얼로그 띄움
+        if((keyCode == KeyEvent.KEYCODE_BACK)) {
+            AlertDialog.Builder d = new AlertDialog.Builder(this);
+            d.setTitle("안내");
+            d.setMessage("프로그램을 종료하시겠습니까?");
+            d.setPositiveButton("예",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+
+            d.setNegativeButton("아니요",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // TODO Auto-generated method stub
+                    dialog.cancel();
+                }
+            });
+            d.show();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     //기존 일정 수정창 띄우기
@@ -172,8 +202,14 @@ public class CalendarActivity extends ListActivity implements Serializable {
                     btnMic.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            DoWhat.checkPermission(CalendarActivity.this, DoWhat.record_audio);
-                            STT();
+                            int permissionResult = checkSelfPermission(DoWhat.record_audio);
+
+                            if (permissionResult == PackageManager.PERMISSION_GRANTED) {
+                                STT();
+                            }else{
+                                DoWhat.checkPermission(CalendarActivity.this, DoWhat.record_audio);
+                                Toast.makeText(CalendarActivity.this, "권한허용 후 다시시도.", Toast.LENGTH_LONG).show();
+                            }
                         }
                     });
                 } else {
@@ -214,43 +250,48 @@ public class CalendarActivity extends ListActivity implements Serializable {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && (requestCode == RESULT_SPEECH)) {
-            ArrayList<String> sstResult = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+        try {
+            if (resultCode == RESULT_OK && (requestCode == RESULT_SPEECH)) {
+                ArrayList<String> sstResult = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-            final String result_stt = sstResult.get(0);
-            final String[] Place_Title=result_stt.split("에서");
-            AlertDialog.Builder ab = new AlertDialog.Builder(this);
-            ab.setTitle("녹음 확인");
-            ab.setMessage("일정 : [ " + Place_Title[1] + " ]\n일시 : [ " + startdate + " ]\n장소 : [ " + Place_Title[0]+ " ]")
-                    .setCancelable(true)
-                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ScheduleDTO dto = new ScheduleDTO();
-                            id = new PrefManager(CalendarActivity.this).getUserInfo().get("id");
-                            dto.setId(id);
-                            dto.setTitle(Place_Title[1]);
-                            dto.setPlace(Place_Title[0]);
-                            dto.setStarttime("08:00");
-                            dto.setEndtime("09:00");
-                            dto.setStartdate(startdate);
-                            dto.setEnddate(startdate);
-                            dbManager.insertSchedule(dto);
-                            Toast.makeText(CalendarActivity.this, "일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                final String result_stt = sstResult.get(0);
+                final String[] Place_Title = result_stt.split("에서");
+                AlertDialog.Builder ab = new AlertDialog.Builder(this);
+                ab.setTitle("녹음 확인");
+                ab.setMessage("일정 : [ " + Place_Title[1] + " ]\n일시 : [ " + startdate + " ]\n장소 : [ " + Place_Title[0] + " ]")
+                        .setCancelable(true)
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ScheduleDTO dto = new ScheduleDTO();
+                                id = new PrefManager(CalendarActivity.this).getUserInfo().get("id");
+                                dto.setId(id);
+                                dto.setTitle(Place_Title[1]);
+                                dto.setPlace(Place_Title[0]);
+                                dto.setStarttime("08:00");
+                                dto.setEndtime("09:00");
+                                dto.setStartdate(startdate);
+                                dto.setEnddate(startdate);
+                                dbManager.insertSchedule(dto);
+                                Toast.makeText(CalendarActivity.this, "일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
 //                            DoWhat.resetAlarm(CalendarActivity.this, asdf, true);
-                            String[] days = startdate.split("-"); // 년= [0], 월= [1], 일= [2]
-                            SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
-                        }
-                    })
-                    .setNeutralButton("다시 녹음", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            STT();
-                        }
-                    })
-                    .setNegativeButton("취소", null);
-            AlertDialog alertDialog = ab.create();
-            alertDialog.show();
+                                String[] days = startdate.split("-"); // 년= [0], 월= [1], 일= [2]
+                                SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
+                            }
+                        })
+                        .setNeutralButton("다시 녹음", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                STT();
+                            }
+                        })
+                        .setNegativeButton("취소", null);
+                AlertDialog alertDialog = ab.create();
+                alertDialog.show();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            Toast.makeText(this, "인터넷 연결 상태를 확인하세요.", Toast.LENGTH_SHORT).show();
         }
     }
 

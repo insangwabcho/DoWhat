@@ -2,10 +2,15 @@ package com.comnawa.dowhat.sangjin;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -49,6 +54,20 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_savebutton, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        //빽(취소)키가 눌렸을때 종료여부를 묻는 다이얼로그 띄움
+        if((keyCode == KeyEvent.KEYCODE_BACK)) {
+            Intent intent=new Intent(this, CalendarActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -111,9 +130,22 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                Intent intent=new Intent(this, CalendarActivity.class);
+                startActivity(intent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로로 고정
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_sangjin);
 
