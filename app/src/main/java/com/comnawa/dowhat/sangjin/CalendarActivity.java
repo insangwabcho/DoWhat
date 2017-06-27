@@ -172,6 +172,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                     btnMic.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            DoWhat.checkPermission(CalendarActivity.this, DoWhat.record_audio);
                             STT();
                         }
                     });
