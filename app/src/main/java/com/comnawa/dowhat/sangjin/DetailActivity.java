@@ -347,13 +347,69 @@ public class DetailActivity extends AppCompatActivity {
                 m = String.valueOf(minute);
             }
             if (timeOk == true) {
-                DBstime=h+":"+m;
+                DBstime = h + ":" + m;
                 txtStime.setText(DBstime);
             } else if (timeOk == false) {
-                DBetime=h+":"+m;
+                DBetime = h + ":" + m;
                 txtEtime.setText(DBetime);
             }
 
+            //날짜가 같고 시작시간이 종료시간보다 나중일때 처리
+            String[] StartDay=txtSdate.getText().toString().split("-");
+            String[] EndDay=txtEdate.getText().toString().split("-");
+            int Sy=Integer.parseInt(StartDay[0]);
+            int Ey=Integer.parseInt(EndDay[0]);
+            int Sm=Integer.parseInt(StartDay[1]);
+            int Em=Integer.parseInt(EndDay[1]);
+            int Sd=Integer.parseInt(StartDay[2]);
+            int Ed=Integer.parseInt(EndDay[2]);
+            if(Sy==Ey && Sm==Em && Sd==Ed){
+                String[] Stimes = txtStime.getText().toString().split(":");
+                String[] Etimes = txtEtime.getText().toString().split(":");
+                int Eh1, Sh1, Em1, Sm1, Eh2, Sh2, Em2, Sm2;
+                Eh1 = Integer.parseInt(h);
+                Sh1 = Integer.parseInt(Stimes[0]);
+                Em1 = Integer.parseInt(m);
+                Sm1 = Integer.parseInt(Stimes[1]);
+                if (Eh1 < Sh1) {
+                    String resultH;
+                    if(Integer.parseInt(Etimes[0])-1 < 10){
+                        resultH="0"+String.valueOf(Integer.parseInt(Etimes[0])-1);
+                    }else {
+                        resultH=String.valueOf(Integer.parseInt(Etimes[0])-1);
+                    }
+                    txtStime.setText(resultH + ":" + Etimes[1]);
+                } else if (Eh1 == Sh1 && Em1 < Sm1) {
+                    String resultH;
+                    if(Integer.parseInt(Etimes[0])-1 < 10){
+                        resultH="0"+String.valueOf(Integer.parseInt(Etimes[0])-1);
+                    }else {
+                        resultH=String.valueOf(Integer.parseInt(Etimes[0])-1);
+                    }
+                    txtStime.setText(resultH + ":" + Etimes[1]);
+                }
+                Sh2 = Integer.parseInt(h);
+                Eh2 = Integer.parseInt(Etimes[0]);
+                Sm2 = Integer.parseInt(m);
+                Em2 = Integer.parseInt(Etimes[1]);
+                if (Eh2 < Sh2) {
+                    String resultH;
+                    if(Integer.parseInt(Stimes[0]) + 1 < 10){
+                        resultH="0"+String.valueOf(Integer.parseInt(Stimes[0]) + 1);
+                    }else{
+                        resultH=String.valueOf(Integer.parseInt(Stimes[0]) + 1);
+                    }
+                    txtEtime.setText(resultH + ":" + Stimes[1]);
+                } else if (Eh2 == Sh2 && Em2 < Sm2) {
+                    String resultH;
+                    if(Integer.parseInt(Stimes[0]) + 1 < 10){
+                        resultH="0"+String.valueOf(Integer.parseInt(Stimes[0]) + 1);
+                    }else{
+                        resultH=String.valueOf(Integer.parseInt(Stimes[0]) + 1);
+                    }
+                    txtEtime.setText(resultH + ":" + Stimes[1]);
+                }
+            }
         }
     };
 
