@@ -8,7 +8,7 @@ public class DateChangedReceiver extends BroadcastReceiver {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    if (intent.getAction().equals(Intent.ACTION_DATE_CHANGED)) {
+    if (intent.getAction().equals(Intent.ACTION_DATE_CHANGED) && new PrefManager(context).getPushAlarm()) {
       context.stopService(new Intent(context, AlarmService.class));
       context.startService(new Intent(context, AlarmService.class));
     }

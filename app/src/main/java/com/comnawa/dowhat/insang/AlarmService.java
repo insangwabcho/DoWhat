@@ -1,12 +1,14 @@
 package com.comnawa.dowhat.insang;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.comnawa.dowhat.sangjin.ScheduleDTO;
 
@@ -21,7 +23,7 @@ public class AlarmService extends Service {
   @Override
   public void onCreate() {
     super.onCreate();
-    Toast.makeText(this, "서비스 시작", Toast.LENGTH_SHORT).show();
+//    Toast.makeText(this, "서비스 시작", Toast.LENGTH_SHORT).show();
 
   } //서비스 생성될시 (최초 1회)
 
@@ -74,7 +76,20 @@ public class AlarmService extends Service {
   public void onDestroy() {
     super.onDestroy();
     isRunning = false;
-    Toast.makeText(this, "서비스 종료", Toast.LENGTH_SHORT).show();
+    final PrefManager pm = new PrefManager(this);
+    for (int i = 1; i <= pm.getScheduleCount(); i++) {
+      AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+      Intent intent = new Intent(this, AlarmBroadcast.class);
+      PendingIntent sender = PendingIntent.getBroadcast(this, i, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+      if (sender != null) {
+        am.cancel(sender);
+        sender.cancel();
+        sender.cancel();
+      }
+    }
+    pm.setScheduleCount(0);
+//    Toast.makeText(this, "서비스 종료", Toast.LENGTH_SHORT).show();
   } // 서비스가 종료될때
 
   class MyThread extends Thread {
@@ -95,7 +110,7 @@ public class AlarmService extends Service {
     @Override
     public void handleMessage(Message msg) {
       super.handleMessage(msg);
-      Toast.makeText(AlarmService.this, "서비스 실행중", Toast.LENGTH_SHORT).show();
+//      Toast.makeText(AlarmService.this, "서비스 실행중", Toast.LENGTH_SHORT).show();
     }
   };
 

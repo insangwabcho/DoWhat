@@ -2,7 +2,10 @@ package com.comnawa.dowhat.insang;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -48,6 +51,10 @@ public class Preferences extends android.preference.PreferenceActivity {
     SwitchPreference autoLogin, pushService;
     Preference logId, logName, logoutKakao, backup, restore;
 
+    //네트워크상태
+    boolean connWifi;
+    boolean connMobile;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -61,10 +68,21 @@ public class Preferences extends android.preference.PreferenceActivity {
       backup = (Preference) findPreference("backup");
       restore = (Preference) findPreference("restore");
 
+      //네트워크 상태체크
+      ConnectivityManager manager = (ConnectivityManager) ac.getSystemService(Context.CONNECTIVITY_SERVICE);
+      final NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+      final NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+      connWifi = wifi.isConnected();
+      connMobile = mobile.isConnected();
       //백업버튼
       backup.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
         @Override
         public boolean onPreferenceClick(Preference preference) {
+          if (!connWifi && !connMobile) {
+            Toast.makeText(ac, "인터넷에 연결되어있지 않습니다.", Toast.LENGTH_SHORT).show();
+            return false;
+          }
           restoreOrBackup = "백업";
           Network nw = new Network();
           nw.execute();
@@ -76,6 +94,10 @@ public class Preferences extends android.preference.PreferenceActivity {
       restore.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
         @Override
         public boolean onPreferenceClick(Preference preference) {
+          if (!connWifi && !connMobile) {
+            Toast.makeText(ac, "인터넷에 연결되어있지 않습니다.", Toast.LENGTH_SHORT).show();
+            return false;
+          }
           restoreOrBackup = "복원";
           Network nw = new Network();
           nw.execute();
@@ -144,24 +166,24 @@ public class Preferences extends android.preference.PreferenceActivity {
             current = false;
           }
           if (current) {
-            Log.i("ac","성공!");
+            Log.i("ac", "성공!");
           } else {
-            Log.i("ac","실패");
+            Log.i("ac", "실패");
           }
         } else if (restoreOrBackup.equals("백업")) {
-          ScheduleBackup b= new ScheduleBackup(ac);
+          ScheduleBackup b = new ScheduleBackup(ac);
           b.start();
-          boolean current= true;
-          try{
+          boolean current = true;
+          try {
             b.join();
-          }catch (InterruptedException e){
+          } catch (InterruptedException e) {
             e.printStackTrace();
-            current= false;
+            current = false;
           }
-          if (current){
-            Log.i("ac","성공");
-          }else {
-            Log.i("ac","실패");
+          if (current) {
+            Log.i("ac", "성공");
+          } else {
+            Log.i("ac", "실패");
           }
         }
         return null;

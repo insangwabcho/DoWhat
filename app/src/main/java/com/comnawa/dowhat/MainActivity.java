@@ -47,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
     switch (v.getId()) {
       case R.id.btnInsang:
         Toast.makeText(this, "테스트중인거없습니다 ㅡ ㅡ", Toast.LENGTH_SHORT).show();
-//        intent = new Intent(this, Preferences.class);
+//        intent = add Intent(this, Preferences.class);
 //        break;
-//        new PrefManager(this).resetScheduleCount();
+//        add PrefManager(this).resetScheduleCount();
 //        Calendar cal = Calendar.getInstance();
 //        int year = cal.get(Calendar.YEAR);
 //        int month = 6;
@@ -69,8 +69,9 @@ public class MainActivity extends AppCompatActivity {
         break;
       case R.id.btnInsang2:
         DBManager dbManager= new DBManager(this);
-        dbManager.tableDrop();
-        Toast.makeText(this, "성공", Toast.LENGTH_SHORT).show();
+        dbManager.testDelete(1);
+        dbManager.testDelete(2);
+
         return;
       case R.id.btninsang3:
         PrefManager prefManager= new PrefManager(this);

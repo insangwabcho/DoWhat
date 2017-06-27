@@ -2,10 +2,15 @@ package com.comnawa.dowhat.sangjin;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -24,6 +29,7 @@ import com.comnawa.dowhat.insang.DBManager;
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.insang.Preferences;
+
 
 
 public class DetailActivity extends AppCompatActivity {
@@ -50,6 +56,20 @@ public class DetailActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        //빽(취소)키가 눌렸을때 종료여부를 묻는 다이얼로그 띄움
+        if((keyCode == KeyEvent.KEYCODE_BACK)) {
+            Intent intent=new Intent(this, CalendarActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //저장버튼을 눌렀을때 처리
@@ -70,19 +90,36 @@ public class DetailActivity extends AppCompatActivity {
             dto.setMemo(editMemo.getText().toString());
             dto.setAlarm(alarm);
             dto.setRepeat(repeat);
+            Log.i("test:",dto.toString());
 
             DBManager dbManager= new DBManager(this);
             if (check) { //신규
                 dbManager.insertSchedule(dto);
-                Toast.makeText(this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
-                finish();
+
+                //신규설정한 날짜 startdate를  putExtra로 넣어서 CalendarActivity에 보내주고 finish()
+                Intent intent= new Intent(this, CalendarActivity.class);
+                intent.putExtra("sdate", txtSdate.getText().toString());
+                intent.putExtra("newMod", true);
+                intent.putExtra("cbAlarm","설정");
+                if (cbAlarm.getText().toString().equals("설정")) {
+                    DoWhat.resetAlarm(this, intent, check);
+                } else {
+                    Toast.makeText(this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
+                    startActivity(intent);
+                    finish();
+                }
 
 //              UpdateNewSchedule uns= new UpdateNewSchedule(this,true,dto);
 //              uns.start();
             } else { //수정
                 dbManager.updateSchedule(dto);
-                Toast.makeText(this, "수정 되었습니다.", Toast.LENGTH_SHORT).show();
-                finish();
+
+                //수정한 날짜 startdate를 putExtra로 넣어서 CalendarActivity에 보내주고 실행 후 finish()
+                Intent intent= new Intent(this, CalendarActivity.class);
+                intent.putExtra("sdate", txtSdate.getText().toString());
+                intent.putExtra("newMod", false);
+                intent.putExtra("cbAlarm",cbAlarm.getText().toString());
+                DoWhat.resetAlarm(this, intent, check);
 
 //              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
 //              uns.start();
@@ -93,9 +130,22 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                Intent intent=new Intent(this, CalendarActivity.class);
+                startActivity(intent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로로 고정
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_sangjin);
 
@@ -134,58 +184,17 @@ public class DetailActivity extends AppCompatActivity {
             ScheduleDTO dto=CalendarActivity.items.get(index);
             Num=dto.getNum();
             editTitle.setText(dto.getTitle());
-            if(dto.getPlace()!=null){
-                editPlace.setText(dto.getPlace());
-            }else{
+            if(dto.getPlace()==null || dto.getPlace().equals("null")){
                 editPlace.setText("");
+            }else{
+                editPlace.setText(dto.getPlace());
             }
             txtSdate.setText(dto.getStartdate());
             txtEdate.setText(dto.getEnddate());
-            int Shour=Integer.parseInt(dto.getStarttime().substring(0,2));
-            int Sminute=Integer.parseInt(dto.getStarttime().substring(3));
-            int Ehour=Integer.parseInt(dto.getEndtime().substring(0,2));
-            int Eminute=Integer.parseInt(dto.getEndtime().substring(3));
-            String h1,h2,m1,m2,setStime,setEtime;
-            if (Shour < 10) { //0~9시일경우 앞에 0을 붙임
-                h1 = "0" + String.valueOf(Shour);
-            } else {
-                h1 = String.valueOf(Shour);
-            }
-            if (Ehour < 10) { //0~9시일경우 앞에 0을 붙임
-                h2 = "0" + String.valueOf(Ehour);
-            } else {
-                h2 = String.valueOf(Ehour);
-            }
-            if (Sminute < 10) { //1~9분일경우 앞에 0을 붙임
-                m1 = "0" + String.valueOf(Sminute);
-            } else {
-                m1 = String.valueOf(Sminute);
-            }
-            if (Eminute < 10) { //1~9분일경우 앞에 0을 붙임
-                m2 = "0" + String.valueOf(Eminute);
-            } else {
-                m2 = String.valueOf(Eminute);
-            }
-            if(Shour>12 && Shour<22){
-                setStime = "오후 0"+(Shour-12) + "시 " + m1 +"분";
-            }else if(Shour>21){
-                setStime = "오후 "+(Shour-12) + "시 " + m1 +"분";
-            }else if(Shour==12){
-                setStime = "오후 "+h1+"시 "+m1+"분";
-            }else{
-                setStime = "오전 "+h1+"시 "+m1+"분";
-            }
-            if(Ehour>12 && Ehour<22){
-                setEtime = "오후 0"+(Ehour-12) + "시 " + m2 +"분";
-            }else if(Ehour>21){
-                setEtime = "오후 "+(Shour-12) + "시 " + m2 +"분";
-            }else if(Ehour==12){
-                setEtime = "오후 "+h2+"시 "+m2+"분";
-            }else{
-                setEtime = "오전 "+h2+"시 "+m2+"분";
-            }
-            txtStime.setText(setStime);
-            txtEtime.setText(setEtime);
+            txtStime.setText(dto.getStarttime());
+            txtEtime.setText(dto.getEndtime());
+            DBstime=dto.getStarttime();
+            DBetime=dto.getEndtime();
             if(dto.getEvent().equals("생일")) {
                 spinner.setSelection(1);
             }else if(dto.getEvent().equals("공휴일")){
@@ -196,24 +205,28 @@ public class DetailActivity extends AppCompatActivity {
                 spinner.setSelection(0);
             }
 
-            if(editMemo!=null){
-                editMemo.setText(dto.getMemo());
-            }else{
+            if(dto.getMemo()==null || dto.getMemo().equals("null")){
                 editMemo.setText("");
+            }else{
+                editMemo.setText(dto.getMemo());
             }
 
             if(dto.getAlarm() == 0){
                 cbAlarm.setText("해제");
+                alarm=0;
             }else{
                 cbAlarm.setChecked(true);
                 cbAlarm.setText("설정");
+                alarm=1;
             }
 
             if(dto.getRepeat() == 0){
                 cbRepeat.setText("해제");
+                repeat=0;
             }else{
                 cbRepeat.setChecked(true);
                 cbRepeat.setText("설정");
+                repeat=1;
             }
 
         }
@@ -249,17 +262,37 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+        //시작시간 TextView를 눌렀을떄
+        txtStime.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                timeOk = true; //시작시간
+                Tdialog.show();
+                return false;
+            }
+        });
+
+        //종료시간 TextView를 눌렀을때
+        txtEtime.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                timeOk = false;
+                Tdialog.show();
+                return false;
+            }
+        });
+
         cbAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(cbAlarm.isChecked()){
                     alarm = 1;
                     cbAlarm.setText("설정");
-                    Toast.makeText(DetailActivity.this, "알람이 설정되었습니다", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(DetailActivity.this, "알람이 설정되었습니다", Toast.LENGTH_SHORT).show();
                 }else {
                     alarm = 0;
                     cbAlarm.setText("해제");
-                    Toast.makeText(DetailActivity.this, "해제되었습니다", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(DetailActivity.this, "해제되었습니다", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -300,13 +333,15 @@ public class DetailActivity extends AppCompatActivity {
             }
 
             //시작일이 종료일보다 나중일때 처리
+            String[] Sdays=txtSdate.getText().toString().split("-");
+            String[] Edays=txtEdate.getText().toString().split("-");
             int Ey1,Sy1,Em1,Sm1,Ed1,Sd1,Ey2,Sy2,Em2,Sm2,Ed2,Sd2;
             Ey1=year;
-            Sy1=Integer.parseInt(txtSdate.getText().toString().substring(0,4));
+            Sy1=Integer.parseInt(Sdays[0]);
             Em1=Integer.parseInt(w);
-            Sm1=Integer.parseInt(txtSdate.getText().toString().substring(5,7));
+            Sm1=Integer.parseInt(Sdays[1]);
             Ed1=Integer.parseInt(i);
-            Sd1=Integer.parseInt(txtSdate.getText().toString().substring(8));
+            Sd1=Integer.parseInt(Sdays[2]);
             if(Ey1<Sy1){
                 txtSdate.setText(date);
             }else if(Ey1==Sy1 && Em1<Sm1){
@@ -315,11 +350,11 @@ public class DetailActivity extends AppCompatActivity {
                 txtSdate.setText(date);
             }
             Sy2=year;
-            Ey2=Integer.parseInt(txtEdate.getText().toString().substring(0,4));
+            Ey2=Integer.parseInt(Edays[0]);
             Sm2=Integer.parseInt(w);
-            Em2=Integer.parseInt(txtEdate.getText().toString().substring(5,7));
+            Em2=Integer.parseInt(Edays[1]);
             Sd2=Integer.parseInt(i);
-            Ed2=Integer.parseInt(txtEdate.getText().toString().substring(8));
+            Ed2=Integer.parseInt(Edays[2]);
             if(Ey2<Sy2){
                 txtEdate.setText(date);
             }else if(Ey2==Sy2 && Em2<Sm2){
@@ -344,42 +379,85 @@ public class DetailActivity extends AppCompatActivity {
             } else {
                 h = String.valueOf(hourOfDay);
             }
-
             if (minute < 10) { //1~9분일경우 앞에 0을 붙임
                 m = "0" + String.valueOf(minute);
             } else {
                 m = String.valueOf(minute);
             }
-            String time =""; //txtTime에 출력할 시간
-            if(hourOfDay>12 && hourOfDay<22){
-                time = "오후 0"+(hourOfDay-12) + "시 " + m +"분";
-            }else if(hourOfDay>21){
-                time = "오후 "+(hourOfDay-12) +"시 "+ m +"분";
-            }else if(hourOfDay==12){
-                time = "오후 "+h+"시 "+m+"분";
-            }else{
-                time = "오전 "+h+"시 "+m+"분";
-            }
-            //시작시간, 종료시간, 알람을 구분하여 알맞는 editText에 출력
-            //DB에는 시:분 형식으로 저장
             if (timeOk == true) {
-                DBstime=h+":"+m;
-                txtStime.setText(time);
+                DBstime = h + ":" + m;
+                txtStime.setText(DBstime);
             } else if (timeOk == false) {
-                DBetime=h+":"+m;
-                txtEtime.setText(time);
+                DBetime = h + ":" + m;
+                txtEtime.setText(DBetime);
             }
 
+            //날짜가 같고 시작시간이 종료시간보다 나중일때 처리
+            String[] StartDay=txtSdate.getText().toString().split("-");
+            String[] EndDay=txtEdate.getText().toString().split("-");
+            int Sy=Integer.parseInt(StartDay[0]);
+            int Ey=Integer.parseInt(EndDay[0]);
+            int Sm=Integer.parseInt(StartDay[1]);
+            int Em=Integer.parseInt(EndDay[1]);
+            int Sd=Integer.parseInt(StartDay[2]);
+            int Ed=Integer.parseInt(EndDay[2]);
+            if(Sy==Ey && Sm==Em && Sd==Ed){
+                String[] Stimes = txtStime.getText().toString().split(":");
+                String[] Etimes = txtEtime.getText().toString().split(":");
+                int Eh1, Sh1, Em1, Sm1, Eh2, Sh2, Em2, Sm2;
+                Eh1 = Integer.parseInt(h);
+                Sh1 = Integer.parseInt(Stimes[0]);
+                Em1 = Integer.parseInt(m);
+                Sm1 = Integer.parseInt(Stimes[1]);
+                if (Eh1 < Sh1) {
+                    String resultH;
+                    if(Integer.parseInt(Etimes[0])-1 < 10){
+                        resultH="0"+String.valueOf(Integer.parseInt(Etimes[0])-1);
+                    }else {
+                        resultH=String.valueOf(Integer.parseInt(Etimes[0])-1);
+                    }
+                    txtStime.setText(resultH + ":" + Etimes[1]);
+                } else if (Eh1 == Sh1 && Em1 < Sm1) {
+                    String resultH;
+                    if(Integer.parseInt(Etimes[0])-1 < 10){
+                        resultH="0"+String.valueOf(Integer.parseInt(Etimes[0])-1);
+                    }else {
+                        resultH=String.valueOf(Integer.parseInt(Etimes[0])-1);
+                    }
+                    txtStime.setText(resultH + ":" + Etimes[1]);
+                }
+                Sh2 = Integer.parseInt(h);
+                Eh2 = Integer.parseInt(Etimes[0]);
+                Sm2 = Integer.parseInt(m);
+                Em2 = Integer.parseInt(Etimes[1]);
+                if (Eh2 < Sh2) {
+                    String resultH;
+                    if(Integer.parseInt(Stimes[0]) + 1 < 10){
+                        resultH="0"+String.valueOf(Integer.parseInt(Stimes[0]) + 1);
+                    }else{
+                        resultH=String.valueOf(Integer.parseInt(Stimes[0]) + 1);
+                    }
+                    txtEtime.setText(resultH + ":" + Stimes[1]);
+                } else if (Eh2 == Sh2 && Em2 < Sm2) {
+                    String resultH;
+                    if(Integer.parseInt(Stimes[0]) + 1 < 10){
+                        resultH="0"+String.valueOf(Integer.parseInt(Stimes[0]) + 1);
+                    }else{
+                        resultH=String.valueOf(Integer.parseInt(Stimes[0]) + 1);
+                    }
+                    txtEtime.setText(resultH + ":" + Stimes[1]);
+                }
+            }
         }
     };
 
     private void BasicSet(){ //신규일정 등록시 기본 날짜와 시간 세팅
         txtSdate.setText(CalendarActivity.startdate);
-        txtStime.setText("오전 08시 00분");
         DBstime="08:00";
+        txtStime.setText(DBstime);
         txtEdate.setText(CalendarActivity.startdate);
-        txtEtime.setText("오전 09시 00분");
         DBetime="09:00";
+        txtEtime.setText(DBetime);
     }
 
 }

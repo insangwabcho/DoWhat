@@ -3,6 +3,7 @@ package com.comnawa.dowhat.insang;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -34,6 +35,8 @@ public class DBManager {
     dbm.insertAllSchedules(dto);
   }
 
+
+
   public void tableDrop(){
     dbm.tableDrop();
   }
@@ -54,6 +57,14 @@ public class DBManager {
     dbm.delete(dto);
   }
 
+  public void testDelete(int idx){
+    dbm.testDelete(idx);
+  }
+
+  public void setRequestCode(ScheduleDTO dto, int requestCode){
+    dbm.setRequestCode(dto, requestCode);
+  }
+
   public void insertSchedule(ScheduleDTO dto) {
     dbm.insert(dto);
   }
@@ -64,23 +75,7 @@ public class DBManager {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-//      String sql =
-//        "create table schedule(" +
-//          "num integer primary key," +
-//          "id varchar(50)," +
-//          "startdate varchar(50)," +
-//          "enddate varchar(50)," +
-//          "starttime varchar(50)," +
-//          "endtime varchar(50)," +
-//          "title varchar(50)," +
-//          "event varchar(50)," +
-//          "place varchar(50)," +
-//          "memo varchar(50)," +
-//          "alarm integer," +
-//          "repeat integer)";
-    String sql="drop table schedule";
-      db.execSQL(sql);
-      Log.i("test","삭제완료");
+
     }
 
     @Override
@@ -90,6 +85,29 @@ public class DBManager {
 
     public DBM(Context context, String name, @Nullable SQLiteDatabase.CursorFactory factory, @Nullable int version) {
       super(context, name, null, 1);
+      String sql =
+        "create table schedule(" +
+          "num integer primary key," +
+          "id varchar(50)," +
+          "startdate varchar(50)," +
+          "enddate varchar(50)," +
+          "starttime varchar(50)," +
+          "endtime varchar(50)," +
+          "title varchar(50)," +
+          "event varchar(50)," +
+          "place varchar(50)," +
+          "memo varchar(50)," +
+          "alarm integer," +
+          "repeat integer" +
+          "requestcode integer)";
+//    String sql="drop table schedule";
+      SQLiteDatabase db= getWritableDatabase();
+      try {
+        db.execSQL(sql);
+      }catch(SQLiteException e){
+        e.printStackTrace();
+        Log.i("db","이미 테이블이 있ㄱ음");
+      }
     }
 
     public void tableDrop(){
@@ -224,7 +242,7 @@ public class DBManager {
     //일정 삭제
     public void delete(ScheduleDTO dto) {
       SQLiteDatabase db = getWritableDatabase();
-      String sql = "delete from schedule where=" + dto.getNum() + "and" + dto.getId();
+      String sql = "delete from schedule where num=" + dto.getNum() + " and id='" + dto.getId()+"'";
       db.execSQL(sql);
     }
 
@@ -234,9 +252,15 @@ public class DBManager {
       db.execSQL(sql);
     }
 
-    public void test() {
+    public void testDelete(int idx) {
       SQLiteDatabase db = getWritableDatabase();
-      String sql = "drop table schedule";
+      String sql = "delete from schedule where num="+idx;
+      db.execSQL(sql);
+    }
+
+    public void setRequestCode(ScheduleDTO dto, int requestCode){
+      SQLiteDatabase db= getWritableDatabase();
+      String sql= "updqte schedule set requestcode="+requestCode+" where num="+dto.getNum()+" and id='"+dto.getId()+"'";
       db.execSQL(sql);
     }
   }
