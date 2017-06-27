@@ -1,14 +1,17 @@
 package com.comnawa.dowhat.kwanwoo;
 
+import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
-import com.comnawa.dowhat.insang.DoWhat;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -18,9 +21,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
-public class PositionActivity extends AppCompatActivity implements OnMapReadyCallback {
-    EditText editPlace;
+public class PositionActivity extends AppCompatActivity implements OnMapReadyCallback{
 
+    EditText editPlace;
     MapFragment fragment;
     GoogleMap map;
 
@@ -29,44 +32,81 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.position_kwanwoo);
-
-        editPlace = (EditText) findViewById(R.id.editPlace);
-        fragment = (MapFragment) getFragmentManager().findFragmentById(R.id.fragment1);
-        //비동기적 방식으로 맵 로딩
+        editPlace=(EditText)findViewById(R.id.editPlace);
+        fragment=(MapFragment)getFragmentManager().findFragmentById(R.id.fragment1);
         fragment.getMapAsync(this);
+            //확인버튼
+        Button btnOk = (Button)findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder mOk = new AlertDialog.Builder(PositionActivity.this);
+                mOk.setTitle("설정알림")
+                        .setMessage("설정한 위치를 저장하시겠습니까?")
+                        .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(PositionActivity.this,"위치가 저장되었습니다."
+                                ,Toast.LENGTH_SHORT).show();
+                            }}).setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).create().show();
+            }//onClick
+        }); //onClickListener
     }
-
-    //로딩완료시 지도 호출
+    //취소버튼 이벤트
     @Override
-    public void onMapReady(GoogleMap Map) {
+    public void onBackPressed() {
+         AlertDialog.Builder mBack = new AlertDialog.Builder(PositionActivity.this);
+        mBack.setTitle("취소알림")
+                .setMessage("위치설정을 그만하시겠습니까?")
+                .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(PositionActivity.this, "이전화면으로 돌아갑니다.",
+                                Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }).setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(PositionActivity.this,"위치설정을 계속합니다."
+                ,Toast.LENGTH_SHORT).show();
+
+            }
+        }).create().show();
+
+    }
+    //implements method - 지도가 완성될 때 호출
+    @Override
+    public void onMapReady(GoogleMap map) {
         this.map = map;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        DoWhat.checkPermission(this, DoWhat.access_fine_location, DoWhat.access_coarse_location);
-        map.setMyLocationEnabled(true); //현재위치
-        map.setIndoorEnabled(true); //실내정보
-        map.setBuildingsEnabled(true); //건물정보
-
+       // map.setMyLocationEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
     }
-    public void onClick(View v){
-        String place = editPlace.getText().toString();
-        Geocoder corder = new Geocoder(this);
-        List<Address> list = null;
-        try {
-            list = corder.getFromLocationName(place, 1);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        Address addr = list.get(0);
-        double lat = addr.getLatitude();    //위도
-        double log = addr.getLongitude();   //경도
+        public void search(View v){
+            String place = editPlace.getText().toString();
+            Geocoder corder = new Geocoder(this);
+            List<Address> list = null;
+            try {
+                list = corder.getFromLocationName(place, 5);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            Address addr = list.get(0);
+            double lat = addr.getLatitude();    //위도
+            double log = addr.getLongitude();   //경도
+            //좌표객체
+            LatLng geoPoint = new LatLng(lat, log);
+            //카메라 이동 효과,좌표,줌레벨
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(geoPoint, 15));
+            MarkerOptions marker = new MarkerOptions();
+            marker.position(geoPoint);
+            marker.title(""+editPlace.getText().toString());
+            map.addMarker(marker);
 
-        LatLng geoPoint = new LatLng(lat, log);
-        map.animateCamera(
-                CameraUpdateFactory.newLatLngZoom(geoPoint,15));
-        MarkerOptions marker = new MarkerOptions();
-        marker.position(geoPoint);
-        marker.title(editPlace.getText().toString());
-        map.addMarker(marker);
-    }
+        }
 }
