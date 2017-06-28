@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
+import com.comnawa.dowhat.insang.DoWhat;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -84,9 +85,12 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
     public void onMapReady(GoogleMap map) {
         this.map = map;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-       // map.setMyLocationEnabled(true);
+        //권한
+        DoWhat.checkPermission(this, DoWhat.access_fine_location,DoWhat.access_coarse_location);
+        map.setMyLocationEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
     }
+
         public void search(View v){
             String place = editPlace.getText().toString();
             Geocoder corder = new Geocoder(this);
@@ -109,4 +113,5 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
             map.addMarker(marker);
 
         }
+
 }
