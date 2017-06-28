@@ -21,6 +21,6 @@
         android:layout_weight="9"
         android:textFilterEnabled="true"
         android:background="@drawable/border"
-        android:choiceMode="singleChoice" />
+        android:choiceMode="multipleChoice" />
 
 </LinearLayout>
