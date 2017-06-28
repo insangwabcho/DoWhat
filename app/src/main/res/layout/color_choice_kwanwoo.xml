@@ -35,8 +35,9 @@
         android:text="회색" />
 
     <Button
-        android:id="@+id/btnChoice"
+        android:id="@+id/btnCancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="선택" />
+        android:onClick="onClick"
+        android:text="취소" />
 </LinearLayout>

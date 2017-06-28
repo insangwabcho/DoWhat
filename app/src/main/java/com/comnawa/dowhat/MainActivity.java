@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         PrefManager prefManager= new PrefManager(this);
         prefManager.setAutoLogin("dowhat@dowhat.com","dowhat1234","dowhat","","",true);
         return;
+
     }
     startActivity(intent);
   } //onClick

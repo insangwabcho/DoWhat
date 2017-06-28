@@ -3,16 +3,21 @@ package com.comnawa.dowhat.kwanwoo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.RadioButton;
 
 import com.comnawa.dowhat.R;
 
 public class ColorChoice extends AppCompatActivity {
     RadioButton btnRed, btnBlue, btnGreen, btnYellow, btnGray;
+    Button btnCancel;
+    CalendarView calview;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.color_choice_kwanwoo);
+        setContentView(R.layout.calendar_sangjin);
 
         btnRed = (RadioButton)findViewById(R.id.btnRed);
         btnBlue = (RadioButton)findViewById(R.id.btnBlue);
@@ -20,10 +25,13 @@ public class ColorChoice extends AppCompatActivity {
         btnYellow = (RadioButton)findViewById(R.id.btnYellow);
         btnGray = (RadioButton)findViewById(R.id.btnGray);
 
+        calview = (CalendarView)findViewById(R.id.calview);
 
 
     }
-//매뉴아이템이 선택 되었을 때의 처리
+
+
+    //매뉴아이템이 선택 되었을 때의 처리
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
