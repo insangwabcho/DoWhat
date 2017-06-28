@@ -276,7 +276,7 @@ public class DoWhat {
   }
 
 
-  public void sendPushMsg(final String message, final String userid){
+  public static void sendPushMsg(final String message, @Nullable final String userid){
 
     final String svKey= "AAAARqvabTs:APA91bF_Ldp3AyUWQUo9-uNbcb70MGmYFHB1yuOT6eV4v-K5sTbs6-Vs8jD9ZK9Eln3XEmfs4yjbzulW5dcL9tY9lTbu9nTfF_FFF8FXGPjn-WfM4dlud43qrClW1xKpf4_MSfiEEv9P";
     new Thread(new Runnable() {
@@ -286,10 +286,10 @@ public class DoWhat {
           // FMC 메시지 생성 start
           JSONObject root = new JSONObject();
           JSONObject notification = new JSONObject();
-          notification.put("body", message);
+          notification.put("body", "조인상님 께서 친구로 등록하셨습니다");
           notification.put("title", "DoWhat");
           root.put("notification", notification);
-          root.put("to", userid);
+          root.put("to", "dmpYCExfLbo:APA91bHwCcw0u1aMNHWsJ-g1LwySPgNIyb7s01LWG9Mfb7dzoVyrouaqcjkvSMNWvRXkrmCX09oKfFc4UE4EWqdNmpKJeHY4Yf8Yb2caa_03HiJkNTTUnmmMK_zkZqxFnuLnQNZbc49X");
           // FMC 메시지 생성 end
 
           URL Url = new URL("https://fcm.googleapis.com/fcm/send");

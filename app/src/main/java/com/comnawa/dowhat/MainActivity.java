@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
         return;
       case R.id.btninsang3:
-
+        DoWhat.sendPushMsg("hi",null);
         return;
 
     }
