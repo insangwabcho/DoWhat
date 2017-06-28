@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "303530929467",
+    "firebase_url": "https://dowhat-d1b77.firebaseio.com",
+    "project_id": "dowhat-d1b77",
+    "storage_bucket": "dowhat-d1b77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303530929467:android:26f9bee9ebd6fd62",
+        "android_client_info": {
+          "package_name": "com.comnawa.dowhat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "303530929467-hu26ln58qjmnids6hsln9b52f431f277.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.comnawa.dowhat",
+            "certificate_hash": "c1b00fdd50e9cdca63c066ce3f10450efc46a62c"
+          }
+        },
+        {
+          "client_id": "303530929467-evq45ng1v0pea88h4k93hl6sp0pp80i3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC827laoIFiM_7m1RPS4A619n59DcpzNL4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "303530929467-evq45ng1v0pea88h4k93hl6sp0pp80i3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
