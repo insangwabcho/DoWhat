@@ -44,7 +44,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
     static ArrayList<ScheduleDTO> items; //일정을 담을 리스트
     String id;
     static String startdate; //아이디와 선택 날짜
-    ImageView btnPlus, btnAdd, btnMic;
+    ImageView btnPlus, btnAdd, btnMic, btnSet;
     PrefManager manager;
     DBManager dbManager;
     ScheduleAdapter adapter;
@@ -101,7 +101,6 @@ public class CalendarActivity extends ListActivity implements Serializable {
                     finish();
                 }
             });
-
             d.setNegativeButton("아니요",new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -153,6 +152,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         btnPlus = (ImageView) findViewById(R.id.btnPlus);
         btnAdd = (ImageView) findViewById(R.id.btnAdd);
         btnMic = (ImageView) findViewById(R.id.btnMic);
+        btnSet = (ImageView) findViewById(R.id.btnSet);
         calview = (CalendarView) findViewById(R.id.calview);
 
 
@@ -217,8 +217,10 @@ public class CalendarActivity extends ListActivity implements Serializable {
         btnPlus.setImageResource(R.drawable.plus);
         btnAdd.setImageResource(R.drawable.add);
         btnMic.setImageResource(R.drawable.mic);
+        btnSet.setImageResource(R.drawable.set);
         btnAdd.setVisibility(View.INVISIBLE);
         btnMic.setVisibility(View.INVISIBLE);
+        btnSet.setVisibility(View.INVISIBLE);
 
         //플러스 버튼을 눌렀을때 이벤트
         btnPlus.setOnClickListener(new View.OnClickListener() {
@@ -228,6 +230,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                     //버튼 2개 표시후 X로 이미지 변경
                     btnAdd.setVisibility(View.VISIBLE);
                     btnMic.setVisibility(View.VISIBLE);
+                    btnSet.setVisibility(View.VISIBLE);
                     btnPlus.setImageResource(R.drawable.x);
                     isClick = !isClick;
                     //추가버튼 눌렀을때 이벤트
@@ -254,9 +257,19 @@ public class CalendarActivity extends ListActivity implements Serializable {
                             }
                         }
                     });
+                    //환경설정
+                    btnSet.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent=new Intent(CalendarActivity.this, Preferences.class);
+                            startActivity(intent);
+                        }
+                    });
+
                 } else {
                     btnAdd.setVisibility(View.INVISIBLE);
                     btnMic.setVisibility(View.INVISIBLE);
+                    btnSet.setVisibility(View.INVISIBLE);
                     btnPlus.setImageResource(R.drawable.plus);
                     isClick = !isClick;
                 }
@@ -280,7 +293,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         i.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
         i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
-        i.putExtra(RecognizerIntent.EXTRA_PROMPT, "일정을 말씀해주세요.");
+        i.putExtra(RecognizerIntent.EXTRA_PROMPT, '"'+"장소"+'"'+" 에서 "+'"'+"일정"+'"'+"\nex)"+'"'+"공원"+'"'+" 에서 "+'"'+"산책하기"+'"');
 
         Toast.makeText(CalendarActivity.this, "음성인식 시작", Toast.LENGTH_SHORT).show();
 

@@ -76,20 +76,34 @@
                 android:id="@android:id/list"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="5" />
+                android:layout_weight="5.5" />
 
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginTop="40dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/btnSet"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="13px"
+                    android:layout_marginBottom="13px"
+                    android:layout_marginRight="13px"
+                    android:layout_marginLeft="13px"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/set" />
 
                 <ImageView
                     android:id="@+id/btnMic"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_marginTop="13px"
+                    android:layout_marginBottom="13px"
+                    android:layout_marginRight="13px"
+                    android:layout_marginLeft="13px"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/mic" />
 
@@ -97,6 +111,10 @@
                     android:id="@+id/btnAdd"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_marginTop="13px"
+                    android:layout_marginBottom="13px"
+                    android:layout_marginRight="13px"
+                    android:layout_marginLeft="13px"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/add" />
 
