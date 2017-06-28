@@ -7,7 +7,7 @@
     tools:context="com.comnawa.dowhat.sangjin.calendar_sangjin"
     tools:layout_editor_absoluteY="25dp"
     tools:layout_editor_absoluteX="0dp">
-
+<!-- -->
     <TimePicker
         android:id="@+id/timePicker2"
         android:layout_width="wrap_content"

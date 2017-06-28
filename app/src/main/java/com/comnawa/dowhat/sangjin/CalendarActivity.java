@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -252,6 +253,9 @@ public class CalendarActivity extends ListActivity implements Serializable {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
                 SetYMD(year, month, day);
+                Log.i("getx:",calview.getX()+"");
+                Log.i("getWidth:",calview.getWidth()+"");
+                Log.i("getHeight:",calview.getHeight()+"");
             }
         });
     }
