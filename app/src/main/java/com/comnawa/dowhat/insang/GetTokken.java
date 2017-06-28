@@ -33,9 +33,6 @@ public class GetTokken extends Thread {
 
   private void getSchedule() {
 
-    PrefManager prefManager= new PrefManager(context);
-    String id= prefManager.getUserInfo().get("id");
-
     try {
       String page = Common.SERVER_URL + "/Dowhat/Member_servlet/selecttoken.do";
       HashMap<String,String> map= new HashMap<>();

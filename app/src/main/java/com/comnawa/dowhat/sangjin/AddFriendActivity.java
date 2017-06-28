@@ -63,6 +63,10 @@ public class AddFriendActivity extends AppCompatActivity {
             String name= arr[0];
             String id= arr[1].substring(0,arr[1].length()-1);
             String myId= new PrefManager(this).getUserInfo().get("id");
+            if (id.equals(myId)){
+                Toast.makeText(this, "자기 자신을 추가할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
 
             //서버로 보낼 친구추가 코드
             //addfriend.do
@@ -80,7 +84,7 @@ public class AddFriendActivity extends AppCompatActivity {
                 friendid+= t;
                 friendid+=",";
             }
-            friendid+= id;
+            friendid+= choice;
 
             AddFriend af= new AddFriend(this, myId, friendid);
             af.start();
@@ -90,7 +94,7 @@ public class AddFriendActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             //푸시메세지 코드
-            DoWhat.sendPushMsg(this,id+"님께서 친구로 추가하셨습니다.",id);
+            DoWhat.sendPushMsg(this,myId+"님께서 친구로 추가하셨습니다.",id);
         }
         Toast.makeText(this, "친구로 추가되었습니다.", Toast.LENGTH_SHORT).show();
         return false;
