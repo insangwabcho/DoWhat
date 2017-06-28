@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
+import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.sungwon.Common;
 import com.comnawa.dowhat.sungwon.JsonObject;
@@ -44,7 +45,7 @@ public class AddFriendActivity extends AppCompatActivity {
 
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_savebutton, menu);
+        getMenuInflater().inflate(R.menu.menu_save, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -53,12 +54,16 @@ public class AddFriendActivity extends AppCompatActivity {
         if (item.getItemId()== R.id.action_settings) {
             startActivity(new Intent(AddFriendActivity.this, Preferences.class));
         } else if (item.getItemId()== R.id.menu_add){ //추가 클릭시 코드
-            //내장 파일에 가지고있을 친구목록 추가코드
+            int idx= listview1.getCheckedItemPosition();
+            String choice= items.get(idx);
+            String[] arr= choice.split("[(]");
+            String name= arr[0];
+            String id= arr[1].substring(0,arr[1].length()-1);
 
             //서버로 보낼 친구추가 코드
 
             //푸시메세지 코드
-
+            DoWhat.sendPushMsg(this,id+"님께서 친구로 추가하셨습니다.",id);
         }
         return false;
     }

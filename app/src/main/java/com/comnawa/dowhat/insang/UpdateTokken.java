@@ -19,7 +19,7 @@ public class UpdateTokken extends Thread {
   private String id;
   private String tokken;
 
-  public UpdateTokken(Context context, String id) {
+  public UpdateTokken(Context context, String id, String tokken) {
     this.context = context;
     this.id= id;
     this.tokken= tokken;
