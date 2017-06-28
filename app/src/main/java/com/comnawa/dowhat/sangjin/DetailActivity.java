@@ -27,10 +27,13 @@ import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.insang.Preferences;
 
+import java.util.ArrayList;
+
 
 public class DetailActivity extends AppCompatActivity {
     //일정, 장소, 시작일, 종료일, 시작시간, 종료시간, 메모, 알람, 일행
-    EditText editTitle, editPlace, editMemo, editFriend;
+    public static EditText editFriend;
+    EditText editTitle, editPlace, editMemo;
     TextView txtSdate, txtStime, txtEdate, txtEtime;
     CheckBox cbAlarm, cbRepeat; //알람설정,반복설정
     ImageButton btnPlace, btnFriend;
@@ -472,4 +475,8 @@ public class DetailActivity extends AppCompatActivity {
         txtEtime.setText(DBetime);
     }//
 
+    public void setTag(String tag){
+        Log.i("tag:",tag);
+        editFriend.setText(tag);
+    }
 }

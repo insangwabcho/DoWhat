@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
+import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.sungwon.Common;
@@ -30,8 +32,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TagFriendActivity extends AppCompatActivity implements Filterable{
+public class TagFriendActivity extends AppCompatActivity implements Filterable {
     ArrayList<String> items; //내친구 목록
+    String tag=""; //태그된 친구이름 목록
     ArrayAdapter adapter; //아답터
     EditText editText; //검색바
     ListView listview1; //리스트뷰
@@ -43,7 +46,7 @@ public class TagFriendActivity extends AppCompatActivity implements Filterable{
         return super.onCreateOptionsMenu(menu);
     }
 
-    Handler handler=new Handler(){
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -58,8 +61,18 @@ public class TagFriendActivity extends AppCompatActivity implements Filterable{
             startActivity(new Intent(TagFriendActivity.this, Preferences.class));
         } else if (item.getItemId() == R.id.menu_add) { //확인 클릭시 코드
             //액티비티를 종료시키고 선택한 친구를 DetailActivity의 editText에 set함
-
-
+            SparseBooleanArray dd = new SparseBooleanArray();
+            dd = listview1.getCheckedItemPositions();
+            for (int i=0; i<items.size(); i++){
+                if (dd.get(i)) {
+                    String[] arr = items.get(i).split("[(]");
+                    tag+= arr[0]+",";
+                }
+            }
+            tag=tag.substring(0,tag.length()-1);
+            Log.i("tag",tag);
+            DetailActivity.editFriend.setText(tag);
+            finish();
         } else if (item.getItemId() == R.id.addFriend) { //친구 추가
             startActivity(new Intent(TagFriendActivity.this, AddFriendActivity.class));
         }
@@ -69,6 +82,7 @@ public class TagFriendActivity extends AppCompatActivity implements Filterable{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로로 고정
         setContentView(R.layout.freindtag);
         listview1 = (ListView) findViewById(R.id.listview1);
         editText = (EditText) findViewById(R.id.editText);
@@ -87,17 +101,17 @@ public class TagFriendActivity extends AppCompatActivity implements Filterable{
                     String body = JsonObject.objectType(page, map);
                     JSONObject jsonObj = new JSONObject(body);
                     Log.i("body", body);
-                    if(jsonObj.get("sendData").equals("fail")){
+                    if (jsonObj.get("sendData").equals("fail")) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Toast.makeText(TagFriendActivity.this, "등록된 친구가 없습니다.", Toast.LENGTH_LONG).show();
                             }
                         });
-                    }else{
-                        String[] friendList=jsonObj.get("sendData").toString().split(",");
-                        for(int i=0; i<friendList.length; i++){
-                            if(friendList[i].equals("null") || friendList[i]==null){
+                    } else {
+                        String[] friendList = jsonObj.get("sendData").toString().split(",");
+                        for (int i = 0; i < friendList.length; i++) {
+                            if (friendList[i].equals("null") || friendList[i] == null) {
                                 continue;
                             }
                             items.add(friendList[i]);
@@ -114,15 +128,19 @@ public class TagFriendActivity extends AppCompatActivity implements Filterable{
         //이름으로 검색
         editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
             @Override
             public void afterTextChanged(Editable s) {
-                String keyword=editText.getText().toString();
-                if(keyword.length() > 0){
+                String keyword = editText.getText().toString();
+                if (keyword.length() > 0) {
                     listview1.setFilterText(keyword);
-                }else{
+                } else {
                     listview1.clearTextFilter();
                 }
             }
