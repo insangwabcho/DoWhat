@@ -16,6 +16,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Calendar;
 
 public class DoWhat {
@@ -269,6 +274,43 @@ public class DoWhat {
   public static void setTitleBar(AppCompatActivity activity, String title) {
     activity.getSupportActionBar().setTitle(title);
   }
+
+
+  public void sendPushMsg(final String message, final String userid){
+
+    final String svKey= "AAAARqvabTs:APA91bF_Ldp3AyUWQUo9-uNbcb70MGmYFHB1yuOT6eV4v-K5sTbs6-Vs8jD9ZK9Eln3XEmfs4yjbzulW5dcL9tY9lTbu9nTfF_FFF8FXGPjn-WfM4dlud43qrClW1xKpf4_MSfiEEv9P";
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          // FMC 메시지 생성 start
+          JSONObject root = new JSONObject();
+          JSONObject notification = new JSONObject();
+          notification.put("body", message);
+          notification.put("title", "DoWhat");
+          root.put("notification", notification);
+          root.put("to", userid);
+          // FMC 메시지 생성 end
+
+          URL Url = new URL("https://fcm.googleapis.com/fcm/send");
+          HttpURLConnection conn = (HttpURLConnection) Url.openConnection();
+          conn.setRequestMethod("POST");
+          conn.setDoOutput(true);
+          conn.setDoInput(true);
+          conn.addRequestProperty("Authorization", "key=" + svKey);
+          conn.setRequestProperty("Accept", "application/json");
+          conn.setRequestProperty("Content-type", "application/json");
+          OutputStream os = conn.getOutputStream();
+          os.write(root.toString().getBytes("utf-8"));
+          os.flush();
+          conn.getResponseCode();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    }).start();
+  }
+
 
 }
 

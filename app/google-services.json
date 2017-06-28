@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "303530929467-7e76hjj8n34l0t3pfctmn8etlbrltklb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.comnawa.dowhat",
+            "certificate_hash": "587286f450d478788fb95a321fc47b64a64aa5bd"
+          }
+        },
+        {
           "client_id": "303530929467-hu26ln58qjmnids6hsln9b52f431f277.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,8 @@ import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.kwanwoo.CalendarCoreActivity;
 import com.comnawa.dowhat.sangjin.CalendarActivity;
 import com.comnawa.dowhat.sungwon.LoginActivity;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
     ActionBar actionBar= getSupportActionBar();
     DoWhat.setTitleBar(this, "DoWhat 개발자 디버깅전용화면");
     setContentView(R.layout.activity_main);
+
+    FirebaseApp.initializeApp(this);
+    String token= FirebaseInstanceId.getInstance().getToken();
+    Log.d("FCM_Token", token);
   }
 
   @Override

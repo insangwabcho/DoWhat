@@ -26,10 +26,10 @@ import java.util.ArrayList;
  * Created by insang on 2017. 6. 19..
  */
 
-public class GetSchedule extends Thread {
+public class GetFriendid extends Thread {
   private Context context;
 
-  public GetSchedule(Context context) {
+  public GetFriendid(Context context) {
     this.context = context;
   }
 

@@ -10,8 +10,8 @@ import android.graphics.BitmapFactory;
 import android.os.PowerManager;
 import android.util.Log;
 
-import com.comnawa.dowhat.MainActivity;
 import com.comnawa.dowhat.R;
+import com.comnawa.dowhat.sangjin.CalendarActivity;
 
 public class AlarmBroadcast extends BroadcastReceiver {
 
@@ -41,7 +41,7 @@ public class AlarmBroadcast extends BroadcastReceiver {
 
     PendingIntent pendingIntent =
       PendingIntent.getActivity(context, intent.getIntExtra("requestCode", 0)
-        , new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        , new Intent(context, CalendarActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
     Notification.Builder builder = new Notification.Builder(context);
 

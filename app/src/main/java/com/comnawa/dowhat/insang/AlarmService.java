@@ -40,7 +40,7 @@ public class AlarmService extends Service {
     //브로드캐스트리시버가 자정을 인지하여 서비스를 리스타트 하고
     //리스타트된 서버는 당일 날짜로 설정되어있는 알람을 가져옴
     DBManager dbManager = new DBManager(this);
-    ArrayList<ScheduleDTO> lists = dbManager.todaySchedule(new PrefManager(this).getUserInfo().get("id"));
+    schedules = dbManager.todaySchedule(new PrefManager(this).getUserInfo().get("id"));
 
     Log.i("test", schedules.toString());
     Calendar cal = Calendar.getInstance();
@@ -51,10 +51,17 @@ public class AlarmService extends Service {
     int min = cal.get(Calendar.MINUTE);
     int sec = cal.get(Calendar.SECOND);
 
+    Log.i("dto",schedules.toString());
+
     for (ScheduleDTO dto : schedules) {
 
-      long dtoTime = Time.valueOf(dto.getStarttime()).getTime();
+      if (dto.getAlarm()==0){
+        continue;
+      }
+
+      long dtoTime = Time.valueOf(dto.getStarttime()+":00").getTime();
       long nowTime = Time.valueOf(hour + ":" + min + ":" + sec).getTime();
+      Log.i("timezzo",dtoTime+","+nowTime);
 
       if (dtoTime > nowTime) {
         String alarmtime = dto.getStarttime();
@@ -110,7 +117,7 @@ public class AlarmService extends Service {
     @Override
     public void handleMessage(Message msg) {
       super.handleMessage(msg);
-//      Toast.makeText(AlarmService.this, "서비스 실행중", Toast.LENGTH_SHORT).show();
+      Log.i("service","실행중");
     }
   };
 
