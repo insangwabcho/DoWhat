@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.comnawa.dowhat.MainActivity;
 import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.sungwon.LoginActivity;
 
@@ -50,6 +51,7 @@ public class Preferences extends android.preference.PreferenceActivity {
 
     SwitchPreference autoLogin, pushService;
     Preference logId, logName, logoutKakao, backup, restore;
+    Preference developers;
 
     //네트워크상태
     boolean connWifi;
@@ -67,6 +69,16 @@ public class Preferences extends android.preference.PreferenceActivity {
       logName = (Preference) findPreference("logName");
       backup = (Preference) findPreference("backup");
       restore = (Preference) findPreference("restore");
+      developers= (Preference) findPreference("developers");
+
+      developers.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+          Intent intent= new Intent(ac, MainActivity.class);
+          startActivity(intent);
+          return false;
+        }
+      });
 
       //네트워크 상태체크
       ConnectivityManager manager = (ConnectivityManager) ac.getSystemService(Context.CONNECTIVITY_SERVICE);
