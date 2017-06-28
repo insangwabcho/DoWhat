@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,8 +18,10 @@ import com.comnawa.dowhat.R;
 public class CalendarCoreActivity extends AppCompatActivity {
     // 변수선언
     EditText txtTitle;
-    TextView txtPlace = null;
+    EditText txtPlace;
     ImageButton btnColor, btnPlace;
+    Bundle extraBundle;
+    Intent intent;
 
 
     @Override
@@ -29,7 +30,7 @@ public class CalendarCoreActivity extends AppCompatActivity {
         setContentView(R.layout.calendar_core_kwanwoo);
         //생성
         txtTitle = (EditText) findViewById(R.id.txtTitle);
-        txtPlace = (TextView) findViewById(R.id.txtPlace);
+        txtPlace = (EditText) findViewById(R.id.txtPlace);
         btnColor = (ImageButton) findViewById(R.id.btnColor);
         btnPlace = (ImageButton) findViewById(R.id.btnPlace);
 
@@ -38,7 +39,7 @@ public class CalendarCoreActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Dialog cb = new Dialog(CalendarCoreActivity.this);
-                cb.setTitle("Color버튼 선택");
+                cb.setTitle("");
                 TextView text = new TextView(CalendarCoreActivity.this);
                 text.setText("");
                 //  cb.setContentView(text); //color버튼의 내용
@@ -59,26 +60,35 @@ public class CalendarCoreActivity extends AppCompatActivity {
                 }
         );
         //텍스트를 눌렀을 때 구글맵 이동
-        txtPlace = (TextView) findViewById(R.id.txtPlace);
+        txtPlace = (EditText) findViewById(R.id.txtPlace);
         txtPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = null;
                 startActivity(intent);
+               // startActivityForResult(intent,1);
+               finish();
             }
         });
+            extraBundle = new Bundle();
+            extraBundle.putString("key1","testkey1");
+            extraBundle.putString("key2","testkey2");
+
+            intent = new Intent();
+            //intent.putExtra(this.extraBundle);
+            this.setResult(RESULT_OK,intent);
 
 
         //텍스트를 눌렀을 때
-        txtPlace.setOnTouchListener(new View.OnTouchListener() {
+  /*      txtPlace.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return false;
             }
-        });
+        });*/
         //저장버튼
-        Button btnOk = (Button) findViewById(R.id.btnOk);
+        Button btnOk = (Button)findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -90,6 +100,7 @@ public class CalendarCoreActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             Toast.makeText(CalendarCoreActivity.this,"일정이 저장되었습니다."
                             ,Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     }).setNegativeButton("아니오", new DialogInterface.OnClickListener() {
                     @Override
@@ -98,9 +109,13 @@ public class CalendarCoreActivity extends AppCompatActivity {
                                 ,Toast.LENGTH_SHORT).show();
                     }
                 }).create().show();
+               // finish();
+
             }
         });
+
     }// onCreate
+
     //취소버튼
     @Override
     public void onBackPressed() {
