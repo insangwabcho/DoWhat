@@ -3,7 +3,6 @@ package com.comnawa.dowhat.insang;
 import android.content.Context;
 import android.util.Log;
 
-import com.comnawa.dowhat.sangjin.ScheduleDTO;
 import com.comnawa.dowhat.sungwon.Common;
 
 import org.apache.http.NameValuePair;
@@ -42,9 +41,7 @@ public class UpdateTokken extends Thread {
     PrefManager prefManager= new PrefManager(context);
     String id= prefManager.getUserInfo().get("id");
 
-    ArrayList<ScheduleDTO> items = null;
     try {
-      items = new ArrayList<ScheduleDTO>();
       String page = Common.SERVER_URL + "/Dowhat/Schedule_servlet/updatepush.do";
       HttpClient http = new DefaultHttpClient();
       ArrayList<NameValuePair> postData = new ArrayList<>();
