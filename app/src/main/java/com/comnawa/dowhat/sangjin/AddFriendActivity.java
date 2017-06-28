@@ -16,7 +16,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
+import com.comnawa.dowhat.insang.AddFriend;
 import com.comnawa.dowhat.insang.DoWhat;
+import com.comnawa.dowhat.insang.GetFriend;
+import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.sungwon.Common;
 import com.comnawa.dowhat.sungwon.JsonObject;
@@ -59,12 +62,37 @@ public class AddFriendActivity extends AppCompatActivity {
             String[] arr= choice.split("[(]");
             String name= arr[0];
             String id= arr[1].substring(0,arr[1].length()-1);
+            String myId= new PrefManager(this).getUserInfo().get("id");
 
             //서버로 보낼 친구추가 코드
+            //addfriend.do
 
+            ArrayList<String> friendList= new ArrayList<>();
+            GetFriend gf= new GetFriend(this,myId,friendList);
+            gf.start();
+            try {
+                gf.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            String friendid= "";
+            for (String t: friendList){
+                friendid+= t;
+                friendid+=",";
+            }
+            friendid+= id;
+
+            AddFriend af= new AddFriend(this, myId, friendid);
+            af.start();
+            try {
+                af.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             //푸시메세지 코드
             DoWhat.sendPushMsg(this,id+"님께서 친구로 추가하셨습니다.",id);
         }
+        Toast.makeText(this, "친구로 추가되었습니다.", Toast.LENGTH_SHORT).show();
         return false;
     }
 
