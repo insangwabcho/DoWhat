@@ -71,7 +71,7 @@ public class AddFriendActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.editText);
         btnSearch = (ImageButton) findViewById(R.id.btnSearch);
 
-        items.get(listview1.getSelectedItemPosition());
+//        items.get(listview1.getSelectedItemPosition());
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override

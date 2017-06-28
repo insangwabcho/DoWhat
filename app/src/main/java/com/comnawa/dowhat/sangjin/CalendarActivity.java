@@ -31,6 +31,9 @@ import com.comnawa.dowhat.insang.DBManager;
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.insang.Preferences;
+import com.comnawa.dowhat.insang.UpdateTokken;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -154,6 +157,10 @@ public class CalendarActivity extends ListActivity implements Serializable {
         btnMic = (ImageView) findViewById(R.id.btnMic);
         btnSet = (ImageView) findViewById(R.id.btnSet);
         calview = (CalendarView) findViewById(R.id.calview);
+
+        //pushTokken 업데이트
+        FirebaseApp.initializeApp(this);
+        new UpdateTokken(this, manager.getUserInfo().get("id"), FirebaseInstanceId.getInstance().getToken()).start();
 
 
 /*        calview.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
