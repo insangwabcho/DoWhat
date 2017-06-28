@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.insang.DBManager;
 import com.comnawa.dowhat.insang.DoWhat;
+import com.comnawa.dowhat.insang.GetTokken;
 import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.insang.UpdateTokken;
@@ -161,6 +162,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         //pushTokken 업데이트
         FirebaseApp.initializeApp(this);
         new UpdateTokken(this, manager.getUserInfo().get("id"), FirebaseInstanceId.getInstance().getToken()).start();
+        new GetTokken(this, manager.getUserInfo().get("id"), FirebaseInstanceId.getInstance().getToken()).start();
 
 
 /*        calview.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {

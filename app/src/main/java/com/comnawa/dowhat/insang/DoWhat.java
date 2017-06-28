@@ -22,6 +22,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DoWhat {
 
@@ -276,9 +278,23 @@ public class DoWhat {
   }
 
 
-  public static void sendPushMsg(final String message, @Nullable final String userid){
-
+  public static void sendPushMsg(Context context, final String message, @Nullable final String userid){
     final String svKey= "AAAARqvabTs:APA91bF_Ldp3AyUWQUo9-uNbcb70MGmYFHB1yuOT6eV4v-K5sTbs6-Vs8jD9ZK9Eln3XEmfs4yjbzulW5dcL9tY9lTbu9nTfF_FFF8FXGPjn-WfM4dlud43qrClW1xKpf4_MSfiEEv9P";
+
+    Map<String,String> tokk= new HashMap<>();
+    GetTokken th= new GetTokken(context,userid, tokk);
+    th.start();
+    try {
+      th.join();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    if (tokk.get("tokken").equals("fail")){
+      return;
+    }
+
+    final String tok= tokk.get("tokken");
+
     new Thread(new Runnable() {
       @Override
       public void run() {
@@ -286,10 +302,10 @@ public class DoWhat {
           // FMC 메시지 생성 start
           JSONObject root = new JSONObject();
           JSONObject notification = new JSONObject();
-          notification.put("body", "조인상님 께서 친구로 등록하셨습니다");
+          notification.put("body", message);
           notification.put("title", "DoWhat");
           root.put("notification", notification);
-          root.put("to", "dmpYCExfLbo:APA91bHwCcw0u1aMNHWsJ-g1LwySPgNIyb7s01LWG9Mfb7dzoVyrouaqcjkvSMNWvRXkrmCX09oKfFc4UE4EWqdNmpKJeHY4Yf8Yb2caa_03HiJkNTTUnmmMK_zkZqxFnuLnQNZbc49X");
+          root.put("to", tok);
           // FMC 메시지 생성 end
 
           URL Url = new URL("https://fcm.googleapis.com/fcm/send");

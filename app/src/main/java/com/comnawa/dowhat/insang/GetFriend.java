@@ -14,15 +14,13 @@ import java.util.HashMap;
  * Created by insang on 2017. 6. 19..
  */
 
-public class UpdateTokken extends Thread {
+public class GetFriend extends Thread {
   private Context context;
   private String id;
-  private String tokken;
 
-  public UpdateTokken(Context context, String id) {
+  public GetFriend(Context context, String id) {
     this.context = context;
     this.id= id;
-    this.tokken= tokken;
   }
 
   @Override
@@ -39,17 +37,17 @@ public class UpdateTokken extends Thread {
       String page = Common.SERVER_URL + "/Dowhat/Member_servlet/updatepush.do";
       HashMap<String,String> map= new HashMap<>();
       map.put("id",id);
-      map.put("pushtoken",tokken);
       String body= JsonObject.objectType(page,map);
       JSONObject jobj= new JSONObject(body);
-      int result= (int)jobj.get("sendData");
-      if (result == 1){
-        Log.i("test","성공");
-      } else {
+      //result == 친구목록
+      String result= (String)jobj.get("sendData");
+      if (result == "fail"){
         Log.i("test","실패");
+      } else {
+        Log.i("test","성공");
       }
     } catch (Exception e){
-    }
 
+    }
   }
 }
