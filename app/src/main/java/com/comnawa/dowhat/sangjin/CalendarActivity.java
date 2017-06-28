@@ -196,7 +196,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
             //오늘날짜로 StartDay() 함수 실행
             SetYMD(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
 
-        } else { //그렇지 않다면
+        }else { //그렇지 않다면
             //putExtra로 담아준 sdate변수값 가져오기
             String sdate = getIntent().getStringExtra("sdate");
             //넘어온값은 2017-12-12 형식이기때문에 -로 스플릿
