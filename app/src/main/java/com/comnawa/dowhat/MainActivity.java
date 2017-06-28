@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.comnawa.dowhat.insang.DBManager;
 import com.comnawa.dowhat.insang.DoWhat;
-import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.kwanwoo.CalendarCoreActivity;
 import com.comnawa.dowhat.sangjin.CalendarActivity;
@@ -74,8 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         return;
       case R.id.btninsang3:
-        PrefManager prefManager= new PrefManager(this);
-        prefManager.setAutoLogin("dowhat@dowhat.com","dowhat1234","dowhat","","",true);
+
         return;
 
     }
