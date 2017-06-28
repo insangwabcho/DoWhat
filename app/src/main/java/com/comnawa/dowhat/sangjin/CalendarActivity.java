@@ -261,7 +261,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
                     btnSet.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent=new Intent(CalendarActivity.this, Preferences.class);
+                            /*Intent intent=new Intent(CalendarActivity.this, Preferences.class);*/
+                            Intent intent=new Intent(CalendarActivity.this, AddFriendActivity.class);
                             startActivity(intent);
                         }
                     });
