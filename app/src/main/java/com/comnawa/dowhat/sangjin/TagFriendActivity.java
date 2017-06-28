@@ -59,6 +59,7 @@ public class TagFriendActivity extends AppCompatActivity implements Filterable{
         } else if (item.getItemId() == R.id.menu_add) { //확인 클릭시 코드
             //액티비티를 종료시키고 선택한 친구를 DetailActivity의 editText에 set함
 
+
         } else if (item.getItemId() == R.id.addFriend) { //친구 추가
             startActivity(new Intent(TagFriendActivity.this, AddFriendActivity.class));
         }
@@ -96,6 +97,9 @@ public class TagFriendActivity extends AppCompatActivity implements Filterable{
                     }else{
                         String[] friendList=jsonObj.get("sendData").toString().split(",");
                         for(int i=0; i<friendList.length; i++){
+                            if(friendList[i].equals("null") || friendList[i]==null){
+                                continue;
+                            }
                             items.add(friendList[i]);
                         }
                         handler.sendEmptyMessage(0);
