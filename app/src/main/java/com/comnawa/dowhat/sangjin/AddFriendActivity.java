@@ -136,6 +136,10 @@ public class AddFriendActivity extends AppCompatActivity {
                                     }
                                 });
                             } else {
+                                if (jsonMain.getString("id").equals(
+                                  new PrefManager(AddFriendActivity.this).getUserInfo().get("id"))){
+                                    return;
+                                }
                                 MemberDTO dto=new MemberDTO();
                                 dto.setFriendId(jsonMain.getString("id"));
                                 dto.setFriendName(jsonMain.getString("name"));
