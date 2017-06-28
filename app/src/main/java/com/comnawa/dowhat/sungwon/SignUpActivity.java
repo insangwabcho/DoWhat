@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -72,7 +73,9 @@ public class SignUpActivity extends AppCompatActivity {
                                 map.put("id", editId.getText().toString());
                                 String body = objectType(page,map);
                                 JSONObject jsonObj = new JSONObject(body);
-                                if (jsonObj.get("sendData").equals("success")) {
+                                JSONArray jArray = (JSONArray) jsonObj.get("sendData");
+                                JSONObject jsonMain = (JSONObject)jArray.get(0);
+                                if (jsonMain.get("id").equals("success")) {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
