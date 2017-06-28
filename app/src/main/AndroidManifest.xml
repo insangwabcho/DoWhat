@@ -76,24 +76,21 @@
         </receiver>
 
         <activity android:name=".sungwon.confrimActivity" />
-        <activity android:name=".sangjin.DetailActivity"></activity>
-        <activity android:name=".sangjin.AddFriendActivity"/>
+        <activity android:name=".sangjin.DetailActivity" />
+        <activity android:name=".sangjin.AddFriendActivity" />
+        <activity android:name=".sangjin.TagFriendActivity" />
 
-        <service
-          android:name=".insang.FirebaseMessagingService">
+        <service android:name=".insang.FirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-        <service
-          android:name=".insang.FirebaseInstanceIDService">
+        <service android:name=".insang.FirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
     </application>
-
 
 </manifest>

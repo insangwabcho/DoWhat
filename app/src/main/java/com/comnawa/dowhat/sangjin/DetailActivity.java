@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -32,6 +33,7 @@ public class DetailActivity extends AppCompatActivity {
     EditText editTitle, editPlace, editMemo, editFriend;
     TextView txtSdate, txtStime, txtEdate, txtEtime;
     CheckBox cbAlarm, cbRepeat; //알람설정,반복설정
+    ImageButton btnPlace, btnFriend;
     DatePicker dp; //데이트피커
     TimePicker tp; //타임피커
     Spinner spinner; //이벤트 스피너
@@ -160,12 +162,32 @@ public class DetailActivity extends AppCompatActivity {
         txtStime = (TextView) findViewById(R.id.txtStime);
         txtEtime = (TextView) findViewById(R.id.txtEtime);
         editMemo = (EditText) findViewById(R.id.editMemo);
-        //   editFriend = (EditText) findViewById(R.id.editFriend);
+        editFriend = (EditText) findViewById(R.id.editFriend);
         cbAlarm = (CheckBox) findViewById(R.id.cbAlarm);
         cbRepeat = (CheckBox) findViewById(R.id.cbRepeat);
+        btnPlace = (ImageButton) findViewById(R.id.btnPlace);
+        btnFriend = (ImageButton) findViewById(R.id.btnFriend);
         dp = (DatePicker) findViewById(R.id.datePicker);
         tp = (TimePicker) findViewById(R.id.timePicker);
         spinner = (Spinner) findViewById(R.id.spinner);
+
+        //장소버튼 클릭 이벤트
+/*        btnPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });*/
+
+        //친구버튼 클릭 이벤트
+        btnFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(DetailActivity.this, TagFriendActivity.class);
+                startActivity(intent);
+            }
+        });
+
         //데이트피커다이얼로그 생성(액티비티, 리스너, 년, 월, 일)
         Ddialog = new DatePickerDialog(this, listener2, dp.getYear(), dp.getMonth(), dp.getDayOfMonth());
         //타임피커다이얼로그 생성(액티비티, 리스너, 시, 분, 12시간구분)
