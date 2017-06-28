@@ -3,4 +3,5 @@
   <color name="colorPrimary">#F47833</color>
     <color name="colorPrimaryDark">#55000000</color>
   <color name="colorAccent">#FF4081</color>
+  <color name="textColor_sangjin">#5c00bf</color>
 </resources>

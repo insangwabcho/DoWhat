@@ -25,7 +25,7 @@
                 android:id="@+id/txtSchedule"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/textColor_sangjin"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
