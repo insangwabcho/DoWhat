@@ -48,7 +48,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
   PrefManager manager;
   DBManager dbManager;
   ScheduleAdapter adapter;
-  boolean isClick;
+  boolean isClick; //
 
   private static final int RESULT_SPEECH = 1;
   private Intent i;

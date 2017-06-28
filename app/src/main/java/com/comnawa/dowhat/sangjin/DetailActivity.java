@@ -447,6 +447,6 @@ public class DetailActivity extends AppCompatActivity {
             txtEdate.setText(CalendarActivity.startdate);
             DBetime="09:00";
                     txtEtime.setText(DBetime);
-        }
+        }//
 
     }
