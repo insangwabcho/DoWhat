@@ -40,6 +40,6 @@
         android:layout_height="0dp"
         android:layout_weight="9.5"
         android:textFilterEnabled="true"
-        android:choiceMode="multipleChoice" />
+        android:choiceMode="singleChoice" />
 
 </LinearLayout>

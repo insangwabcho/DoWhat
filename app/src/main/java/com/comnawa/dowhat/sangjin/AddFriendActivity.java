@@ -37,7 +37,7 @@ public class AddFriendActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            adapter = new ArrayAdapter(AddFriendActivity.this, android.R.layout.simple_list_item_multiple_choice, items);
+            adapter = new ArrayAdapter(AddFriendActivity.this, android.R.layout.simple_list_item_single_choice, items);
             listview1.setAdapter(adapter);
         }
     };
@@ -70,6 +70,8 @@ public class AddFriendActivity extends AppCompatActivity {
         listview1 = (ListView) findViewById(R.id.listview1);
         editText = (EditText) findViewById(R.id.editText);
         btnSearch = (ImageButton) findViewById(R.id.btnSearch);
+
+        items.get(listview1.getSelectedItemPosition());
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
