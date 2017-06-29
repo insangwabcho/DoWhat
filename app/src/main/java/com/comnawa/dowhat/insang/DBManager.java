@@ -36,6 +36,9 @@ public class DBManager {
   }
 
 
+  public ArrayList<ScheduleDTO> setDot(String id, int year, int month){
+    return dbm.setDot(id, year, month);
+  }
 
   public void tableDrop(){
     dbm.tableDrop();
@@ -154,6 +157,38 @@ public class DBManager {
       String today = year + "-" + monthly + "-" + dately;
       Log.i("test",id+today);
       String sql = "select * from schedule where id='" + id + "' and startdate='" + today + "'";
+      Log.i("query",sql);
+      SQLiteDatabase db = getReadableDatabase();
+      rs = db.rawQuery(sql, null);
+      while (rs.moveToNext()) {
+        ScheduleDTO dto = new ScheduleDTO();
+        dto.setNum(rs.getInt(0));
+        dto.setId(rs.getString(1));
+        dto.setStartdate(rs.getString(2));
+        dto.setEnddate(rs.getString(3));
+        dto.setStarttime(rs.getString(4));
+        dto.setEndtime(rs.getString(5));
+        dto.setTitle(rs.getString(6));
+        dto.setEvent(rs.getString(7));
+        dto.setPlace(rs.getString(8));
+        dto.setMemo(rs.getString(9));
+        dto.setAlarm(rs.getInt(10));
+        dto.setRepeat(rs.getInt(11));
+        Log.i("dto",dto.toString());
+        items.add(dto);
+      }
+      return items;
+    }
+
+    public ArrayList<ScheduleDTO> setDot(String id, int year, int month) {
+      ArrayList<ScheduleDTO> items = new ArrayList<>();
+      String monthly= month<10 ? "0"+month : month+"";
+      String today = year + "-" + monthly + "-%" ;
+      Log.i("sibalseki","sibal");
+      Log.i("test",id+today);
+      String sql = "select * from schedule where id='" + id + "' and startdate like '" + today + "'";
+      Log.i("asdf","query:"+sql);
+//      "select * from schedule where id= 'dowhat' and startdate like '2017-12-%'"
       Log.i("query",sql);
       SQLiteDatabase db = getReadableDatabase();
       rs = db.rawQuery(sql, null);

@@ -10,12 +10,14 @@ import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -58,8 +60,11 @@ public class CalendarActivity extends ListActivity implements Serializable {
               dot11,dot12,dot13,dot14,dot15,dot16,dot17,dot18,dot19,dot20,
               dot21,dot22,dot23,dot24,dot25,dot26,dot27,dot28,dot29,dot30,
               dot31,dot32,dot33,dot34,dot35,dot36,dot37,dot38,dot39,dot40,dot41;
+    ImageView[] dots;
     private static final int RESULT_SPEECH = 1;
     private Intent i;
+    private float x; //좌표
+    private int stat; //캘린더뷰 넘길때 왼쪽 오른쪽 ( 0 default, 1 left, 2 right )
 
     private void SettingListview() {
         adapter = new ScheduleAdapter(CalendarActivity.this, R.layout.layout, items);
@@ -81,6 +86,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                                 Calendar cal = Calendar.getInstance();
                                 String[] days = startdate.split("-"); // 년= [0], 월= [1], 일= [2]
                                 SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
+                                setDot();
                             }
                         })
                         .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
@@ -93,6 +99,12 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 return true;
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        setDot();
+        super.onResume();
     }
 
     @Override
@@ -119,6 +131,24 @@ public class CalendarActivity extends ListActivity implements Serializable {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction()== MotionEvent.ACTION_DOWN){
+            x= ev.getX();
+        } else if (ev.getAction()== MotionEvent.ACTION_UP){
+            if (x- ev.getX() < 0) { //왼쪽으로 넘길때
+                Log.i("asdf","왼쪽");
+                Log.i("adsf",x-ev.getX()+"");
+                stat= 1;
+            } else if (x- ev.getX() > 0) { //오른쪽으로 넘길때
+                Log.i("asdf","오른쪽");
+                Log.i("adsf",x-ev.getX()+"");
+                stat= 2;
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override
@@ -165,13 +195,23 @@ public class CalendarActivity extends ListActivity implements Serializable {
         btnMic = (ImageView) findViewById(R.id.btnMic);
         btnSet = (ImageView) findViewById(R.id.btnSet);
         calview = (CalendarView) findViewById(R.id.calview);
-
+        calview.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (stat== 1){
+                    Log.i("asdf","화면왼쪽");
+                } else if (stat == 2){
+                    Log.i("asdf","화면오른쪽");
+                }
+            }
+        });
         dotsConn();
+        setDot();
 
         //pushTokken 업데이트
         FirebaseApp.initializeApp(this);
         new UpdateTokken(this, manager.getUserInfo().get("id"), FirebaseInstanceId.getInstance().getToken()).start();
-        test();
+
 
 
 /*        calview.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
@@ -384,6 +424,9 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 v = li.inflate(R.layout.layout, null);
             }
             ScheduleDTO dto = items.get(position);
+            String startdatee= dto.getStartdate();
+            String[] dateArr= startdatee.split("-");
+
             if (dto != null) {
                 TextView txtSchedule = (TextView) v.findViewById(R.id.txtSchedule);
                 TextView txtStartTime = (TextView) v.findViewById(R.id.txtStarttime);
@@ -490,16 +533,24 @@ public class CalendarActivity extends ListActivity implements Serializable {
         SettingListview();
     }
 
-    private void test(){
+    private int test(@Nullable String leftOrRight){
         Calendar cal= Calendar.getInstance();
         Date now= new Date(calview.getDate());
         int year= now.getYear();
         year= Integer.parseInt("20"+(year+"").substring(1));
         int month= now.getMonth();
+        if (leftOrRight== null){
+            month= month;
+        } else if (leftOrRight.equals("left")){
+            month-= 1;
+        } else if (leftOrRight.equals("right")){
+            month+=1;
+        }
         int date= now.getDate();
         cal.set(Calendar.YEAR,year);
         cal.set(Calendar.MONTH,month);
         cal.set(Calendar.DATE,date);
+
 
         /*
         1 일
@@ -511,134 +562,138 @@ public class CalendarActivity extends ListActivity implements Serializable {
         7 토
          */
         int startDatee= cal.get(Calendar.DAY_OF_WEEK);
+        return startDatee;
     }
 
     private void dotsConn(){
         dot0= (ImageView)findViewById(R.id.dot0);
         dot0.setImageResource(R.drawable.dot);
-        dot0.setVisibility(View.VISIBLE);
         dot1= (ImageView)findViewById(R.id.dot1);
         dot1.setImageResource(R.drawable.dot);
-        dot1.setVisibility(View.VISIBLE);
         dot2= (ImageView)findViewById(R.id.dot2);
         dot2.setImageResource(R.drawable.dot);
-        dot2.setVisibility(View.VISIBLE);
         dot3= (ImageView)findViewById(R.id.dot3);
         dot3.setImageResource(R.drawable.dot);
-        dot3.setVisibility(View.VISIBLE);
         dot4= (ImageView)findViewById(R.id.dot4);
         dot4.setImageResource(R.drawable.dot);
-        dot4.setVisibility(View.VISIBLE);
         dot5= (ImageView)findViewById(R.id.dot5);
         dot5.setImageResource(R.drawable.dot);
-        dot5.setVisibility(View.VISIBLE);
         dot6= (ImageView)findViewById(R.id.dot6);
         dot6.setImageResource(R.drawable.dot);
-        dot6.setVisibility(View.VISIBLE);
         dot7= (ImageView)findViewById(R.id.dot7);
         dot7.setImageResource(R.drawable.dot);
-        dot7.setVisibility(View.VISIBLE);
         dot8= (ImageView)findViewById(R.id.dot8);
         dot8.setImageResource(R.drawable.dot);
-        dot8.setVisibility(View.VISIBLE);
         dot9= (ImageView)findViewById(R.id.dot9);
         dot9.setImageResource(R.drawable.dot);
-        dot9.setVisibility(View.VISIBLE);
         dot10= (ImageView)findViewById(R.id.dot10);
         dot10.setImageResource(R.drawable.dot);
-        dot10.setVisibility(View.VISIBLE);
         dot11= (ImageView)findViewById(R.id.dot11);
         dot11.setImageResource(R.drawable.dot);
-        dot11.setVisibility(View.VISIBLE);
         dot12= (ImageView)findViewById(R.id.dot12);
         dot12.setImageResource(R.drawable.dot);
-        dot12.setVisibility(View.VISIBLE);
         dot13= (ImageView)findViewById(R.id.dot13);
         dot13.setImageResource(R.drawable.dot);
-        dot13.setVisibility(View.VISIBLE);
         dot14= (ImageView)findViewById(R.id.dot14);
         dot14.setImageResource(R.drawable.dot);
-        dot14.setVisibility(View.VISIBLE);
         dot15= (ImageView)findViewById(R.id.dot15);
         dot15.setImageResource(R.drawable.dot);
-        dot15.setVisibility(View.VISIBLE);
         dot16= (ImageView)findViewById(R.id.dot16);
         dot16.setImageResource(R.drawable.dot);
-        dot16.setVisibility(View.VISIBLE);
         dot17= (ImageView)findViewById(R.id.dot17);
         dot17.setImageResource(R.drawable.dot);
-        dot17.setVisibility(View.VISIBLE);
         dot18= (ImageView)findViewById(R.id.dot18);
         dot18.setImageResource(R.drawable.dot);
-        dot18.setVisibility(View.VISIBLE);
         dot19= (ImageView)findViewById(R.id.dot19);
         dot19.setImageResource(R.drawable.dot);
-        dot19.setVisibility(View.VISIBLE);
         dot20= (ImageView)findViewById(R.id.dot20);
         dot20.setImageResource(R.drawable.dot);
-        dot20.setVisibility(View.VISIBLE);
         dot21= (ImageView)findViewById(R.id.dot21);
         dot21.setImageResource(R.drawable.dot);
-        dot21.setVisibility(View.VISIBLE);
         dot22= (ImageView)findViewById(R.id.dot22);
         dot22.setImageResource(R.drawable.dot);
-        dot22.setVisibility(View.VISIBLE);
         dot23= (ImageView)findViewById(R.id.dot23);
         dot23.setImageResource(R.drawable.dot);
-        dot23.setVisibility(View.VISIBLE);
         dot24= (ImageView)findViewById(R.id.dot24);
         dot24.setImageResource(R.drawable.dot);
-        dot24.setVisibility(View.VISIBLE);
         dot25= (ImageView)findViewById(R.id.dot25);
         dot25.setImageResource(R.drawable.dot);
-        dot25.setVisibility(View.VISIBLE);
         dot26= (ImageView)findViewById(R.id.dot26);
         dot26.setImageResource(R.drawable.dot);
-        dot26.setVisibility(View.VISIBLE);
         dot27= (ImageView)findViewById(R.id.dot27);
         dot27.setImageResource(R.drawable.dot);
-        dot27.setVisibility(View.VISIBLE);
         dot28= (ImageView)findViewById(R.id.dot28);
         dot28.setImageResource(R.drawable.dot);
-        dot28.setVisibility(View.VISIBLE);
         dot29= (ImageView)findViewById(R.id.dot29);
         dot29.setImageResource(R.drawable.dot);
-        dot29.setVisibility(View.VISIBLE);
         dot30= (ImageView)findViewById(R.id.dot30);
         dot30.setImageResource(R.drawable.dot);
-        dot30.setVisibility(View.VISIBLE);
         dot31= (ImageView)findViewById(R.id.dot31);
         dot31.setImageResource(R.drawable.dot);
-        dot31.setVisibility(View.VISIBLE);
         dot32= (ImageView)findViewById(R.id.dot32);
         dot32.setImageResource(R.drawable.dot);
-        dot32.setVisibility(View.VISIBLE);
         dot33= (ImageView)findViewById(R.id.dot33);
         dot33.setImageResource(R.drawable.dot);
-        dot33.setVisibility(View.VISIBLE);
         dot34= (ImageView)findViewById(R.id.dot34);
         dot34.setImageResource(R.drawable.dot);
-        dot34.setVisibility(View.VISIBLE);
         dot35= (ImageView)findViewById(R.id.dot35);
         dot35.setImageResource(R.drawable.dot);
-        dot35.setVisibility(View.VISIBLE);
         dot36= (ImageView)findViewById(R.id.dot36);
         dot36.setImageResource(R.drawable.dot);
-        dot36.setVisibility(View.VISIBLE);
         dot37= (ImageView)findViewById(R.id.dot37);
         dot37.setImageResource(R.drawable.dot);
-        dot37.setVisibility(View.VISIBLE);
         dot38= (ImageView)findViewById(R.id.dot38);
         dot38.setImageResource(R.drawable.dot);
-        dot38.setVisibility(View.VISIBLE);
         dot39= (ImageView)findViewById(R.id.dot39);
         dot39.setImageResource(R.drawable.dot);
-        dot39.setVisibility(View.VISIBLE);
         dot40= (ImageView)findViewById(R.id.dot40);
         dot40.setImageResource(R.drawable.dot);
-        dot40.setVisibility(View.VISIBLE);
         dot41= (ImageView)findViewById(R.id.dot41);
         dot41.setImageResource(R.drawable.dot);
-        dot41.setVisibility(View.VISIBLE);
+        dots= new ImageView[]{
+          dot0,dot1,dot2,dot3,dot4,dot5,dot6,dot7,dot8,dot9,dot10,
+          dot11,dot12,dot13,dot14,dot15,dot16,dot17,dot18,dot19,dot20,
+          dot21,dot22,dot23,dot24,dot25,dot26,dot27,dot28,dot29,dot30,
+          dot31,dot32,dot33,dot34,dot35,dot36,dot37,dot38,dot39,dot40,dot41
+        };
+
     }
+
+    private void setDot(){
+        for (ImageView dot: dots){
+            dot.setVisibility(View.INVISIBLE);
+        }
+        DBManager sibal= new DBManager(this);
+        ArrayList<ScheduleDTO> items= new ArrayList<>();
+        Log.i("asdf",new PrefManager(this).getUserInfo().get("id"));
+        Date now= new Date(calview.getDate());
+        int year= now.getYear();
+        year= Integer.parseInt("20"+(year+"").substring(1));
+        int month= now.getMonth();
+
+        items= sibal.setDot(
+          new PrefManager(this).getUserInfo().get("id"),year,month+1
+        );
+        if (items== null){
+            return;
+        }
+
+        String leftOrRight = null;
+        if (stat == 0) {
+            leftOrRight = null;
+        } else if (stat == 1) {
+            leftOrRight = "left";
+        } else if (stat == 2) {
+            leftOrRight = "right";
+        }
+        int startdate = test(leftOrRight)-2; //5
+        for (ScheduleDTO dto: items) {
+            String startdatee= dto.getStartdate();
+            String[] dateArr = startdatee.split("-"); //index 0년 1월 2일
+            Log.i("asdf","dot:"+(startdate+Integer.parseInt(dateArr[2])));
+            Log.i("asdf","date:"+dateArr[2]);
+            dots[startdate+Integer.parseInt(dateArr[2])].setVisibility(View.VISIBLE);
+
+            }
+        }
 }
