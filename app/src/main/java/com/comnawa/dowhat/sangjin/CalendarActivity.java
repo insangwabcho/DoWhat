@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -64,7 +65,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
     private static final int RESULT_SPEECH = 1;
     private Intent i;
     private float x; //좌표
-    private int stat; //캘린더뷰 넘길때 왼쪽 오른쪽 ( 0 default, 1 left, 2 right )
+    private int stat=0; //캘린더뷰 넘길때 왼쪽 오른쪽 ( 0 default, 1 left, 2 right )
 
     private void SettingListview() {
         adapter = new ScheduleAdapter(CalendarActivity.this, R.layout.layout, items);
@@ -133,23 +134,23 @@ public class CalendarActivity extends ListActivity implements Serializable {
         return super.onKeyDown(keyCode, event);
     }
 
+    float a, b;
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction()== MotionEvent.ACTION_DOWN){
-            x= ev.getX();
-        } else if (ev.getAction()== MotionEvent.ACTION_UP){
-            if (x- ev.getX() < 0) { //왼쪽으로 넘길때
-                Log.i("asdf","왼쪽");
-                Log.i("adsf",x-ev.getX()+"");
-                stat= 1;
-            } else if (x- ev.getX() > 0) { //오른쪽으로 넘길때
-                Log.i("asdf","오른쪽");
-                Log.i("adsf",x-ev.getX()+"");
-                stat= 2;
-            }
+            a= ev.getX();
+            Log.i("page","page"+ev.getX());
         }
+        float last= ev.getX()-a;
+        Log.i("asdf","last:"+last+"");
+
+        if (last < -20 || last > 20){
+            return false;
+        }
+
         return super.dispatchTouchEvent(ev);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -562,6 +563,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         7 토
          */
         int startDatee= cal.get(Calendar.DAY_OF_WEEK);
+        Log.i("startdatee",startDatee+"");
         return startDatee;
     }
 
@@ -695,5 +697,13 @@ public class CalendarActivity extends ListActivity implements Serializable {
             dots[startdate+Integer.parseInt(dateArr[2])].setVisibility(View.VISIBLE);
 
             }
+        }
+
+        class CustomCalendar extends CalendarView {
+            public CustomCalendar(@NonNull Context context) {
+                super(context);
+            }
+
+
         }
 }
