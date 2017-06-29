@@ -1,10 +1,8 @@
 package com.comnawa.dowhat.insang;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -96,6 +94,7 @@ public class Preferences extends android.preference.PreferenceActivity {
             Toast.makeText(ac, "인터넷에 연결되어있지 않습니다.", Toast.LENGTH_SHORT).show();
             return false;
           }else{
+            restoreOrBackup="백업";
             Network nw = new Network();
             nw.execute();
           }
