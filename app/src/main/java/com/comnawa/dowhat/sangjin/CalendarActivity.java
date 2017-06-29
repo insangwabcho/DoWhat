@@ -54,7 +54,15 @@ public class CalendarActivity extends ListActivity implements Serializable {
     DBManager dbManager;
     ScheduleAdapter adapter;
     boolean isClick;
-    ImageView[] dots;
+    ImageView dot0;
+    ImageView dot1;
+    ImageView dot2;
+    ImageView dot3;
+    ImageView dot4;
+    ImageView dot5;
+    ImageView dot6;
+    ImageView dot7;
+    ImageView dot8;
 
     private static final int RESULT_SPEECH = 1;
     private Intent i;
@@ -163,7 +171,9 @@ public class CalendarActivity extends ListActivity implements Serializable {
         btnMic = (ImageView) findViewById(R.id.btnMic);
         btnSet = (ImageView) findViewById(R.id.btnSet);
         calview = (CalendarView) findViewById(R.id.calview);
+
         dotsConn();
+
         calview.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
@@ -517,6 +527,33 @@ public class CalendarActivity extends ListActivity implements Serializable {
     }
 
     private void dotsConn(){
-//        dots[0]= (ImageView)findViewById(android.R.id.accessibilityActionContextClick);
+        dot0= (ImageView)findViewById(R.id.dot0);
+        dot0.setImageResource(R.drawable.dot);
+        dot0.setVisibility(View.VISIBLE);
+        dot1= (ImageView)findViewById(R.id.dot1);
+        dot1.setImageResource(R.drawable.dot);
+        dot1.setVisibility(View.VISIBLE);
+        dot2= (ImageView)findViewById(R.id.dot2);
+        dot2.setImageResource(R.drawable.dot);
+        dot2.setVisibility(View.VISIBLE);
+        dot3= (ImageView)findViewById(R.id.dot3);
+        dot3.setImageResource(R.drawable.dot);
+        dot3.setVisibility(View.VISIBLE);
+        dot4= (ImageView)findViewById(R.id.dot4);
+        dot4.setImageResource(R.drawable.dot);
+        dot4.setVisibility(View.VISIBLE);
+        dot5= (ImageView)findViewById(R.id.dot5);
+        dot5.setImageResource(R.drawable.dot);
+        dot5.setVisibility(View.VISIBLE);
+        dot6= (ImageView)findViewById(R.id.dot6);
+        dot6.setImageResource(R.drawable.dot);
+        dot6.setVisibility(View.VISIBLE);
+        dot7= (ImageView)findViewById(R.id.dot7);
+        dot7.setImageResource(R.drawable.dot);
+        dot7.setVisibility(View.VISIBLE);
+        dot8= (ImageView)findViewById(R.id.dot8);
+        dot8.setImageResource(R.drawable.dot);
+        dot8.setVisibility(View.VISIBLE);
+
     }
 }
