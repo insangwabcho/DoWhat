@@ -80,20 +80,32 @@ public class DetailActivity extends AppCompatActivity {
                 Toast.makeText(this, "일정이 입력되지 않았습니다.", Toast.LENGTH_SHORT).show();
             } else {
                 ScheduleDTO dto = new ScheduleDTO();
+                if(event==null | event.equals("")){
+                    event="-";
+                }
+                String edmm=editMemo.getText().toString();
+                if(edmm==null | edmm.equals("")){
+                    edmm="-";
+                }
+                if(event==null | event.equals("")){
+                    event="-";
+                }
+                String edpc=editPlace.getText().toString();
+                if(edpc==null | edpc.equals("")){
+                    edpc="-";
+                }
                 dto.setNum(Num);
                 dto.setId(new PrefManager(this).getUserInfo().get("id"));
                 dto.setTitle(editTitle.getText().toString());
                 dto.setEvent(event);
                 dto.setStartdate(txtSdate.getText().toString());
-                dto.setPlace(editPlace.getText().toString());
+                dto.setPlace(edpc);
                 dto.setEnddate(txtEdate.getText().toString());
                 dto.setStarttime(DBstime);
                 dto.setEndtime(DBetime);
-                dto.setMemo(editMemo.getText().toString());
+                dto.setMemo(edmm);
                 dto.setAlarm(alarm);
                 dto.setRepeat(repeat);
-                Log.i("test:", dto.toString());
-
                 DBManager dbManager = new DBManager(this);
                 if (check) { //신규
                     dbManager.insertSchedule(dto);
@@ -208,7 +220,7 @@ public class DetailActivity extends AppCompatActivity {
             ScheduleDTO dto = CalendarActivity.items.get(index);
             Num = dto.getNum();
             editTitle.setText(dto.getTitle());
-            if (dto.getPlace() == null || dto.getPlace().equals("null")) {
+            if (dto.getPlace().equals("-")) {
                 editPlace.setText("");
             } else {
                 editPlace.setText(dto.getPlace());
@@ -229,7 +241,7 @@ public class DetailActivity extends AppCompatActivity {
                 spinner.setSelection(0);
             }
 
-            if (dto.getMemo() == null || dto.getMemo().equals("null")) {
+            if (dto.getMemo().equals("-")) {
                 editMemo.setText("");
             } else {
                 editMemo.setText(dto.getMemo());
