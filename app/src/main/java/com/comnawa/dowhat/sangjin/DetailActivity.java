@@ -26,6 +26,7 @@ import com.comnawa.dowhat.insang.DBManager;
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.insang.Preferences;
+import com.comnawa.dowhat.kwanwoo.PositionActivity;
 
 import java.util.ArrayList;
 
@@ -179,12 +180,13 @@ public class DetailActivity extends AppCompatActivity {
         spinner = (Spinner) findViewById(R.id.spinner);
 
         //장소버튼 클릭 이벤트
-/*        btnPlace.setOnClickListener(new View.OnClickListener() {
+        btnPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent=new Intent(DetailActivity.this, PositionActivity.class);
+                startActivity(intent);
             }
-        });*/
+        });
 
         //친구버튼 클릭 이벤트
         btnFriend.setOnClickListener(new View.OnClickListener() {
@@ -194,6 +196,7 @@ public class DetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
         //데이트피커다이얼로그 생성(액티비티, 리스너, 년, 월, 일)
         Ddialog = new DatePickerDialog(this, listener2, dp.getYear(), dp.getMonth(), dp.getDayOfMonth());
