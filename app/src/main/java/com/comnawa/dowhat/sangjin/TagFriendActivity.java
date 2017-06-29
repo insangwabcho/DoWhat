@@ -34,7 +34,7 @@ import java.util.HashMap;
 
 public class TagFriendActivity extends AppCompatActivity implements Filterable {
     ArrayList<String> items; //내친구 목록
-    String tag=""; //태그된 친구이름 목록
+    String tag = ""; //태그된 친구이름 목록
     ArrayAdapter adapter; //아답터
     EditText editText; //검색바
     ListView listview1; //리스트뷰
@@ -63,16 +63,18 @@ public class TagFriendActivity extends AppCompatActivity implements Filterable {
             //액티비티를 종료시키고 선택한 친구를 DetailActivity의 editText에 set함
             SparseBooleanArray dd = new SparseBooleanArray();
             dd = listview1.getCheckedItemPositions();
-            for (int i=0; i<items.size(); i++){
-                if (dd.get(i)) {
-                    String[] arr = items.get(i).split("[(]");
-                    tag+= arr[0]+",";
+            if (dd.size() >= 1) {
+                for (int i = 0; i < items.size(); i++) {
+                    if (dd.get(i)) {
+                        String[] arr = items.get(i).split("[(]");
+                        tag += arr[0] + ",";
+                    }
                 }
+                tag = tag.substring(0, tag.length() - 1);
+                Log.i("tag", tag);
+                DetailActivity.editFriend.setText(tag);
+                finish();
             }
-            tag=tag.substring(0,tag.length()-1);
-            Log.i("tag",tag);
-            DetailActivity.editFriend.setText(tag);
-            finish();
         } else if (item.getItemId() == R.id.addFriend) { //친구 추가
             startActivity(new Intent(TagFriendActivity.this, AddFriendActivity.class));
         }

@@ -37,7 +37,7 @@ public class AddFriendActivity extends AppCompatActivity {
     ImageButton btnSearch; //검색버튼
     ListView listview1; //리스트뷰
 
-    Handler handler=new Handler(){
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -54,49 +54,51 @@ public class AddFriendActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId()== R.id.action_settings) {
+        if (item.getItemId() == R.id.action_settings) {
             startActivity(new Intent(AddFriendActivity.this, Preferences.class));
-        } else if (item.getItemId()== R.id.menu_add){ //추가 클릭시 코드
-            int idx= listview1.getCheckedItemPosition();
-            String choice= items.get(idx);
-            String[] arr= choice.split("[(]");
-            String name= arr[0];
-            String id= arr[1].substring(0,arr[1].length()-1);
-            String myId= new PrefManager(this).getUserInfo().get("id");
-            if (id.equals(myId)){
-                Toast.makeText(this, "자기 자신을 추가할 수 없습니다.", Toast.LENGTH_SHORT).show();
-                return false;
-            }
+        } else if (item.getItemId() == R.id.menu_add) { //추가 클릭시 코드
+            int idx = listview1.getCheckedItemPosition();
+            if (idx == 1) {
+                String choice = items.get(idx);
+                String[] arr = choice.split("[(]");
+                String name = arr[0];
+                String id = arr[1].substring(0, arr[1].length() - 1);
+                String myId = new PrefManager(this).getUserInfo().get("id");
+                if (id.equals(myId)) {
+                    Toast.makeText(this, "자기 자신을 추가할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
 
-            //서버로 보낼 친구추가 코드
-            //addfriend.do
+                //서버로 보낼 친구추가 코드
+                //addfriend.do
 
-            ArrayList<String> friendList= new ArrayList<>();
-            GetFriend gf= new GetFriend(this,myId,friendList);
-            gf.start();
-            try {
-                gf.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            String friendid= "";
-            for (String t: friendList){
-                friendid+= t;
-                friendid+=",";
-            }
-            friendid+= choice;
+                ArrayList<String> friendList = new ArrayList<>();
+                GetFriend gf = new GetFriend(this, myId, friendList);
+                gf.start();
+                try {
+                    gf.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                String friendid = "";
+                for (String t : friendList) {
+                    friendid += t;
+                    friendid += ",";
+                }
+                friendid += choice;
 
-            AddFriend af= new AddFriend(this, myId, friendid);
-            af.start();
-            try {
-                af.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                AddFriend af = new AddFriend(this, myId, friendid);
+                af.start();
+                try {
+                    af.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //푸시메세지 코드
+                DoWhat.sendPushMsg(this, name + "님께서 친구로 추가하셨습니다.", id);
+                Toast.makeText(this, "친구로 추가되었습니다.", Toast.LENGTH_SHORT).show();
             }
-            //푸시메세지 코드
-            DoWhat.sendPushMsg(this,name+"님께서 친구로 추가하셨습니다.",id);
         }
-        Toast.makeText(this, "친구로 추가되었습니다.", Toast.LENGTH_SHORT).show();
         return false;
     }
 
@@ -114,44 +116,46 @@ public class AddFriendActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            items = new ArrayList<String>();
-                            String page = Common.SERVER_URL + "/Dowhat/Member_servlet/idcheck.do";
-                            HashMap<String, String> map = new HashMap<String, String>();
-                            map.put("id", editText.getText().toString());
-                            String body= JsonObject.objectType(page, map);
-                            JSONObject jsonObj = new JSONObject(body);
-                            Log.i("body",body);
-                            JSONArray jArray = (JSONArray) jsonObj.get("sendData");
-                            JSONObject jsonMain = (JSONObject) jArray.get(0);
-                            Log.i("jsonObj:",jsonObj.toString()+"");
-                            if (jsonMain.get("id").equals("success")) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(AddFriendActivity.this, "존재하지 않는 회원입니다.", Toast.LENGTH_SHORT).show();
+                if (!editText.getText().toString().equals("")) {
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                items = new ArrayList<String>();
+                                String page = Common.SERVER_URL + "/Dowhat/Member_servlet/idcheck.do";
+                                HashMap<String, String> map = new HashMap<String, String>();
+                                map.put("id", editText.getText().toString());
+                                String body = JsonObject.objectType(page, map);
+                                JSONObject jsonObj = new JSONObject(body);
+                                Log.i("body", body);
+                                JSONArray jArray = (JSONArray) jsonObj.get("sendData");
+                                JSONObject jsonMain = (JSONObject) jArray.get(0);
+                                Log.i("jsonObj:", jsonObj.toString() + "");
+                                if (jsonMain.get("id").equals("success")) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(AddFriendActivity.this, "존재하지 않는 회원입니다.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } else {
+                                    if (jsonMain.getString("id").equals(
+                                            new PrefManager(AddFriendActivity.this).getUserInfo().get("id"))) {
+                                        return;
                                     }
-                                });
-                            } else {
-                                if (jsonMain.getString("id").equals(
-                                  new PrefManager(AddFriendActivity.this).getUserInfo().get("id"))){
-                                    return;
+                                    MemberDTO dto = new MemberDTO();
+                                    dto.setFriendId(jsonMain.getString("id"));
+                                    dto.setFriendName(jsonMain.getString("name"));
+                                    items.add(dto.getFriendName() + "(" + dto.getFriendId() + ")");
+                                    handler.sendEmptyMessage(0);
                                 }
-                                MemberDTO dto=new MemberDTO();
-                                dto.setFriendId(jsonMain.getString("id"));
-                                dto.setFriendName(jsonMain.getString("name"));
-                                items.add(dto.getFriendName()+"("+dto.getFriendId()+")");
-                                handler.sendEmptyMessage(0);
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
-                    }
-                });
-                thread.start();
+                    });
+                    thread.start();
+                }
             }
         });
     }
