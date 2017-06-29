@@ -106,6 +106,7 @@ public class AddFriendActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로로 고정
+        getSupportActionBar().setTitle("친구 찾기");
         setContentView(R.layout.freindsearch);
         listview1 = (ListView) findViewById(R.id.listview1);
         editText = (EditText) findViewById(R.id.editText);
