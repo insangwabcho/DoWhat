@@ -311,7 +311,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                                 STT();
                             } else {
                                 DoWhat.checkPermission(CalendarActivity.this, DoWhat.record_audio);
-                                Toast.makeText(CalendarActivity.this, "권한허용 후 다시시도.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(CalendarActivity.this, "음성인식 기능이 활성화 되었습니다.", Toast.LENGTH_LONG).show();
                             }
                         }
                     });

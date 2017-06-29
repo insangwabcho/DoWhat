@@ -85,7 +85,7 @@ public class TagFriendActivity extends AppCompatActivity implements Filterable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로로 고정
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("일행 추가");
         setContentView(R.layout.freindtag);
         listview1 = (ListView) findViewById(R.id.listview1);
         editText = (EditText) findViewById(R.id.editText);
