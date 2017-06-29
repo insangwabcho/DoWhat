@@ -135,11 +135,22 @@ public class CalendarActivity extends ListActivity implements Serializable {
     }
 
     float a, b;
+    // 오른쪽 화살표 왼쪽 856, 오른쪽 1002 || 왼쪽 화살표 왼쪽 77 오른쪽 218
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction()== MotionEvent.ACTION_DOWN){
             a= ev.getX();
-            Log.i("page","page"+ev.getX());
+                Log.i("page", "page" + ev.getX());
+            if (ev.getX() >77f && ev.getX() < 218f){
+                Log.i("monthh",ev.getX()+"1");
+                stat= 1;
+            } else if (ev.getX() > 856f && ev.getX() < 1002f){
+                Log.i("monthh",ev.getX()+"2");
+                stat= 2;
+            } else {
+                Log.i("monthh",ev.getX()+"3");
+                stat= 0;
+            }
         }
         float last= ev.getX()-a;
         Log.i("asdf","last:"+last+"");
@@ -200,14 +211,17 @@ public class CalendarActivity extends ListActivity implements Serializable {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 if (stat== 1){
-                    Log.i("asdf","화면왼쪽");
+                    monthh-=1;
                 } else if (stat == 2){
-                    Log.i("asdf","화면오른쪽");
+                    monthh+=1;
                 }
+                setDot();
             }
         });
         dotsConn();
         setDot();
+        Date now= new Date(calview.getDate());
+        monthh=now.getMonth();
 
         //pushTokken 업데이트
         FirebaseApp.initializeApp(this);
@@ -312,7 +326,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                                 STT();
                             } else {
                                 DoWhat.checkPermission(CalendarActivity.this, DoWhat.record_audio);
-                                Toast.makeText(CalendarActivity.this, "음성인식 기능이 활성화 되었습니다.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(CalendarActivity.this, "권한허용 후 다시시도.", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -539,17 +553,9 @@ public class CalendarActivity extends ListActivity implements Serializable {
         Date now= new Date(calview.getDate());
         int year= now.getYear();
         year= Integer.parseInt("20"+(year+"").substring(1));
-        int month= now.getMonth();
-        if (leftOrRight== null){
-            month= month;
-        } else if (leftOrRight.equals("left")){
-            month-= 1;
-        } else if (leftOrRight.equals("right")){
-            month+=1;
-        }
         int date= now.getDate();
         cal.set(Calendar.YEAR,year);
-        cal.set(Calendar.MONTH,month);
+        cal.set(Calendar.MONTH,monthh);
         cal.set(Calendar.DATE,date);
 
 
@@ -661,22 +667,22 @@ public class CalendarActivity extends ListActivity implements Serializable {
 
     }
 
-    private void setDot(){
-        for (ImageView dot: dots){
+    int monthh;
+    private void setDot() {
+        for (ImageView dot : dots) {
             dot.setVisibility(View.INVISIBLE);
         }
-        DBManager sibal= new DBManager(this);
-        ArrayList<ScheduleDTO> items= new ArrayList<>();
-        Log.i("asdf",new PrefManager(this).getUserInfo().get("id"));
-        Date now= new Date(calview.getDate());
-        int year= now.getYear();
-        year= Integer.parseInt("20"+(year+"").substring(1));
-        int month= now.getMonth();
-
-        items= sibal.setDot(
-          new PrefManager(this).getUserInfo().get("id"),year,month+1
+        DBManager sibal = new DBManager(this);
+        Log.i("asdf", new PrefManager(this).getUserInfo().get("id"));
+        Date now = new Date(calview.getDate());
+        int year = now.getYear();
+        year = Integer.parseInt("20" + (year + "").substring(1));
+        Log.i("monthh", (monthh + 1) + "");
+        Log.i("monthh", "stat:" + stat + "");
+        final ArrayList<ScheduleDTO> items = sibal.setDot(
+          new PrefManager(this).getUserInfo().get("id"), year, monthh + 1
         );
-        if (items== null){
+        if (items == null) {
             return;
         }
 
@@ -688,16 +694,17 @@ public class CalendarActivity extends ListActivity implements Serializable {
         } else if (stat == 2) {
             leftOrRight = "right";
         }
-        int startdate = test(leftOrRight)-2; //5
-        for (ScheduleDTO dto: items) {
-            String startdatee= dto.getStartdate();
-            String[] dateArr = startdatee.split("-"); //index 0년 1월 2일
-            Log.i("asdf","dot:"+(startdate+Integer.parseInt(dateArr[2])));
-            Log.i("asdf","date:"+dateArr[2]);
-            dots[startdate+Integer.parseInt(dateArr[2])].setVisibility(View.VISIBLE);
-
+        final int startdate = test(leftOrRight) - 2; //5
+        Log.i("monthh", items.toString());
+        Log.i("monthh", "startdate" + startdate);
+            for (ScheduleDTO dto : items) {
+                String startdatee = dto.getStartdate();
+                String[] dateArr = startdatee.split("-"); //index 0년 1월 2일
+                Log.i("asdf", "dot:" + (startdate + Integer.parseInt(dateArr[2])));
+                Log.i("asdf", "date:" + dateArr[2]);
+                dots[startdate + Integer.parseInt(dateArr[2])].setVisibility(View.VISIBLE);
             }
-        }
+    }
 
         class CustomCalendar extends CalendarView {
             public CustomCalendar(@NonNull Context context) {
