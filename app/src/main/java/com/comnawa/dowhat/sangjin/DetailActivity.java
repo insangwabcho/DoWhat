@@ -74,55 +74,59 @@ public class DetailActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_settings) {
             startActivity(new Intent(DetailActivity.this, Preferences.class));
         } else if (item.getItemId() == R.id.menu_select) {
+            String t=editTitle.getText().toString();
+            if (t.equals("")) {
+                Toast.makeText(this, "일정이 입력되지 않았습니다.", Toast.LENGTH_SHORT).show();
+            } else {
+                ScheduleDTO dto = new ScheduleDTO();
+                dto.setNum(Num);
+                dto.setId(new PrefManager(this).getUserInfo().get("id"));
+                dto.setTitle(editTitle.getText().toString());
+                dto.setEvent(event);
+                dto.setStartdate(txtSdate.getText().toString());
+                dto.setPlace(editPlace.getText().toString());
+                dto.setEnddate(txtEdate.getText().toString());
+                dto.setStarttime(DBstime);
+                dto.setEndtime(DBetime);
+                dto.setMemo(editMemo.getText().toString());
+                dto.setAlarm(alarm);
+                dto.setRepeat(repeat);
+                Log.i("test:", dto.toString());
 
-            ScheduleDTO dto = new ScheduleDTO();
-            dto.setNum(Num);
-            dto.setId(new PrefManager(this).getUserInfo().get("id"));
-            dto.setTitle(editTitle.getText().toString());
-            dto.setEvent(event);
-            dto.setStartdate(txtSdate.getText().toString());
-            dto.setPlace(editPlace.getText().toString());
-            dto.setEnddate(txtEdate.getText().toString());
-            dto.setStarttime(DBstime);
-            dto.setEndtime(DBetime);
-            dto.setMemo(editMemo.getText().toString());
-            dto.setAlarm(alarm);
-            dto.setRepeat(repeat);
-            Log.i("test:", dto.toString());
+                DBManager dbManager = new DBManager(this);
+                if (check) { //신규
+                    dbManager.insertSchedule(dto);
 
-            DBManager dbManager = new DBManager(this);
-            if (check) { //신규
-                dbManager.insertSchedule(dto);
+                    //신규설정한 날짜 startdate를  putExtra로 넣어서 CalendarActivity에 보내주고 finish()
+                    Intent intent = new Intent(this, CalendarActivity.class);
+                    intent.putExtra("sdate", txtSdate.getText().toString());
+                    intent.putExtra("newMod", true);
+                    intent.putExtra("cbAlarm", "설정");
+                    if (cbAlarm.getText().toString().equals("설정")) {
+                        DoWhat.resetAlarm(this, intent, check);
+                    } else {
+                        Toast.makeText(this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
+                        finish();
+                    }
 
-                //신규설정한 날짜 startdate를  putExtra로 넣어서 CalendarActivity에 보내주고 finish()
-                Intent intent = new Intent(this, CalendarActivity.class);
-                intent.putExtra("sdate", txtSdate.getText().toString());
-                intent.putExtra("newMod", true);
-                intent.putExtra("cbAlarm", "설정");
-                if (cbAlarm.getText().toString().equals("설정")) {
+                    //              UpdateNewSchedule uns= new UpdateNewSchedule(this,true,dto);
+                    //              uns.start();
+                } else { //수정
+                    dbManager.updateSchedule(dto);
+
+                    //수정한 날짜 startdate를 putExtra로 넣어서 CalendarActivity에 보내주고 실행 후 finish()
+                    Intent intent = new Intent(this, CalendarActivity.class);
+                    intent.putExtra("sdate", txtSdate.getText().toString());
+                    intent.putExtra("newMod", false);
+                    intent.putExtra("cbAlarm", cbAlarm.getText().toString());
                     DoWhat.resetAlarm(this, intent, check);
-                } else {
-                    Toast.makeText(this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
-                    startActivity(intent);
-                    finish();
+
+                    //              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
+                    //              uns.start();
                 }
 
-                //              UpdateNewSchedule uns= new UpdateNewSchedule(this,true,dto);
-                //              uns.start();
-            } else { //수정
-                dbManager.updateSchedule(dto);
-
-                //수정한 날짜 startdate를 putExtra로 넣어서 CalendarActivity에 보내주고 실행 후 finish()
-                Intent intent = new Intent(this, CalendarActivity.class);
-                intent.putExtra("sdate", txtSdate.getText().toString());
-                intent.putExtra("newMod", false);
-                intent.putExtra("cbAlarm", cbAlarm.getText().toString());
-                DoWhat.resetAlarm(this, intent, check);
-
-                //              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
-                //              uns.start();
             }
-
         }
         return false;
     }
