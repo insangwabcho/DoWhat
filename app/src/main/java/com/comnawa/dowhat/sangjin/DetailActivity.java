@@ -147,7 +147,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로로 고정
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_sangjin);
 
