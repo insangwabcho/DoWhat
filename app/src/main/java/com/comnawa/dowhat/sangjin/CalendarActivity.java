@@ -174,13 +174,6 @@ public class CalendarActivity extends ListActivity implements Serializable {
 
         dotsConn();
 
-        calview.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                Log.i("asdf","layout,"+v.toString());
-            }
-        });
-
         //pushTokken 업데이트
         FirebaseApp.initializeApp(this);
         new UpdateTokken(this, manager.getUserInfo().get("id"), FirebaseInstanceId.getInstance().getToken()).start();
