@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -679,10 +678,10 @@ public class CalendarActivity extends ListActivity implements Serializable {
         year = Integer.parseInt("20" + (year + "").substring(1));
         Log.i("monthh", (monthh + 1) + "");
         Log.i("monthh", "stat:" + stat + "");
-        final ArrayList<ScheduleDTO> items = sibal.setDot(
+        final ArrayList<ScheduleDTO> lists = sibal.setDot(
           new PrefManager(this).getUserInfo().get("id"), year, monthh + 1
         );
-        if (items == null) {
+        if (lists == null) {
             return;
         }
 
@@ -695,9 +694,9 @@ public class CalendarActivity extends ListActivity implements Serializable {
             leftOrRight = "right";
         }
         final int startdate = test(leftOrRight) - 2; //5
-        Log.i("monthh", items.toString());
+        Log.i("monthh", lists.toString());
         Log.i("monthh", "startdate" + startdate);
-            for (ScheduleDTO dto : items) {
+            for (ScheduleDTO dto : lists) {
                 String startdatee = dto.getStartdate();
                 String[] dateArr = startdatee.split("-"); //index 0년 1월 2일
                 Log.i("asdf", "dot:" + (startdate + Integer.parseInt(dateArr[2])));
@@ -705,12 +704,4 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 dots[startdate + Integer.parseInt(dateArr[2])].setVisibility(View.VISIBLE);
             }
     }
-
-        class CustomCalendar extends CalendarView {
-            public CustomCalendar(@NonNull Context context) {
-                super(context);
-            }
-
-
-        }
 }
