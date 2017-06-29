@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
+import com.comnawa.dowhat.insang.AddFriend;
 import com.comnawa.dowhat.insang.DBManager;
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.PrefManager;
@@ -94,17 +95,17 @@ public class CalendarActivity extends ListActivity implements Serializable {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         //빽(취소)키가 눌렸을때 종료여부를 묻는 다이얼로그 띄움
-        if((keyCode == KeyEvent.KEYCODE_BACK)) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             AlertDialog.Builder d = new AlertDialog.Builder(this);
             d.setTitle("안내");
             d.setMessage("프로그램을 종료하시겠습니까?");
-            d.setPositiveButton("예",new DialogInterface.OnClickListener() {
+            d.setPositiveButton("예", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     finish();
                 }
             });
-            d.setNegativeButton("아니요",new DialogInterface.OnClickListener() {
+            d.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
@@ -124,8 +125,11 @@ public class CalendarActivity extends ListActivity implements Serializable {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //저장버튼을 눌렀을때 처리
-        if (item.getItemId() == R.id.action_settings) {
+        //친구추가 버튼을 눌렀을때 처리
+        if (item.getItemId() == R.id.addFriend) {
+            startActivity(new Intent(CalendarActivity.this, AddFriend.class));
+            //저장버튼을 눌렀을때 처리
+        } else if (item.getItemId() == R.id.action_settings) {
             startActivity(new Intent(CalendarActivity.this, Preferences.class));
         }
         return true;
@@ -203,7 +207,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
             //오늘날짜로 StartDay() 함수 실행
             SetYMD(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
 
-        }else { //그렇지 않다면
+        } else { //그렇지 않다면
             //putExtra로 담아준 sdate변수값 가져오기
             String sdate = getIntent().getStringExtra("sdate");
             //넘어온값은 2017-12-12 형식이기때문에 -로 스플릿
@@ -258,7 +262,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
 
                             if (permissionResult == PackageManager.PERMISSION_GRANTED) {
                                 STT();
-                            }else{
+                            } else {
                                 DoWhat.checkPermission(CalendarActivity.this, DoWhat.record_audio);
                                 Toast.makeText(CalendarActivity.this, "권한허용 후 다시시도.", Toast.LENGTH_LONG).show();
                             }
@@ -268,8 +272,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                     btnSet.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            /*Intent intent=new Intent(CalendarActivity.this, Preferences.class);*/
-                            Intent intent=new Intent(CalendarActivity.this, AddFriendActivity.class);
+                            Intent intent = new Intent(CalendarActivity.this, Preferences.class);
                             startActivity(intent);
                         }
                     });
@@ -290,9 +293,9 @@ public class CalendarActivity extends ListActivity implements Serializable {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
                 SetYMD(year, month, day);
-                Log.i("getx:",calview.getX()+"");
-                Log.i("getWidth:",calview.getWidth()+"");
-                Log.i("getHeight:",calview.getHeight()+"");
+                Log.i("getx:", calview.getX() + "");
+                Log.i("getWidth:", calview.getWidth() + "");
+                Log.i("getHeight:", calview.getHeight() + "");
             }
         });
     }
@@ -301,7 +304,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         i.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
         i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
-        i.putExtra(RecognizerIntent.EXTRA_PROMPT, '"'+"장소"+'"'+" 에서 "+'"'+"일정"+'"'+"\nex)"+'"'+"공원"+'"'+" 에서 "+'"'+"산책하기"+'"');
+        i.putExtra(RecognizerIntent.EXTRA_PROMPT, '"' + "장소" + '"' + " 에서 " + '"' + "일정" + '"' + "\nex)" + '"' + "공원" + '"' + " 에서 " + '"' + "산책하기" + '"');
 
         Toast.makeText(CalendarActivity.this, "음성인식 시작", Toast.LENGTH_SHORT).show();
 
@@ -355,7 +358,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 AlertDialog alertDialog = ab.create();
                 alertDialog.show();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, "인터넷 연결 상태를 확인하세요.", Toast.LENGTH_SHORT).show();
         }
@@ -455,7 +458,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
     }
 
     //날짜세팅 메소드
-    private void SetYMD(int year, int month, int day){
+    private void SetYMD(int year, int month, int day) {
         final String id = new PrefManager(CalendarActivity.this).getUserInfo().get("id");
         String n = String.valueOf(year);
         String w = String.valueOf(month + 1);
