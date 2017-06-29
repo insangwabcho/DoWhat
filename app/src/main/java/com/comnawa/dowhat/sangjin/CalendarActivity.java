@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
@@ -103,7 +104,6 @@ public class CalendarActivity extends ListActivity implements Serializable {
 
     @Override
     protected void onResume() {
-        setDot();
         super.onResume();
     }
 
@@ -192,6 +192,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
     }
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로 고정
@@ -219,8 +220,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         });
         dotsConn();
         setDot();
-        Date now= new Date(calview.getDate());
-        monthh=now.getMonth();
+
 
         //pushTokken 업데이트
         FirebaseApp.initializeApp(this);
@@ -267,7 +267,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         if (getIntent().getStringExtra("sdate") == null || getIntent().getStringExtra("sdate").equals("null")) {
             //오늘날짜로 StartDay() 함수 실행
             SetYMD(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-
+            monthh= cal.get(Calendar.MONTH);
         } else { //그렇지 않다면
             //putExtra로 담아준 sdate변수값 가져오기
             String sdate = getIntent().getStringExtra("sdate");
@@ -276,6 +276,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
             //받아온 년,월-1,일로 날자 세팅 후 StartDay() 실행
             int year = Integer.parseInt(days[0]);
             int month = Integer.parseInt(days[1]) - 1;
+            monthh= month;
             int day = Integer.parseInt(days[2]);
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, year);
@@ -284,6 +285,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
             long setdate = calendar.getTimeInMillis();
             calview.setDate(setdate, true, true);
             SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
+            setDot();
         }
         //
         btnPlus.setImageResource(R.drawable.plus);
@@ -549,13 +551,11 @@ public class CalendarActivity extends ListActivity implements Serializable {
 
     private int test(@Nullable String leftOrRight){
         Calendar cal= Calendar.getInstance();
-        Date now= new Date(calview.getDate());
-        int year= now.getYear();
+        int year= cal.get(Calendar.YEAR);
         year= Integer.parseInt("20"+(year+"").substring(1));
-        int date= now.getDate();
         cal.set(Calendar.YEAR,year);
         cal.set(Calendar.MONTH,monthh);
-        cal.set(Calendar.DATE,date);
+        cal.set(Calendar.DATE,1);
 
 
         /*
@@ -694,6 +694,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
             leftOrRight = "right";
         }
         final int startdate = test(leftOrRight) - 2; //5
+        DotAnimation dotAnimation= new DotAnimation();
+        Animation anim= dotAnimation.alphaOn(0f,0f);
         Log.i("monthh", lists.toString());
         Log.i("monthh", "startdate" + startdate);
             for (ScheduleDTO dto : lists) {
@@ -701,6 +703,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 String[] dateArr = startdatee.split("-"); //index 0년 1월 2일
                 Log.i("asdf", "dot:" + (startdate + Integer.parseInt(dateArr[2])));
                 Log.i("asdf", "date:" + dateArr[2]);
+                dots[startdate + Integer.parseInt(dateArr[2])].setAnimation(anim);
+                dots[startdate + Integer.parseInt(dateArr[2])].startAnimation(anim);
                 dots[startdate + Integer.parseInt(dateArr[2])].setVisibility(View.VISIBLE);
             }
     }
