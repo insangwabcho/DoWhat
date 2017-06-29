@@ -39,6 +39,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 
@@ -53,6 +54,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
     DBManager dbManager;
     ScheduleAdapter adapter;
     boolean isClick;
+    ImageView[] dots;
 
     private static final int RESULT_SPEECH = 1;
     private Intent i;
@@ -161,10 +163,18 @@ public class CalendarActivity extends ListActivity implements Serializable {
         btnMic = (ImageView) findViewById(R.id.btnMic);
         btnSet = (ImageView) findViewById(R.id.btnSet);
         calview = (CalendarView) findViewById(R.id.calview);
+        dotsConn();
+        calview.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                Log.i("asdf","layout,"+v.toString());
+            }
+        });
 
         //pushTokken 업데이트
         FirebaseApp.initializeApp(this);
         new UpdateTokken(this, manager.getUserInfo().get("id"), FirebaseInstanceId.getInstance().getToken()).start();
+        test();
 
 
 /*        calview.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
@@ -483,4 +493,30 @@ public class CalendarActivity extends ListActivity implements Serializable {
         SettingListview();
     }
 
+    private void test(){
+        Calendar cal= Calendar.getInstance();
+        Date now= new Date(calview.getDate());
+        int year= now.getYear();
+        year= Integer.parseInt("20"+(year+"").substring(1));
+        int month= now.getMonth();
+        int date= now.getDate();
+        cal.set(Calendar.YEAR,year);
+        cal.set(Calendar.MONTH,month);
+        cal.set(Calendar.DATE,date);
+
+        /*
+        1 일
+        2 월
+        3 화
+        4 수
+        5 목
+        6 금
+        7 토
+         */
+        int startDatee= cal.get(Calendar.DAY_OF_WEEK);
+    }
+
+    private void dotsConn(){
+//        dots[0]= (ImageView)findViewById(android.R.id.accessibilityActionContextClick);
+    }
 }
