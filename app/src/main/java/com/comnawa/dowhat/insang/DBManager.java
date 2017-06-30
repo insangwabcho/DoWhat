@@ -101,8 +101,9 @@ public class DBManager {
           "place varchar(50)," +
           "memo varchar(50)," +
           "alarm integer," +
-          "repeat integer" +
-          "requestcode integer)";
+          "repeat integer," +
+          "requestcode integer," +
+          "tag varchar(100))";
 //    String sql="drop table schedule";
       SQLiteDatabase db= getWritableDatabase();
       try {
@@ -145,6 +146,7 @@ public class DBManager {
         dto.setMemo(rs.getString(9));
         dto.setAlarm(rs.getInt(10));
         dto.setRepeat(rs.getInt(11));
+        dto.setTag(rs.getString(12));
         items.add(dto);
       }
       return items;
@@ -174,6 +176,7 @@ public class DBManager {
         dto.setMemo(rs.getString(9));
         dto.setAlarm(rs.getInt(10));
         dto.setRepeat(rs.getInt(11));
+        dto.setTag(rs.getString(12));
         Log.i("dto",dto.toString());
         items.add(dto);
       }
@@ -206,6 +209,7 @@ public class DBManager {
         dto.setMemo(rs.getString(9));
         dto.setAlarm(rs.getInt(10));
         dto.setRepeat(rs.getInt(11));
+        dto.setTag(rs.getString(12));
         Log.i("dto",dto.toString());
         items.add(dto);
       }
@@ -231,6 +235,7 @@ public class DBManager {
         dto.setMemo(rs.getString(9));
         dto.setAlarm(rs.getInt(10));
         dto.setRepeat(rs.getInt(11));
+        dto.setTag(rs.getString(12));
         items.add(dto);
       }
       return items;
@@ -252,11 +257,12 @@ public class DBManager {
     public void insert(ScheduleDTO dto) {
       SQLiteDatabase db = getWritableDatabase();
       String sql1 = "insert into schedule (id, startdate, enddate, starttime, endtime," +
-        " title, event, place, memo, alarm, repeat) ";
+        " title, event, place, memo, alarm, repeat, tag) ";
       String sql2 = "values('" + dto.getId() + "','" + dto.getStartdate() + "','" +
         dto.getEnddate() + "','" + dto.getStarttime() + "','" + dto.getEndtime() + "','" +
         dto.getTitle() + "','" + dto.getEvent() + "','" +
-        dto.getPlace() + "','" + dto.getMemo() + "'," + dto.getAlarm() + "," + dto.getRepeat() + ")";
+        dto.getPlace() + "','" + dto.getMemo() + "'," + dto.getAlarm() + "," + dto.getRepeat() +
+        ","+ dto.getTag()+")";
       String sql = sql1 + sql2;
       Log.i("insert",sql);
       db.execSQL(sql);
@@ -269,7 +275,7 @@ public class DBManager {
         dto.getEnddate() + "', starttime='" + dto.getStarttime() + "', endtime='" + dto.getEndtime() + "', title='" +
         dto.getTitle() + "', event='" + dto.getEvent() + "', place='" +
         dto.getPlace() + "',memo='" + dto.getMemo() + "', alarm=" + dto.getAlarm() + ", repeat=" + dto.getRepeat() +
-        " where num=" + dto.getNum();
+        ", tag="+dto.getTag()+" where num=" + dto.getNum();
       Log.i("dto",dto.toString());
       db.execSQL(sql);
     }
