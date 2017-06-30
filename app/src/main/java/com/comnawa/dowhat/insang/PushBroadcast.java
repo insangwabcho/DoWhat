@@ -9,10 +9,10 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.os.PowerManager;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.comnawa.dowhat.R;
+import com.comnawa.dowhat.sangjin.CalendarActivity;
 
 public class PushBroadcast extends BroadcastReceiver {
 
@@ -69,18 +69,21 @@ public class PushBroadcast extends BroadcastReceiver {
 
     Intent intentt = null;
     if (dongjak==1){ // 친구추가
-      intent= new Intent(context, AddToFriend.class);
-      intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-      intent.putExtra("userid",userid);
-      intent.putExtra("username",username);
+      intentt= new Intent(context, CalendarActivity.class);
+      intentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+      intentt.putExtra("userid",userid);
+      intentt.putExtra("username",username);
     } else if (dongjak==2) { //일정추가
 
     }
 
-    PendingIntent contentIntent = PendingIntent.getActivity(context, 3,
-      intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    NotificationManager notificationManager =
+      (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+    PendingIntent contentIntent = PendingIntent.getActivity(context, 3,
+      intentt, PendingIntent.FLAG_UPDATE_CURRENT);
+
+    Notification.Builder builder = new Notification.Builder(context)
       .setWhen(System.currentTimeMillis())
       .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
       .setContentTitle("DoWhat")
@@ -93,10 +96,7 @@ public class PushBroadcast extends BroadcastReceiver {
       .setColor(0xff123456)
       .setPriority(Notification.PRIORITY_MAX);
 
-    NotificationManager notificationManager =
-      (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-    notificationManager.notify(3, mBuilder.build());
+    notificationManager.notify(3, builder.build());
 
   }
 }

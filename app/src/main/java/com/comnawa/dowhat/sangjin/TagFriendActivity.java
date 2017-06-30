@@ -1,10 +1,10 @@
 package com.comnawa.dowhat.sangjin;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -15,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -26,7 +25,6 @@ import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.sungwon.Common;
 import com.comnawa.dowhat.sungwon.JsonObject;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -149,6 +147,45 @@ public class TagFriendActivity extends AppCompatActivity implements Filterable {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    items = new ArrayList<String>();
+                    String page = Common.SERVER_URL + "/Dowhat/Member_servlet/findfriend.do";
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    map.put("id", id);
+                    String body = JsonObject.objectType(page, map);
+                    JSONObject jsonObj = new JSONObject(body);
+                    Log.i("body", body);
+                    if (jsonObj.get("sendData").equals("fail")) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(TagFriendActivity.this, "등록된 친구가 없습니다.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } else {
+                        String[] friendList = jsonObj.get("sendData").toString().split(",");
+                        for (int i = 0; i < friendList.length; i++) {
+                            if (friendList[i].equals("null") || friendList[i] == null) {
+                                continue;
+                            }
+                            items.add(friendList[i]);
+                        }
+                        handler.sendEmptyMessage(0);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
     }
 
     @Override

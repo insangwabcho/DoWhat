@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
+import com.comnawa.dowhat.insang.AddToFriend;
 import com.comnawa.dowhat.insang.DBManager;
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.PrefManager;
@@ -201,6 +202,13 @@ public class CalendarActivity extends ListActivity implements Serializable {
         DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로 고정
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar_sangjin);
+        if (getIntent().getStringExtra("userid")!= null){
+            Intent intent= new Intent(this, AddToFriend.class);
+            intent.putExtra("userid",getIntent().getStringExtra("userid"));
+            intent.putExtra("username",getIntent().getStringExtra("username"));
+            startActivity(intent);
+            finish();
+        }
         manager = new PrefManager(this);
         final HashMap<String, String> UserInfo = manager.getUserInfo();
         Log.i("Test2", manager.getUserInfo().toString());
