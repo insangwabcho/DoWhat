@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
+import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.sangjin.CalendarActivity;
 
@@ -30,6 +31,7 @@ public class confrimActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로로 고정
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.confrim);
 

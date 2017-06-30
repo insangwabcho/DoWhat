@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
+import com.comnawa.dowhat.insang.DoWhat;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,6 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로로 고정
         setContentView(R.layout.sign_up);
 
         editName = (EditText) findViewById(R.id.editName);
