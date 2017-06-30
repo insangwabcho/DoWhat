@@ -62,6 +62,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
               dot21,dot22,dot23,dot24,dot25,dot26,dot27,dot28,dot29,dot30,
               dot31,dot32,dot33,dot34,dot35,dot36,dot37,dot38,dot39,dot40,dot41;
     ImageView[] dots;
+    String STTdate;
     private static final int RESULT_SPEECH = 1;
     private Intent i;
     private float x; //좌표
@@ -368,6 +369,9 @@ public class CalendarActivity extends ListActivity implements Serializable {
             public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
 
                 SetYMD(year, month, day);
+                String monthhh= (month+1)<10 ? ("0"+(month+1))+"" : (month+1)+"";
+                String dayhhh= day<10 ? ("0"+day)+"" : day+"";
+                STTdate=year+"-"+monthhh+"-"+dayhhh;
                 Log.i("getx:", calview.getX() + "");
                 Log.i("getWidth:", calview.getWidth() + "");
                 Log.i("getHeight:", calview.getHeight() + "");
@@ -402,7 +406,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 final String[] Place_Title = result_stt.split("에서");
                 AlertDialog.Builder ab = new AlertDialog.Builder(this);
                 ab.setTitle("녹음 확인");
-                ab.setMessage("일정 : [ " + Place_Title[1] + " ]\n일시 : [ " + startdate + " ]\n장소 : [ " + Place_Title[0] + " ]")
+                ab.setMessage("일정 : [ " + Place_Title[1] + " ]\n일시 : [ " + STTdate + " ]\n장소 : [ " + Place_Title[0] + " ]")
                         .setCancelable(true)
                         .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
@@ -414,14 +418,14 @@ public class CalendarActivity extends ListActivity implements Serializable {
                                 dto.setPlace(Place_Title[0]);
                                 dto.setStarttime("08:00");
                                 dto.setEndtime("09:00");
-                                dto.setStartdate(startdate);
-                                Log.i("ssdssd",startdate);
-                                dto.setEnddate(startdate);
+                                dto.setStartdate(STTdate);
+                                Log.i("ssdssd",STTdate);
+                                dto.setEnddate(STTdate);
                                 dbManager.insertSchedule(dto);
                                 Toast.makeText(CalendarActivity.this, "일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
 //                            DoWhat.resetAlarm(CalendarActivity.this, asdf, true);
-                                String[] days = startdate.split("-"); // 년= [0], 월= [1], 일= [2]
-                                SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
+                                String[] days = STTdate.split("-"); // 년= [0], 월= [1], 일= [2]
+                                SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) -1, Integer.parseInt(days[2]));
                                 setDot();
                             }
                         })
