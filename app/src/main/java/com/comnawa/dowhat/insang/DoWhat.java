@@ -305,7 +305,8 @@ public class DoWhat {
           notification.put("body", message);
           notification.put("tag", userid+","+username);
           notification.put("title", "DoWhat");
-          root.put("notification", notification);
+//          root.put("notification", notification);
+          root.put("data",notification);
           root.put("to", tok);
           // FMC 메시지 생성 end
 

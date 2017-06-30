@@ -40,7 +40,8 @@ public class AddToFriend extends AppCompatActivity {
       @Override
       public void onClick(View v) {
         Toast.makeText(AddToFriend.this, "취소되었습니다.", Toast.LENGTH_SHORT).show();
-        finish();
+
+        finishAffinity();
       }
     });
   }

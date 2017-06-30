@@ -19,8 +19,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
     AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
     Intent intent = new Intent(this, PushBroadcast.class);
-    intent.putExtra("remoteMessage", remoteMessage.getNotification().getBody());
-    intent.putExtra("tag", remoteMessage.getNotification().getTag());
+//    intent.putExtra("remoteMessage", remoteMessage.getNotification().getBody());
+    intent.putExtra("remoteMessage", remoteMessage.getData().get("body"));
+//    intent.putExtra("tag", remoteMessage.getNotification().getTag());
+    intent.putExtra("tag", remoteMessage.getData().get("tag"));
 
     PendingIntent sender = PendingIntent.getBroadcast(this, 3, intent, 0);
 
