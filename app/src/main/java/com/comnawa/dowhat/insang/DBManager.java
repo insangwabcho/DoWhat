@@ -30,21 +30,21 @@ public class DBManager {
   }
 
   public void requestAllScheduleForServer(ArrayList<ScheduleDTO> dto) {
-    Log.i("test","Hello");
+    Log.i("test", "Hello");
     dbm.deleteAllSchedule();
     dbm.insertAllSchedules(dto);
   }
 
 
-  public ArrayList<ScheduleDTO> setDot(String id, int year, int month){
+  public ArrayList<ScheduleDTO> setDot(String id, int year, int month) {
     return dbm.setDot(id, year, month);
   }
 
-  public void tableDrop(){
+  public void tableDrop() {
     dbm.tableDrop();
   }
 
-  public ArrayList<ScheduleDTO> getAllSchedule(String id){
+  public ArrayList<ScheduleDTO> getAllSchedule(String id) {
     return dbm.selectAllSchedule(id);
   }
 
@@ -60,11 +60,11 @@ public class DBManager {
     dbm.delete(dto);
   }
 
-  public void testDelete(int idx){
+  public void testDelete(int idx) {
     dbm.testDelete(idx);
   }
 
-  public void setRequestCode(ScheduleDTO dto, int requestCode){
+  public void setRequestCode(ScheduleDTO dto, int requestCode) {
     dbm.setRequestCode(dto, requestCode);
   }
 
@@ -105,18 +105,18 @@ public class DBManager {
           "requestcode integer," +
           "tag varchar(100))";
 //    String sql="drop table schedule";
-      SQLiteDatabase db= getWritableDatabase();
+      SQLiteDatabase db = getWritableDatabase();
       try {
         db.execSQL(sql);
-      }catch(SQLiteException e){
+      } catch (SQLiteException e) {
         e.printStackTrace();
-        Log.i("db","이미 테이블이 있ㄱ음");
+        Log.i("db", "이미 테이블이 있ㄱ음");
       }
     }
 
-    public void tableDrop(){
-      SQLiteDatabase db= getWritableDatabase();
-      String sql="drop table schedule";
+    public void tableDrop() {
+      SQLiteDatabase db = getWritableDatabase();
+      String sql = "drop table schedule";
       db.execSQL(sql);
     }
 
@@ -146,21 +146,21 @@ public class DBManager {
         dto.setMemo(rs.getString(9));
         dto.setAlarm(rs.getInt(10));
         dto.setRepeat(rs.getInt(11));
-        dto.setTag(rs.getString(12));
+        dto.setTag(rs.getString(13));
         items.add(dto);
-        Log.i("ninini",dto.toString());
+        Log.i("ninini", dto.toString());
       }
       return items;
     }
 
     public ArrayList<ScheduleDTO> selectSchedule(String id, int year, int month, int date) {
       ArrayList<ScheduleDTO> items = new ArrayList<>();
-      String monthly= month<10 ? "0"+month : month+"";
-      String dately= date<10 ? "0"+date : date+"";
+      String monthly = month < 10 ? "0" + month : month + "";
+      String dately = date < 10 ? "0" + date : date + "";
       String today = year + "-" + monthly + "-" + dately;
-      Log.i("test",id+today);
+      Log.i("test", id + today);
       String sql = "select * from schedule where id='" + id + "' and startdate='" + today + "'";
-      Log.i("query",sql);
+      Log.i("query", sql);
       SQLiteDatabase db = getReadableDatabase();
       rs = db.rawQuery(sql, null);
       while (rs.moveToNext()) {
@@ -177,8 +177,8 @@ public class DBManager {
         dto.setMemo(rs.getString(9));
         dto.setAlarm(rs.getInt(10));
         dto.setRepeat(rs.getInt(11));
-        dto.setTag(rs.getString(12));
-        Log.i("dto",dto.toString());
+        dto.setTag(rs.getString(13));
+        Log.i("dto", dto.toString());
         items.add(dto);
       }
       return items;
@@ -186,14 +186,14 @@ public class DBManager {
 
     public ArrayList<ScheduleDTO> setDot(String id, int year, int month) {
       ArrayList<ScheduleDTO> items = new ArrayList<>();
-      String monthly= month<10 ? "0"+month : month+"";
-      String today = year + "-" + monthly + "-%" ;
-      Log.i("sibalseki","sibal");
-      Log.i("test",id+today);
+      String monthly = month < 10 ? "0" + month : month + "";
+      String today = year + "-" + monthly + "-%";
+      Log.i("sibalseki", "sibal");
+      Log.i("test", id + today);
       String sql = "select * from schedule where id='" + id + "' and startdate like '" + today + "'";
-      Log.i("asdf","query:"+sql);
+      Log.i("asdf", "query:" + sql);
 //      "select * from schedule where id= 'dowhat' and startdate like '2017-12-%'"
-      Log.i("query",sql);
+      Log.i("query", sql);
       SQLiteDatabase db = getReadableDatabase();
       rs = db.rawQuery(sql, null);
       while (rs.moveToNext()) {
@@ -210,8 +210,8 @@ public class DBManager {
         dto.setMemo(rs.getString(9));
         dto.setAlarm(rs.getInt(10));
         dto.setRepeat(rs.getInt(11));
-        dto.setTag(rs.getString(12));
-        Log.i("dto",dto.toString());
+        dto.setTag(rs.getString(13));
+        Log.i("dto", dto.toString());
         items.add(dto);
       }
       return items;
@@ -219,7 +219,7 @@ public class DBManager {
 
     public ArrayList<ScheduleDTO> selectAllSchedule(String id) {
       ArrayList<ScheduleDTO> items = new ArrayList<>();
-      String sql = "select * from schedule where id='"+id+"'";
+      String sql = "select * from schedule where id='" + id + "'";
       SQLiteDatabase db = getReadableDatabase();
       rs = db.rawQuery(sql, null);
       while (rs.moveToNext()) {
@@ -236,7 +236,7 @@ public class DBManager {
         dto.setMemo(rs.getString(9));
         dto.setAlarm(rs.getInt(10));
         dto.setRepeat(rs.getInt(11));
-        dto.setTag(rs.getString(12));
+        dto.setTag(rs.getString(13));
         items.add(dto);
       }
       return items;
@@ -246,11 +246,11 @@ public class DBManager {
     public void insertAllSchedules(ArrayList<ScheduleDTO> items) {
       SQLiteDatabase db = getWritableDatabase();
       for (ScheduleDTO dto : items) {
-        String sql = "insert into schedule values("+dto.getNum()+",'" + dto.getId() + "','" + dto.getStartdate() + "','" +
+        String sql = "insert into schedule values(" + dto.getNum() + ",'" + dto.getId() + "','" + dto.getStartdate() + "','" +
           dto.getEnddate() + "','" + dto.getStarttime() + "','" + dto.getEndtime() + "','" +
           dto.getTitle() + "','" + dto.getEvent() + "','" +
           dto.getPlace() + "','" + dto.getMemo() + "'," + dto.getAlarm() + "," + dto.getRepeat() + ")";
-        Log.i("insert",dto.toString());
+        Log.i("insert", dto.toString());
         db.execSQL(sql);
       }
     }
@@ -263,9 +263,9 @@ public class DBManager {
         dto.getEnddate() + "','" + dto.getStarttime() + "','" + dto.getEndtime() + "','" +
         dto.getTitle() + "','" + dto.getEvent() + "','" +
         dto.getPlace() + "','" + dto.getMemo() + "'," + dto.getAlarm() + "," + dto.getRepeat() +
-        ",'"+ dto.getTag()+"')";
+        ",'" + dto.getTag() + "')";
       String sql = sql1 + sql2;
-      Log.i("insert",sql);
+      Log.i("insert", sql);
       db.execSQL(sql);
     }
 
@@ -276,15 +276,15 @@ public class DBManager {
         dto.getEnddate() + "', starttime='" + dto.getStarttime() + "', endtime='" + dto.getEndtime() + "', title='" +
         dto.getTitle() + "', event='" + dto.getEvent() + "', place='" +
         dto.getPlace() + "',memo='" + dto.getMemo() + "', alarm=" + dto.getAlarm() + ", repeat=" + dto.getRepeat() +
-        ", tag="+dto.getTag()+" where num=" + dto.getNum();
-      Log.i("dto",dto.toString());
+        ", tag=" + dto.getTag() + " where num=" + dto.getNum();
+      Log.i("dto", dto.toString());
       db.execSQL(sql);
     }
 
     //일정 삭제
     public void delete(ScheduleDTO dto) {
       SQLiteDatabase db = getWritableDatabase();
-      String sql = "delete from schedule where num=" + dto.getNum() + " and id='" + dto.getId()+"'";
+      String sql = "delete from schedule where num=" + dto.getNum() + " and id='" + dto.getId() + "'";
       db.execSQL(sql);
     }
 
@@ -296,13 +296,13 @@ public class DBManager {
 
     public void testDelete(int idx) {
       SQLiteDatabase db = getWritableDatabase();
-      String sql = "delete from schedule where num="+idx;
+      String sql = "delete from schedule where num=" + idx;
       db.execSQL(sql);
     }
 
-    public void setRequestCode(ScheduleDTO dto, int requestCode){
-      SQLiteDatabase db= getWritableDatabase();
-      String sql= "updqte schedule set requestcode="+requestCode+" where num="+dto.getNum()+" and id='"+dto.getId()+"'";
+    public void setRequestCode(ScheduleDTO dto, int requestCode) {
+      SQLiteDatabase db = getWritableDatabase();
+      String sql = "updqte schedule set requestcode=" + requestCode + " where num=" + dto.getNum() + " and id='" + dto.getId() + "'";
       db.execSQL(sql);
     }
   }
