@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
@@ -52,6 +53,7 @@ public class LoginActivity extends Activity {
     Button btnLogin, btnSignUp;
     String userid, username;
     CheckBox cb;
+    ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,9 @@ public class LoginActivity extends Activity {
         editpwd = (EditText) findViewById(R.id.editpwd);
         btnSignUp = (Button) findViewById(R.id.btnSignUp);
         btnLogin = (Button) findViewById(R.id.btnLogin);
+        image = (ImageView) findViewById(R.id.image);
         cb = (CheckBox) findViewById(R.id.cb);
+        image.setImageResource(R.drawable.wtd);
         //자동로그인 상태일경우 유저 정보 전송
         if (new PrefManager(this).getAutoLogin()) {
             Intent intent = new Intent(LoginActivity.this, CalendarActivity.class);

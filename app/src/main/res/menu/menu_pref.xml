@@ -3,7 +3,7 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
   <item
     android:id="@+id/addFriend"
-    android:title="친구추가"
+    android:title="친구찾기"
     android:orderInCategory="100"
     app:showAsAction="never"/>
   <item
