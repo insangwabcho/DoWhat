@@ -39,6 +39,8 @@ public class PushBroadcast extends BroadcastReceiver {
       wakeScreen = null;
     }
 
+    Log.i("zzoz",intent.getStringExtra("remoteMessage"));
+    Log.i("zzoz",intent.getStringExtra("tag"));
     msg = intent.getStringExtra("remoteMessage"); //remoteMessage.getNotification().getBody();
     String tag= intent.getStringExtra("tag");//remoteMessage.getNotification().getTag();
     //dongjak 1= 친구추가 2= 일정추가
@@ -75,8 +77,8 @@ public class PushBroadcast extends BroadcastReceiver {
 
     }
 
-    PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-      intent, 0);
+    PendingIntent contentIntent = PendingIntent.getActivity(context, 3,
+      intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
       .setWhen(System.currentTimeMillis())
@@ -94,7 +96,7 @@ public class PushBroadcast extends BroadcastReceiver {
     NotificationManager notificationManager =
       (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-    notificationManager.notify(0, mBuilder.build());
+    notificationManager.notify(3, mBuilder.build());
 
   }
 }
