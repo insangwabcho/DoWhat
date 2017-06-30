@@ -57,8 +57,10 @@ public class AddFriendActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_settings) {
             startActivity(new Intent(AddFriendActivity.this, Preferences.class));
         } else if (item.getItemId() == R.id.menu_add) { //추가 클릭시 코드
+            Log.i("addf","here");
+            Log.i("addf",listview1.getCheckedItemPosition()+"");
             int idx = listview1.getCheckedItemPosition();
-            if (idx == 1) {
+            if (idx == 0) {
                 String choice = items.get(idx);
                 String[] arr = choice.split("[(]");
                 String name = arr[0];
@@ -68,13 +70,15 @@ public class AddFriendActivity extends AppCompatActivity {
                     Toast.makeText(this, "자기 자신을 추가할 수 없습니다.", Toast.LENGTH_SHORT).show();
                     return false;
                 }
-
+                Log.i("addf","1");
                 //서버로 보낼 친구추가 코드
                 //addfriend.do
 
                 ArrayList<String> friendList = new ArrayList<>();
                 GetFriend gf = new GetFriend(this, myId, friendList);
+                Log.i("addf","here2");
                 gf.start();
+                Log.i("addf","here3");
                 try {
                     gf.join();
                 } catch (InterruptedException e) {
@@ -88,7 +92,9 @@ public class AddFriendActivity extends AppCompatActivity {
                 friendid += choice;
 
                 AddFriend af = new AddFriend(this, myId, friendid);
+                Log.i("addf","here4");
                 af.start();
+                Log.i("addf","here5");
                 try {
                     af.join();
                 } catch (InterruptedException e) {
@@ -97,6 +103,8 @@ public class AddFriendActivity extends AppCompatActivity {
                 //푸시메세지 코드
                 DoWhat.sendPushMsg(this, name + "님께서 친구로 추가하셨습니다.", id);
                 Toast.makeText(this, "친구로 추가되었습니다.", Toast.LENGTH_SHORT).show();
+            } else if (idx==0){
+                Toast.makeText(this, "선택된 친구가 없습니다.", Toast.LENGTH_SHORT).show();
             }
         }
         return false;

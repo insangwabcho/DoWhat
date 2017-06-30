@@ -47,7 +47,7 @@ public class AlarmBroadcast extends BroadcastReceiver {
 
     builder.setSmallIcon(R.drawable.green)
       .setWhen(System.currentTimeMillis())
-      .setContentTitle(intent.getStringExtra("subject") + " (requestCode: " + intent.getIntExtra("requestCode", 0)+")")
+      .setContentTitle(intent.getStringExtra("subject"))
       .setContentText("탭하면 상세정보창으로 이동됩니다")
       .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
       .setContentIntent(pendingIntent)
