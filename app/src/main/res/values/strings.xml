@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">DoWhat</string>
+    <string name="app_name">오늘뭐하지?</string>
     <string name="user_id_pref"></string>
 </resources>
