@@ -429,7 +429,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                                 dto.setEnddate(STTdate);
                                 dbManager.insertSchedule(dto);
                                 Toast.makeText(CalendarActivity.this, "일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
-//                            DoWhat.resetAlarm(CalendarActivity.this, asdf, true);
+////                            DoWhat.resetAlarm(CalendarActivity.this, asdf, true);
                                 String[] days = STTdate.split("-"); // 년= [0], 월= [1], 일= [2]
                                 SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) -1, Integer.parseInt(days[2]));
                                 setDot();
