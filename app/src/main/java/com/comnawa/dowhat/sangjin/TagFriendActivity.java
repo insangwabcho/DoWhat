@@ -90,42 +90,6 @@ public class TagFriendActivity extends AppCompatActivity implements Filterable {
         manager = new PrefManager(this);
         id = manager.getUserInfo().get("id");
 
-        //서버에서 친구목록을 받아옴
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    items = new ArrayList<String>();
-                    String page = Common.SERVER_URL + "/Dowhat/Member_servlet/findfriend.do";
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("id", id);
-                    String body = JsonObject.objectType(page, map);
-                    JSONObject jsonObj = new JSONObject(body);
-                    Log.i("body", body);
-                    if (jsonObj.get("sendData").equals("fail")) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(TagFriendActivity.this, "등록된 친구가 없습니다.", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    } else {
-                        String[] friendList = jsonObj.get("sendData").toString().split(",");
-                        for (int i = 0; i < friendList.length; i++) {
-                            if (friendList[i].equals("null") || friendList[i] == null) {
-                                continue;
-                            }
-                            items.add(friendList[i]);
-                        }
-                        handler.sendEmptyMessage(0);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
-
         //이름으로 검색
         editText.addTextChangedListener(new TextWatcher() {
             @Override
