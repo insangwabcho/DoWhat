@@ -23,6 +23,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     intent.putExtra("remoteMessage", remoteMessage.getData().get("body"));
 //    intent.putExtra("tag", remoteMessage.getNotification().getTag());
     intent.putExtra("tag", remoteMessage.getData().get("tag"));
+    intent.putExtra("title", remoteMessage.getData().get("title"));
 
     PendingIntent sender = PendingIntent.getBroadcast(this, 3, intent, 0);
 

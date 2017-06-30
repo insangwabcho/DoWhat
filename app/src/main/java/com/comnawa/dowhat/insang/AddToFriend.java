@@ -92,7 +92,7 @@ public class AddToFriend extends AppCompatActivity {
       e.printStackTrace();
     }
     //푸시메세지 코드
-    DoWhat.sendPushMsg(this, username + " 님께서 친구로 추가하셨습니다.", userid, username);
+    DoWhat.sendPushMsg(this, username + " 님께서 친구로 추가하셨습니다.", userid, username, null);
     Toast.makeText(this, "친구로 추가되었습니다.", Toast.LENGTH_SHORT).show();
   }
 

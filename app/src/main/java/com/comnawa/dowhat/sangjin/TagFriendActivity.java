@@ -33,6 +33,7 @@ import java.util.HashMap;
 public class TagFriendActivity extends AppCompatActivity implements Filterable {
     ArrayList<String> items; //내친구 목록
     String tag = ""; //태그된 친구이름 목록
+    String tagId= "";
     ArrayAdapter adapter; //아답터
     EditText editText; //검색바
     ListView listview1; //리스트뷰
@@ -66,11 +67,13 @@ public class TagFriendActivity extends AppCompatActivity implements Filterable {
                     if (dd.get(i)) {
                         String[] arr = items.get(i).split("[(]");
                         tag += arr[0] + ",";
+                        tagId += arr[1].substring(arr[1].length())+",";
                     }
                 }
                 tag = tag.substring(0, tag.length() - 1);
                 Log.i("tag", tag);
                 DetailActivity.editTag.setText(tag);
+                DetailActivity.taggg= tagId;
                 finish();
             }
         } else if (item.getItemId() == R.id.addFriend) { //친구 추가

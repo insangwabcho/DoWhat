@@ -60,6 +60,7 @@ public class DetailActivity extends AppCompatActivity {
     private boolean check; //신규 , 수정 판별 변수 (true:신규)
     int Num;
     public static String address; //지도에 입력한 값을 넘길 변수
+    int index;
 
     //주소로 위도, 경도 구하기
     public static Location findGeoPoint(Context mcontext, String address){
@@ -180,7 +181,17 @@ public class DetailActivity extends AppCompatActivity {
                     //              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
                     //              uns.start();
                 }
-
+                if (!editTag.getText().toString().equals("")){
+                    String tags= editTag.getText().toString();
+                    String[] friendss= tags.split(",");
+                    String[] friendssId= taggg.split(",");
+                    String myId= new PrefManager(DetailActivity.this).getUserInfo().get("id");
+                    String myName= new PrefManager(DetailActivity.this).getUserInfo().get("name");
+                    Log.i("nnnnn",taggg);
+                    for (String f: friendssId){
+                        DoWhat.sendPushMsg(DetailActivity.this, myName+" 님의 일정에 태그되었습니다.", f, myName, CalendarActivity.items.get(index));
+                    }
+                }
             }
         }
         return false;
@@ -216,7 +227,7 @@ public class DetailActivity extends AppCompatActivity {
 
           */
 
-        int index = getIntent().getIntExtra("index", -1);
+        index = getIntent().getIntExtra("index", -1);
         editTitle = (EditText) findViewById(R.id.editTitle);
         editPlace = (EditText) findViewById(R.id.editPlace);
         txtSdate = (TextView) findViewById(R.id.txtSdate);
