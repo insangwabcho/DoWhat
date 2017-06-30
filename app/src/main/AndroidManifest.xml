@@ -81,6 +81,8 @@
     <activity android:name=".sangjin.TagFriendActivity"/>
 
     <service android:name=".insang.FirebaseMessagingService">
+      android:enabled=true;
+      android:exported=true;
       <intent-filter>
         <action android:name="com.google.firebase.MESSAGING_EVENT"/>
       </intent-filter>
@@ -93,6 +95,12 @@
 
     <activity android:name=".insang.AddToFriend">
     </activity>
+
+    <receiver
+      android:name=".insang.PushBroadcast"
+      android:enabled="true"
+      android:exported="true">
+    </receiver>
   </application>
 
 </manifest>
