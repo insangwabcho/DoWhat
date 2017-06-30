@@ -11,8 +11,12 @@ public class ScheduleDTO {
     private String event;
     private String place;
     private String memo;
+    private String tag;
     private int alarm;
     private int repeat;
+
+    public ScheduleDTO() {
+    }
 
     public int getNum() {
         return num;
@@ -94,6 +98,14 @@ public class ScheduleDTO {
         this.memo = memo;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     public int getAlarm() {
         return alarm;
     }
@@ -110,32 +122,23 @@ public class ScheduleDTO {
         this.repeat = repeat;
     }
 
-    public ScheduleDTO(int num, String id, String startdate, String enddate, String starttime, String endtime,
-                       String title, String event, String place, String memo, int alarm, int repeat) {
-        super();
-        this.num = num;
-        this.id = id;
-        this.startdate = startdate;
-        this.enddate = enddate;
-        this.starttime = starttime;
-        this.endtime = endtime;
-        this.title = title;
-        this.event = event;
-        this.place = place;
-        this.memo = memo;
-        this.alarm = alarm;
-        this.repeat = repeat;
-    }
-
-    public ScheduleDTO() {
-    }
-
     @Override
     public String toString() {
-        return "ScheduleDTO [num=" + num + ", id=" + id + ", startdate=" + startdate + ", enddate=" + enddate
-                + ", starttime=" + starttime + ", endtime=" + endtime + ", title=" + title + ", event=" + event
-                + ", place=" + place + ", memo=" + memo + ", alarm=" + alarm + ", repeat=" + repeat + "]";
+        return "ScheduleDTO{" +
+                "num=" + num +
+                ", id='" + id + '\'' +
+                ", startdate='" + startdate + '\'' +
+                ", enddate='" + enddate + '\'' +
+                ", starttime='" + starttime + '\'' +
+                ", endtime='" + endtime + '\'' +
+                ", title='" + title + '\'' +
+                ", event='" + event + '\'' +
+                ", place='" + place + '\'' +
+                ", memo='" + memo + '\'' +
+                ", tag='" + tag + '\'' +
+                ", alarm=" + alarm +
+                ", repeat=" + repeat +
+                '}';
     }
-
 }
 

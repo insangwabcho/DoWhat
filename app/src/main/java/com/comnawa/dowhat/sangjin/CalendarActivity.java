@@ -280,6 +280,9 @@ public class CalendarActivity extends ListActivity implements Serializable {
             //오늘날짜로 StartDay() 함수 실행
             SetYMD(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
             monthh= cal.get(Calendar.MONTH);
+            String monthhh= (monthh+1)<10 ? ("0"+(monthh+1))+"" : (monthh+1)+"";
+            String dayhhh= cal.get(Calendar.DATE)<10 ? ("0"+cal.get(Calendar.DATE))+"" : cal.get(Calendar.DATE)+"";
+            STTdate=cal.get(Calendar.YEAR)+"-"+monthhh+"-"+dayhhh;
         } else { //그렇지 않다면
             //putExtra로 담아준 sdate변수값 가져오기
             String sdate = getIntent().getStringExtra("sdate");
@@ -418,6 +421,9 @@ public class CalendarActivity extends ListActivity implements Serializable {
                                 dto.setPlace(Place_Title[0]);
                                 dto.setStarttime("08:00");
                                 dto.setEndtime("09:00");
+                                dto.setEvent("-");
+                                dto.setMemo("-");
+                                dto.setTag("-");
                                 dto.setStartdate(STTdate);
                                 Log.i("ssdssd",STTdate);
                                 dto.setEnddate(STTdate);

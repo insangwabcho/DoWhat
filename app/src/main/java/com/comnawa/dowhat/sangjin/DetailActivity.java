@@ -132,6 +132,10 @@ public class DetailActivity extends AppCompatActivity {
                 if(edpc==null | edpc.equals("")){
                     edpc="-";
                 }
+                String tag=editFriend.getText().toString();
+                if(tag==null | tag.equals("")){
+                    tag="-";
+                }
                 dto.setNum(Num);
                 dto.setId(new PrefManager(this).getUserInfo().get("id"));
                 dto.setTitle(editTitle.getText().toString());
@@ -144,6 +148,7 @@ public class DetailActivity extends AppCompatActivity {
                 dto.setMemo(edmm);
                 dto.setAlarm(alarm);
                 dto.setRepeat(repeat);
+                dto.setTag(tag);
                 DBManager dbManager = new DBManager(this);
                 if (check) { //신규
                     dbManager.insertSchedule(dto);
@@ -346,6 +351,9 @@ public class DetailActivity extends AppCompatActivity {
                 repeat = 1;
             }
 
+            if(dto.getTag().equals("-")){
+                editFriend.setText("");
+            }
         }
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

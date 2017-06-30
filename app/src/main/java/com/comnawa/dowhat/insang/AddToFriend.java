@@ -25,7 +25,7 @@ public class AddToFriend extends AppCompatActivity {
     btnNo= (Button) findViewById(R.id.btnNo);
     txtResult= (TextView) findViewById(R.id.txtResult);
 
-    txtResult.setText(username+"님께서 친구로 등록하셨습니다 너도하실?");
+    txtResult.setText(username+"님을 친구로 등록하시겠습니까?");
 
     btnOk.setOnClickListener(new View.OnClickListener() {
       @Override
