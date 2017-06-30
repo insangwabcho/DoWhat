@@ -3,11 +3,15 @@ package com.comnawa.dowhat.sangjin;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -81,7 +85,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        DoWhat.checkPermission(this, DoWhat.access_fine_location, DoWhat.access_coarse_location);
         editPlace.setText(address);
     }
 
@@ -229,8 +233,51 @@ public class DetailActivity extends AppCompatActivity {
         btnPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(DetailActivity.this, PositionActivity.class);
-                startActivity(intent);
+                final String[] args= {
+                  DoWhat.access_fine_location, DoWhat.access_coarse_location
+                };
+
+                if (checkSelfPermission(DoWhat.access_fine_location)==PackageManager.PERMISSION_DENIED ||
+                  checkSelfPermission(DoWhat.access_coarse_location)== PackageManager.PERMISSION_DENIED) {
+                    for (int i = 0; i < args.length; i++) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                            int permissionResult = checkSelfPermission(args[i]);
+
+                            if (permissionResult == PackageManager.PERMISSION_DENIED) {
+                                if (shouldShowRequestPermissionRationale(args[i])) {
+
+                                    AlertDialog.Builder dialog = new AlertDialog.Builder(DetailActivity.this);
+                                    final int finalI = i;
+                                    dialog.setTitle("권한이 필요합니다.")
+                                      .setMessage("이 기능을 사용하기 위해서는 권한이 필요합니다. 계속하시겠습니까?")
+                                      .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                                          @Override
+                                          public void onClick(DialogInterface dialog, int which) {
+
+                                              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                  requestPermissions(new String[]{args[finalI]}, 1000);
+                                              }
+                                          }
+                                      })
+                                      .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                                          @Override
+                                          public void onClick(DialogInterface dialog, int which) {
+                                              Toast.makeText(DetailActivity.this, "기능을 취소했습니다.", Toast.LENGTH_SHORT).show();
+                                          }
+                                      })
+                                      .create()
+                                      .show();
+                                } else {
+                                    requestPermissions(new String[]{args[i]}, 1000);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    Intent intent = new Intent(DetailActivity.this, PositionActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 

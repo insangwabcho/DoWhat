@@ -92,6 +92,7 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
                 }).create().show();
             }//onClick
         }); //onClickListener
+
     }
 
 
@@ -170,6 +171,7 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
         this.map = map;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         //권한
+
         DoWhat.checkPermission(this, DoWhat.access_fine_location, DoWhat.access_coarse_location);
         //현재위치
         map.setMyLocationEnabled(true);
