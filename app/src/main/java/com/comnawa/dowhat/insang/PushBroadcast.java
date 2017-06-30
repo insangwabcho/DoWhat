@@ -49,6 +49,8 @@ public class PushBroadcast extends BroadcastReceiver {
       dongjak= 1;
     } else if (msg.indexOf("일정을")!= -1){
       dongjak= 2;
+    } else {
+      dongjak =0;
     }
     String userid= tag.split(",")[0];
     String username= tag.split(",")[1];
@@ -92,7 +94,8 @@ public class PushBroadcast extends BroadcastReceiver {
       .setAutoCancel(true)
       .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
       .setSmallIcon(R.drawable.alarm1)
-      .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.drawable.alarm1))
+      .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+        dongjak==1 ? R.drawable.friend : R.drawable.alarm1))
       .setColor(0xff123456)
       .setPriority(Notification.PRIORITY_MAX);
 

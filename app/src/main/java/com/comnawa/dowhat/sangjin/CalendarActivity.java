@@ -366,6 +366,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         calview.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int day) {
+
                 SetYMD(year, month, day);
                 Log.i("getx:", calview.getX() + "");
                 Log.i("getWidth:", calview.getWidth() + "");
@@ -414,6 +415,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                                 dto.setStarttime("08:00");
                                 dto.setEndtime("09:00");
                                 dto.setStartdate(startdate);
+                                Log.i("ssdssd",startdate);
                                 dto.setEnddate(startdate);
                                 dbManager.insertSchedule(dto);
                                 Toast.makeText(CalendarActivity.this, "일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
