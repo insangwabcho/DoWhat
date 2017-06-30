@@ -104,6 +104,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
 
     @Override
     protected void onResume() {
+        setDot();
         super.onResume();
     }
 

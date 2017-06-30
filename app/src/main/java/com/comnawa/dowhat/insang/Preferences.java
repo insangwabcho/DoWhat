@@ -133,7 +133,7 @@ public class Preferences extends android.preference.PreferenceActivity {
           Toast.makeText(ac, "계정 로그아웃 완료", Toast.LENGTH_SHORT).show();
           Intent intent = ac.getPackageManager().getLaunchIntentForPackage("com.comnawa.dowhat");
           startActivity(intent);
-          ac.finishAndRemoveTask();
+          ac.finishAffinity();
           return false;
         }
       });
