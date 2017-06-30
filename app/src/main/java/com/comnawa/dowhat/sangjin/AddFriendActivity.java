@@ -101,7 +101,7 @@ public class AddFriendActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 //푸시메세지 코드
-                DoWhat.sendPushMsg(this, name + "님께서 친구로 추가하셨습니다.", id);
+                DoWhat.sendPushMsg(this, name + " 님께서 친구로 추가하셨습니다.", id, name);
                 Toast.makeText(this, "친구로 추가되었습니다.", Toast.LENGTH_SHORT).show();
             } else if (idx==0){
                 Toast.makeText(this, "선택된 친구가 없습니다.", Toast.LENGTH_SHORT).show();

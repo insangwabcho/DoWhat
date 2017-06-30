@@ -278,7 +278,7 @@ public class DoWhat {
   }
 
 
-  public static void sendPushMsg(Context context, final String message, @Nullable final String userid){
+  public static void sendPushMsg(Context context, final String message, @Nullable final String userid, @Nullable final String username){
     final String svKey= "AAAARqvabTs:APA91bF_Ldp3AyUWQUo9-uNbcb70MGmYFHB1yuOT6eV4v-K5sTbs6-Vs8jD9ZK9Eln3XEmfs4yjbzulW5dcL9tY9lTbu9nTfF_FFF8FXGPjn-WfM4dlud43qrClW1xKpf4_MSfiEEv9P";
 
     Map<String,String> tokk= new HashMap<>();
@@ -303,6 +303,7 @@ public class DoWhat {
           JSONObject root = new JSONObject();
           JSONObject notification = new JSONObject();
           notification.put("body", message);
+          notification.put("tag", userid+","+username);
           notification.put("title", "DoWhat");
           root.put("notification", notification);
           root.put("to", tok);
