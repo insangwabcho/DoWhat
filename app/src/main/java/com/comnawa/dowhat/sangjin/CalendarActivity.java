@@ -409,6 +409,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
 //                            DoWhat.resetAlarm(CalendarActivity.this, asdf, true);
                                 String[] days = startdate.split("-"); // 년= [0], 월= [1], 일= [2]
                                 SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
+                                setDot();
                             }
                         })
                         .setNeutralButton("다시 녹음", new DialogInterface.OnClickListener() {
