@@ -148,6 +148,7 @@ public class DBManager {
         dto.setRepeat(rs.getInt(11));
         dto.setTag(rs.getString(12));
         items.add(dto);
+        Log.i("ninini",dto.toString());
       }
       return items;
     }
