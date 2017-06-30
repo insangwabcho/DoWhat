@@ -96,8 +96,10 @@ public class PushBroadcast extends BroadcastReceiver {
       .setSmallIcon(R.drawable.alarm1)
       .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
         dongjak==1 ? R.drawable.friend : R.drawable.alarm1))
-      .setColor(0xff123456)
-      .setPriority(Notification.PRIORITY_MAX);
+      .setColor(0xff123456);
+    if (dongjak!=1) {
+      builder.setPriority(Notification.PRIORITY_MAX);
+    }
 
     notificationManager.notify(3, builder.build());
 
