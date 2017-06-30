@@ -70,7 +70,7 @@ public class TagFriendActivity extends AppCompatActivity implements Filterable {
                 }
                 tag = tag.substring(0, tag.length() - 1);
                 Log.i("tag", tag);
-                DetailActivity.editFriend.setText(tag);
+                DetailActivity.editTag.setText(tag);
                 finish();
             }
         } else if (item.getItemId() == R.id.addFriend) { //친구 추가

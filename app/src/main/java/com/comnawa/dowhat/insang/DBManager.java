@@ -276,7 +276,7 @@ public class DBManager {
         dto.getEnddate() + "', starttime='" + dto.getStarttime() + "', endtime='" + dto.getEndtime() + "', title='" +
         dto.getTitle() + "', event='" + dto.getEvent() + "', place='" +
         dto.getPlace() + "',memo='" + dto.getMemo() + "', alarm=" + dto.getAlarm() + ", repeat=" + dto.getRepeat() +
-        ", tag=" + dto.getTag() + " where num=" + dto.getNum();
+        ", tag='" + dto.getTag() + "' where num=" + dto.getNum();
       Log.i("dto", dto.toString());
       db.execSQL(sql);
     }

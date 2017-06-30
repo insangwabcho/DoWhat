@@ -41,7 +41,8 @@ import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
     //일정, 장소, 시작일, 종료일, 시작시간, 종료시간, 메모, 알람, 일행
-    public static EditText editFriend;
+    public static EditText editTag;
+    static String taggg="-";
     EditText editTitle, editPlace, editMemo;
     TextView txtSdate, txtStime, txtEdate, txtEtime;
     CheckBox cbAlarm, cbRepeat; //알람설정,반복설정
@@ -118,24 +119,22 @@ public class DetailActivity extends AppCompatActivity {
                 Toast.makeText(this, "일정이 입력되지 않았습니다.", Toast.LENGTH_SHORT).show();
             } else {
                 ScheduleDTO dto = new ScheduleDTO();
-                if(event==null | event.equals("")){
+                if(event==null || event.equals("")){
                     event="-";
                 }
                 String edmm=editMemo.getText().toString();
-                if(edmm==null | edmm.equals("")){
+                if(edmm==null || edmm.equals("")){
                     edmm="-";
                 }
-                if(event==null | event.equals("")){
-                    event="-";
-                }
                 String edpc=editPlace.getText().toString();
-                if(edpc==null | edpc.equals("")){
+                if(edpc==null || edpc.equals("")){
                     edpc="-";
                 }
-                String tag=editFriend.getText().toString();
-                if(tag==null | tag.equals("")){
-                    tag="-";
+                String friendtag=editTag.getText().toString();
+                if(friendtag==null || friendtag.equals("")){
+                    friendtag="-";
                 }
+
                 dto.setNum(Num);
                 dto.setId(new PrefManager(this).getUserInfo().get("id"));
                 dto.setTitle(editTitle.getText().toString());
@@ -148,7 +147,7 @@ public class DetailActivity extends AppCompatActivity {
                 dto.setMemo(edmm);
                 dto.setAlarm(alarm);
                 dto.setRepeat(repeat);
-                dto.setTag(tag);
+                dto.setTag(friendtag);
                 DBManager dbManager = new DBManager(this);
                 if (check) { //신규
                     dbManager.insertSchedule(dto);
@@ -225,7 +224,7 @@ public class DetailActivity extends AppCompatActivity {
         txtStime = (TextView) findViewById(R.id.txtStime);
         txtEtime = (TextView) findViewById(R.id.txtEtime);
         editMemo = (EditText) findViewById(R.id.editMemo);
-        editFriend = (EditText) findViewById(R.id.editFriend);
+        editTag = (EditText) findViewById(R.id.editTag);
         cbAlarm = (CheckBox) findViewById(R.id.cbAlarm);
         cbRepeat = (CheckBox) findViewById(R.id.cbRepeat);
         btnPlace = (ImageButton) findViewById(R.id.btnPlace);
@@ -350,9 +349,10 @@ public class DetailActivity extends AppCompatActivity {
                 cbRepeat.setText("설정");
                 repeat = 1;
             }
-
             if(dto.getTag().equals("-")){
-                editFriend.setText("");
+                editTag.setText("");
+            }else{
+                editTag.setText(dto.getTag());
             }
         }
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -585,6 +585,6 @@ public class DetailActivity extends AppCompatActivity {
 
     public void setTag(String tag){
         Log.i("tag:",tag);
-        editFriend.setText(tag);
+        editTag.setText(tag);
     }
 }
