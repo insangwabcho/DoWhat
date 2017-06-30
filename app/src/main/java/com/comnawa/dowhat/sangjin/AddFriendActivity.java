@@ -85,24 +85,32 @@ public class AddFriendActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 String friendid = "";
+                int count=0;
                 for (String t : friendList) {
                     friendid += t;
+                    if(t.equals(choice)){
+                        count++;
+                    }
                     friendid += ",";
                 }
                 friendid += choice;
-
-                AddFriend af = new AddFriend(this, myId, friendid);
-                Log.i("addf","here4");
-                af.start();
-                Log.i("addf","here5");
-                try {
-                    af.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if(count>0){
+                    Toast.makeText(this, "이미 등록된 친구입니다.", Toast.LENGTH_SHORT).show();
+                    return false;
+                }else{
+                    AddFriend af = new AddFriend(this, myId, friendid);
+                    Log.i("addf","here4");
+                    af.start();
+                    Log.i("addf","here5");
+                    try {
+                        af.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    //푸시메세지 코드
+                    DoWhat.sendPushMsg(this, name + " 님께서 친구로 추가하셨습니다.", id, name);
+                    Toast.makeText(this, "친구로 추가되었습니다.", Toast.LENGTH_SHORT).show();
                 }
-                //푸시메세지 코드
-                DoWhat.sendPushMsg(this, name + " 님께서 친구로 추가하셨습니다.", id, name);
-                Toast.makeText(this, "친구로 추가되었습니다.", Toast.LENGTH_SHORT).show();
             } else if (idx==0){
                 Toast.makeText(this, "선택된 친구가 없습니다.", Toast.LENGTH_SHORT).show();
             }
