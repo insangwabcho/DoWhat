@@ -42,10 +42,37 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
     LocationManager locationManager;
     LocationListener locationListener; //위치정보 리스너
 
+    double latitude; //위도
+    double longitude; //경도
+
     //GoogleMap
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //위치정보관리자
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        //맵 프래그먼트
+        fragment = (MapFragment)getFragmentManager().findFragmentById(R.id.fragment1);
+      //  fragment.getMapAsync(this); //비동기 방식으로 로딩
+        //위치정보리스너 등록
+                locationListener= new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+             latitude = location.getLatitude(); //현재위도
+             longitude = location.getLongitude(); //현재경도
+
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+            @Override
+            public void onProviderDisabled(String provider) {
+            }
+        };
 
         prevMakers = new ArrayList<Marker>();
         //현재좌표 출력 변수
@@ -101,6 +128,8 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
         super.onResume();
         //출력된 주소 값을 지도액티비티에 다시 불러옴
         editPlace.setText(DetailActivity.address);
+
+
     }
 
     //스타트액티비티포리저트
@@ -155,6 +184,7 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
                     String currentLocationAddress = address.get(0).getAddressLine(0).toString();
                     nowAddress = currentLocationAddress;
                     editPlace.setText(nowAddress);
+
                 }
             }
         } catch (Exception e) {
@@ -171,7 +201,6 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
         this.map = map;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         //권한
-
         DoWhat.checkPermission(this, DoWhat.access_fine_location, DoWhat.access_coarse_location);
         //현재위치
         map.setMyLocationEnabled(true);
@@ -186,8 +215,12 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
         String locationProvider = LocationManager.GPS_PROVIDER;
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
         if(lastKnownLocation != null){
+            latitude = lastKnownLocation.getLatitude();
+            longitude = lastKnownLocation.getLongitude();
 
         }
+            //getAddress()
+       // editPlace.setText(getAddress(this, 123f, 145f));
         //List<Marker> prevMakers = null;
     /*    //중복마커 제거
         HashSet<Marker> hashSet = new HashSet<Marker>();
