@@ -14,13 +14,17 @@ import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.sangjin.CalendarActivity;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import static com.comnawa.dowhat.sungwon.JsonObject.objectType;
+
 public class confrimActivity extends Activity {
 
     EditText editAccount;
+    EditText editPasswd;
     Button btnSearch,btnCancel;
 
     @Override
@@ -33,6 +37,7 @@ public class confrimActivity extends Activity {
         final String name = getIntent().getStringExtra("name");
 
         editAccount = (EditText)findViewById(R.id.editAccount);
+        editPasswd = (EditText)findViewById(R.id.editPasswd);
         btnCancel = (Button)findViewById(R.id.btnCancel);
 
         btnSearch =(Button)findViewById(R.id.btnSearch);
@@ -45,12 +50,14 @@ public class confrimActivity extends Activity {
                     @Override
                     public void run() {
                         try {
-                           String page = Common.SERVER_URL+"/Dowhat/Member_servlet/idcheck.do";
-                            HashMap<String,String> map = new HashMap<String, String>();
-                            map.put("id",editAccount.getText().toString());
-                            String body = JsonObject.objectType(page,map);
+                           String page = Common.SERVER_URL+"/Dowhat/Member_servlet/login.do";
+                            HashMap<String, String> map = new HashMap<String, String>();
+                            map.put("id", editAccount.getText().toString());
+                            map.put("password", editPasswd.getText().toString());
+                            String body = objectType(page, map);
                             JSONObject jsonObj = new JSONObject(body);
-                            if(!jsonObj.get("sendData").equals("success")){ //입력한 계정이 DB에 있으면
+                            final JSONArray jArray = (JSONArray) jsonObj.get("sendData");
+                            if(jArray.length() > 0){ //로그인이 되면
                                 String page2 = Common.SERVER_URL +"/Dowhat/Member_servlet/tokeninsert.do";
                                 HashMap<String,String> map2 = new HashMap<String, String>();
                                 map2.put("id",editAccount.getText().toString());
@@ -80,7 +87,7 @@ public class confrimActivity extends Activity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(confrimActivity.this, "존재하지않는 계정입니다.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(confrimActivity.this, "계정 정보를 다시 확인해주세요.", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }

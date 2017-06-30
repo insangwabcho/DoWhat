@@ -13,6 +13,7 @@ import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -142,6 +143,32 @@ public class LoginActivity extends Activity {
 
         callback = new SessionCallback();
         Session.getCurrentSession().addCallback(callback);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        //빽(취소)키가 눌렸을때 종료여부를 묻는 다이얼로그 띄움
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            AlertDialog.Builder d = new AlertDialog.Builder(this);
+            d.setTitle("안내");
+            d.setMessage("프로그램을 종료하시겠습니까?");
+            d.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            d.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            d.show();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 
