@@ -26,8 +26,8 @@ public class AddToFriend extends AppCompatActivity {
     final String userid= getIntent().getStringExtra("userid");
     final String username= getIntent().getStringExtra("username");
 
-    btnOk= (Button) findViewById(R.id.btnOk);
-    btnNo= (Button) findViewById(R.id.btnNo);
+//    btnOk= (Button) findViewById(R.id.btnOk);
+//    btnNo= (Button) findViewById(R.id.btnNo);
     txtResult= (TextView) findViewById(R.id.txtResult);
 
     txtResult.setText(username+"님을 친구로 등록하시겠습니까?");

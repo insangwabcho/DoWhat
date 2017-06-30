@@ -262,7 +262,7 @@ public class DBManager {
         dto.getEnddate() + "','" + dto.getStarttime() + "','" + dto.getEndtime() + "','" +
         dto.getTitle() + "','" + dto.getEvent() + "','" +
         dto.getPlace() + "','" + dto.getMemo() + "'," + dto.getAlarm() + "," + dto.getRepeat() +
-        ","+ dto.getTag()+")";
+        ",'"+ dto.getTag()+"')";
       String sql = sql1 + sql2;
       Log.i("insert",sql);
       db.execSQL(sql);
