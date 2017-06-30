@@ -103,13 +103,13 @@ public class CalendarActivity extends ListActivity implements Serializable {
         });
     }
 
-    @Override
+/*    @Override
     protected void onResume() {
         Calendar cal= Calendar.getInstance();
         SetYMD(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
         setDot();
         super.onResume();
-    }
+    }*/
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -419,13 +419,13 @@ public class CalendarActivity extends ListActivity implements Serializable {
                                 dto.setId(id);
                                 dto.setTitle(Place_Title[1]);
                                 dto.setPlace(Place_Title[0]);
+                                Log.i("뭐지",Place_Title[0]);
                                 dto.setStarttime("08:00");
                                 dto.setEndtime("09:00");
                                 dto.setEvent("-");
                                 dto.setMemo("-");
                                 dto.setTag("-");
                                 dto.setStartdate(STTdate);
-                                Log.i("ssdssd",STTdate);
                                 dto.setEnddate(STTdate);
                                 dbManager.insertSchedule(dto);
                                 Toast.makeText(CalendarActivity.this, "일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
