@@ -2,7 +2,11 @@ package com.comnawa.dowhat.sangjin;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -28,6 +32,8 @@ import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.kwanwoo.PositionActivity;
 
+import java.util.List;
+
 
 public class DetailActivity extends AppCompatActivity {
     //일정, 장소, 시작일, 종료일, 시작시간, 종료시간, 메모, 알람, 일행
@@ -48,8 +54,29 @@ public class DetailActivity extends AppCompatActivity {
     int alarm, repeat; //DB에 저장할 알람, 반복
     private boolean check; //신규 , 수정 판별 변수 (true:신규)
     int Num;
-    public static String address; //지도에 입력반 값을 넘길 변수
+    public static String address; //지도에 입력한 값을 넘길 변수
 
+    //주소로 위도, 경도 구하기
+    public static Location findGeoPoint(Context mcontext, String address){
+        Location loc = new Location("");
+        Geocoder coder = new Geocoder(mcontext);
+        List<Address> addr = null;
+        try {
+            addr = coder.getFromLocationName(address, 5);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if( addr != null){
+            for (int i =0; i<addr.size(); i++){
+                Address lating = addr.get(i);
+                double lat = lating.getLatitude();
+                double lon = lating.getLongitude();
+                loc.setLatitude(lat);
+                loc.setLongitude(lon);
+            }
+        }
+        return loc;
+    }
 
     @Override
     protected void onResume() {
