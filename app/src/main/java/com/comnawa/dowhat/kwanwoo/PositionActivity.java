@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.insang.DoWhat;
+import com.comnawa.dowhat.sangjin.DetailActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -63,18 +64,18 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
                             public void onClick(DialogInterface dialog, int which) {
                                 Toast.makeText(PositionActivity.this,"위치가 저장되었습니다."
                                 ,Toast.LENGTH_SHORT).show();
-
-                                Intent intent = new Intent(PositionActivity.this,CalendarCoreActivity.class);
+                                //저장된 값을 DetailActivity로 이동
+                               // Intent intent = new Intent(PositionActivity.this, DetailActivity.class);
                                    // Intent intent = new Intent();
                        /*         intent.setClassName("com.comnawa.dowhat.kwanwoo.CalendarCoreActivity"
                                         ,"com.comnawa.dowhat.kwanwoo.PositionActivity");*/
                                 //intent.setClassName(CalendarCoreActivity.class,PositionActivity.this);
-                                startActivityForResult(intent,1);
+
+                               // startActivityForResult(intent,1);
                                // startActivity(intent);
+                                DetailActivity.address=editPlace.getText().toString();
                                 finish(); //이전화면으로 이동
-
                             }
-
                         }).setNegativeButton("아니오", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -82,10 +83,16 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
                 }).create().show();
             }//onClick
         }); //onClickListener
-
     }
 
-        //스타트액티비티포리저트
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        editPlace.setText(DetailActivity.address);
+    }
+
+    //스타트액티비티포리저트
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
         PositionActivity.super.onActivityResult(requestCode,resultCode, intent);
         Bundle extraBundle;
@@ -163,8 +170,6 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
             marker.position(geoPoint);
             marker.title(""+editPlace.getText().toString());
             map.addMarker(marker);
-
-
 
         }
 

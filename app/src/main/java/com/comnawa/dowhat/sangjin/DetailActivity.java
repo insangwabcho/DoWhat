@@ -28,8 +28,6 @@ import com.comnawa.dowhat.insang.PrefManager;
 import com.comnawa.dowhat.insang.Preferences;
 import com.comnawa.dowhat.kwanwoo.PositionActivity;
 
-import java.util.ArrayList;
-
 
 public class DetailActivity extends AppCompatActivity {
     //일정, 장소, 시작일, 종료일, 시작시간, 종료시간, 메모, 알람, 일행
@@ -50,6 +48,15 @@ public class DetailActivity extends AppCompatActivity {
     int alarm, repeat; //DB에 저장할 알람, 반복
     private boolean check; //신규 , 수정 판별 변수 (true:신규)
     int Num;
+    public static String address; //지도에 입력반 값을 넘길 변수
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        editPlace.setText(address);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
