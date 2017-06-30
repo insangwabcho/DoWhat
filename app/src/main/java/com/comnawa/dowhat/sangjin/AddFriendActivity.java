@@ -57,8 +57,8 @@ public class AddFriendActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_settings) {
             startActivity(new Intent(AddFriendActivity.this, Preferences.class));
         } else if (item.getItemId() == R.id.menu_add) { //추가 클릭시 코드
-            Log.i("addf","here");
-            Log.i("addf",listview1.getCheckedItemPosition()+"");
+            Log.i("addf", "here");
+            Log.i("addf", listview1.getCheckedItemPosition() + "");
             int idx = listview1.getCheckedItemPosition();
             if (idx == 0) {
                 String choice = items.get(idx);
@@ -68,50 +68,56 @@ public class AddFriendActivity extends AppCompatActivity {
                 String myId = new PrefManager(this).getUserInfo().get("id");
                 if (id.equals(myId)) {
                     Toast.makeText(this, "자기 자신을 추가할 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    editText.setText("");
                     return false;
                 }
-                Log.i("addf","1");
+                Log.i("addf", "1");
                 //서버로 보낼 친구추가 코드
                 //addfriend.do
 
                 ArrayList<String> friendList = new ArrayList<>();
                 GetFriend gf = new GetFriend(this, myId, friendList);
-                Log.i("addf","here2");
+                Log.i("addf", "here2");
                 gf.start();
-                Log.i("addf","here3");
+                Log.i("addf", "here3");
                 try {
                     gf.join();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 String friendid = "";
-                int count=0;
+                int count = 0;
                 for (String t : friendList) {
-                    friendid += t;
-                    if(t.equals(choice)){
+                    if (t.equals(choice)) {
+                        Log.i("sex",t);
+                        Log.i("sex",choice);
                         count++;
+                        Log.i("sex",count+"");
+                        break;
                     }
+                    friendid += t;
                     friendid += ",";
                 }
                 friendid += choice;
-                if(count>0){
+                if (count > 0) {
                     Toast.makeText(this, "이미 등록된 친구입니다.", Toast.LENGTH_SHORT).show();
+                    editText.setText("");
                     return false;
-                }else{
-                    AddFriend af = new AddFriend(this, myId, friendid);
-                    Log.i("addf","here4");
-                    af.start();
-                    Log.i("addf","here5");
-                    try {
-                        af.join();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    //푸시메세지 코드
-                    DoWhat.sendPushMsg(this, name + " 님께서 친구로 추가하셨습니다.", id, name);
-                    Toast.makeText(this, "친구로 추가되었습니다.", Toast.LENGTH_SHORT).show();
                 }
-            } else if (idx==0){
+                AddFriend af = new AddFriend(this, myId, friendid);
+                Log.i("addf", "here4");
+                af.start();
+                Log.i("addf", "here5");
+                try {
+                    af.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //푸시메세지 코드
+                DoWhat.sendPushMsg(this, name + " 님께서 친구로 추가하셨습니다.", id, name);
+                Toast.makeText(this, "친구로 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                editText.setText("");
+            } else if (idx == 0) {
                 Toast.makeText(this, "선택된 친구가 없습니다.", Toast.LENGTH_SHORT).show();
             }
         }
