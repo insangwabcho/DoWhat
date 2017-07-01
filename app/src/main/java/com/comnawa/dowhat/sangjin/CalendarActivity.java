@@ -236,6 +236,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
 
         //pushTokken 업데이트
         FirebaseApp.initializeApp(this);
+        String token= FirebaseInstanceId.getInstance().getToken();
+        Log.d("FCM_Token", token);
         new UpdateTokken(this, manager.getUserInfo().get("id"), FirebaseInstanceId.getInstance().getToken()).start();
 
 

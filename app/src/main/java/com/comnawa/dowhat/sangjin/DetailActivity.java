@@ -9,6 +9,8 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -149,47 +151,130 @@ public class DetailActivity extends AppCompatActivity {
                 dto.setAlarm(alarm);
                 dto.setRepeat(repeat);
                 dto.setTag(friendtag);
+                final ScheduleDTO sendDTO= dto;
                 DBManager dbManager = new DBManager(this);
                 if (check) { //신규
-                    dbManager.insertSchedule(dto);
 
-                    //신규설정한 날짜 startdate를  putExtra로 넣어서 CalendarActivity에 보내주고 finish()
-                    Intent intent = new Intent(this, CalendarActivity.class);
-                    intent.putExtra("sdate", txtSdate.getText().toString());
-                    intent.putExtra("newMod", true);
-                    intent.putExtra("cbAlarm", "설정");
-                    if (cbAlarm.getText().toString().equals("설정")) {
-                        DoWhat.resetAlarm(this, intent, check);
+                    if (!editTag.getText().equals("")) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setTitle("푸시 서비스")
+                          .setMessage("추가된 일정을 친구에게 보내시겠습니까?")
+                          .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                              @Override
+                              public void onClick(DialogInterface dialog, int which) {
+                                  //추가된 날짜 startdate를 putExtra로 넣어서 CalendarActivity에 보내주고 실행 후 finish()
+                                  Intent intent = new Intent(DetailActivity.this, CalendarActivity.class);
+                                  intent.putExtra("sdate", txtSdate.getText().toString());
+                                  intent.putExtra("newMod", false);
+                                  intent.putExtra("cbAlarm", cbAlarm.getText().toString());
+                                  DoWhat.resetAlarm(DetailActivity.this, intent, check);
+                                  new DBManager(DetailActivity.this).insertSchedule(sendDTO);
+                                  ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                                  final NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+                                  final NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                                  boolean connWifi = wifi.isConnected();
+                                  boolean connMobile = mobile.isConnected();
+                                  if (connWifi || connMobile) {
+                                      String tags = editTag.getText().toString();
+//                              String[] friendssId= taggg.split(",");
+                                      String[] friendssId = {
+                                        "조인상", "조인상"
+                                      };
+                                      String myId = new PrefManager(DetailActivity.this).getUserInfo().get("id");
+                                      String myName = new PrefManager(DetailActivity.this).getUserInfo().get("name");
+                                      Log.i("nnnnn", taggg);
+                                      for (String f : friendssId) {
+                                          DoWhat.sendPushMsg(DetailActivity.this, myName + " 님의 일정이 추가되었습니다.", "jo", myName, sendDTO);
+                                      }
+                                  } else {
+                                      Toast.makeText(DetailActivity.this, "인터넷에 연결되어있지 않아 \n 메세지를 보내지 못하였습니다.", Toast.LENGTH_SHORT).show();
+                                  }
+                              }
+                          })
+                          .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                              @Override
+                              public void onClick(DialogInterface dialog, int which) {
+                                  Intent intent = new Intent(DetailActivity.this, CalendarActivity.class);
+                                  intent.putExtra("sdate", txtSdate.getText().toString());
+                                  intent.putExtra("newMod", false);
+                                  intent.putExtra("cbAlarm", cbAlarm.getText().toString());
+                                  DoWhat.resetAlarm(DetailActivity.this, intent, check);
+                                  new DBManager(DetailActivity.this).insertSchedule(sendDTO);
+                              }
+                          })
+                          .create().show();
+
+                        //              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
+                        //              uns.start();
                     } else {
-                        Toast.makeText(this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
-                        startActivity(intent);
-                        finish();
+                        Intent intent = new Intent(DetailActivity.this, CalendarActivity.class);
+                        intent.putExtra("sdate", txtSdate.getText().toString());
+                        intent.putExtra("newMod", false);
+                        intent.putExtra("cbAlarm", cbAlarm.getText().toString());
+                        DoWhat.resetAlarm(DetailActivity.this, intent, check);
+                        new DBManager(DetailActivity.this).insertSchedule(sendDTO);
                     }
 
-                    //              UpdateNewSchedule uns= new UpdateNewSchedule(this,true,dto);
-                    //              uns.start();
                 } else { //수정
-                    dbManager.updateSchedule(dto);
 
-                    //수정한 날짜 startdate를 putExtra로 넣어서 CalendarActivity에 보내주고 실행 후 finish()
-                    Intent intent = new Intent(this, CalendarActivity.class);
-                    intent.putExtra("sdate", txtSdate.getText().toString());
-                    intent.putExtra("newMod", false);
-                    intent.putExtra("cbAlarm", cbAlarm.getText().toString());
-                    DoWhat.resetAlarm(this, intent, check);
+                    if (!editTag.getText().equals("")) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setTitle("푸시 서비스")
+                          .setMessage("수정된 일정을 친구에게 보내시겠습니까?")
+                          .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                              @Override
+                              public void onClick(DialogInterface dialog, int which) {
+                                  //수정한 날짜 startdate를 putExtra로 넣어서 CalendarActivity에 보내주고 실행 후 finish()
+                                  Intent intent = new Intent(DetailActivity.this, CalendarActivity.class);
+                                  intent.putExtra("sdate", txtSdate.getText().toString());
+                                  intent.putExtra("newMod", false);
+                                  intent.putExtra("cbAlarm", cbAlarm.getText().toString());
+                                  DoWhat.resetAlarm(DetailActivity.this, intent, check);
+                                  new DBManager(DetailActivity.this).updateSchedule(sendDTO);
+                                  ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                                  final NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+                                  final NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                                  boolean connWifi = wifi.isConnected();
+                                  boolean connMobile = mobile.isConnected();
+                                  if (connWifi || connMobile) {
+                                      String tags = editTag.getText().toString();
+//                              String[] friendssId= taggg.split(",");
+                                      String[] friendssId = {
+                                        "조인상", "조인상"
+                                      };
+                                      String myId = new PrefManager(DetailActivity.this).getUserInfo().get("id");
+                                      String myName = new PrefManager(DetailActivity.this).getUserInfo().get("name");
+                                      Log.i("nnnnn", taggg);
+                                      for (String f : friendssId) {
+                                          DoWhat.sendPushMsg(DetailActivity.this, myName + " 님의 일정이 수정되었습니다.", "jo", myName, sendDTO);
+                                      }
+                                  } else {
+                                      Toast.makeText(DetailActivity.this, "인터넷에 연결되어있지 않아 \n 메세지를 보내지 못하였습니다.", Toast.LENGTH_SHORT).show();
+                                  }
+                              }
+                          })
+                          .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                              @Override
+                              public void onClick(DialogInterface dialog, int which) {
+                                  Intent intent = new Intent(DetailActivity.this, CalendarActivity.class);
+                                  intent.putExtra("sdate", txtSdate.getText().toString());
+                                  intent.putExtra("newMod", false);
+                                  intent.putExtra("cbAlarm", cbAlarm.getText().toString());
+                                  DoWhat.resetAlarm(DetailActivity.this, intent, check);
+                                  new DBManager(DetailActivity.this).updateSchedule(sendDTO);
+                              }
+                          })
+                          .create().show();
 
-                    //              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
-                    //              uns.start();
-                }
-                if (!editTag.getText().toString().equals("")){
-                    String tags= editTag.getText().toString();
-                    String[] friendss= tags.split(",");
-                    String[] friendssId= taggg.split(",");
-                    String myId= new PrefManager(DetailActivity.this).getUserInfo().get("id");
-                    String myName= new PrefManager(DetailActivity.this).getUserInfo().get("name");
-                    Log.i("nnnnn",taggg);
-                    for (String f: friendssId){
-                        DoWhat.sendPushMsg(DetailActivity.this, myName+" 님의 일정에 태그되었습니다.", f, myName, CalendarActivity.items.get(index));
+                        //              UpdateNewSchedule uns= new UpdateNewSchedule(this,false,dto);
+                        //              uns.start();
+                    } else {
+                        Intent intent = new Intent(DetailActivity.this, CalendarActivity.class);
+                        intent.putExtra("sdate", txtSdate.getText().toString());
+                        intent.putExtra("newMod", false);
+                        intent.putExtra("cbAlarm", cbAlarm.getText().toString());
+                        DoWhat.resetAlarm(DetailActivity.this, intent, check);
+                        new DBManager(DetailActivity.this).updateSchedule(sendDTO);
                     }
                 }
             }

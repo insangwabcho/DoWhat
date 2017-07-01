@@ -13,6 +13,10 @@ import android.util.Log;
 
 import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.sangjin.CalendarActivity;
+import com.comnawa.dowhat.sangjin.ScheduleDTO;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class PushBroadcast extends BroadcastReceiver {
 
@@ -40,14 +44,14 @@ public class PushBroadcast extends BroadcastReceiver {
     }
 
     Log.i("zzoz",intent.getStringExtra("remoteMessage"));
-    Log.i("zzoz",intent.getStringExtra("tagg"));
+    Log.i("zzoz",intent.getStringExtra("tag"));
     msg = intent.getStringExtra("remoteMessage"); //remoteMessage.getNotification().getBody();
-    String tagg= intent.getStringExtra("tagg");//remoteMessage.getNotification().gettagg();
+    String tagg= intent.getStringExtra("tag");//remoteMessage.getNotification().gettagg();
     //dongjak 1= 친구추가 2= 일정추가
     int dongjak=0;
     if (msg.indexOf("친구로")!= -1){
       dongjak= 1;
-    } else if (msg.indexOf("일정에")!= -1){
+    } else if (msg.indexOf("일정")!= -1){
       dongjak= 2;
     } else {
       dongjak =0;
@@ -77,32 +81,32 @@ public class PushBroadcast extends BroadcastReceiver {
       intentt.putExtra("userid",userid);
       intentt.putExtra("username",username);
     } else if (dongjak==2) { //일정추가
-      String titles= intent.getStringExtra("title");
-      int start= titles.indexOf("{");
-      int end= titles.indexOf("}");
-      titles= titles.substring(start, end-1);
+      String obj= intent.getStringExtra("title");
+      ScheduleDTO dto= new ScheduleDTO();
+      try {
+        JSONObject jobj= new JSONObject(obj);
+        dto.setNum(jobj.getInt("num"));
+        dto.setId(jobj.getString("id"));
+        dto.setStartdate(jobj.getString("startdate"));
+        dto.setEnddate(jobj.getString("enddate"));
+        dto.setStarttime(jobj.getString("starttime"));
+        dto.setEndtime(jobj.getString("endtime"));
+        dto.setTitle(jobj.getString("title"));
+        dto.setEvent(jobj.getString("event"));
+        dto.setPlace(jobj.getString("place"));
+        dto.setMemo(jobj.getString("memo"));
+        dto.setTag(jobj.getString("tag"));
+        dto.setAlarm(jobj.getInt("alarm"));
+        dto.setRepeat(jobj.getInt("repeat"));
+        Log.i("push",dto.toString());
+      } catch (JSONException e) {
+        e.printStackTrace();
+      }
 
-      int num;
-      String id;
-      String startdate;
-      String enddate;
-      String starttime;
-      String endtime;
-      String title;
-      String event;
-      String place;
-      String memo;
-      String tag;
-      int alarm;
-      int repeat;
-
-      String[] arr= titles.split("=");
-
-      Log.i("asdfasdf",arr.toString());
-//      DBManager dbManager= new DBManager(context);
-//      ScheduleDTO dto= new ScheduleDTO();
-//      intentt= new Intent(context, CalendarActivity.class);
-//      intentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+      DBManager dbManager= new DBManager(context);
+      dbManager.insertSchedule(dto);
+      intentt= new Intent(context, CalendarActivity.class);
+      intentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 
     NotificationManager notificationManager =

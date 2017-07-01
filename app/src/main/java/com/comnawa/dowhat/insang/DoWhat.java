@@ -24,8 +24,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 public class DoWhat {
 
@@ -280,23 +278,41 @@ public class DoWhat {
   }
 
 
-  public static void sendPushMsg(Context context, final String message, @Nullable final String userid, @Nullable final String username, @Nullable final ScheduleDTO dto){
-    final String svKey= "AAAARqvabTs:APA91bF_Ldp3AyUWQUo9-uNbcb70MGmYFHB1yuOT6eV4v-K5sTbs6-Vs8jD9ZK9Eln3XEmfs4yjbzulW5dcL9tY9lTbu9nTfF_FFF8FXGPjn-WfM4dlud43qrClW1xKpf4_MSfiEEv9P";
+  public static void sendPushMsg(Context context, final String message, @Nullable final String userid, @Nullable final String username, @Nullable final ScheduleDTO dto) {
+    final String svKey = "AAAARqvabTs:APA91bF_Ldp3AyUWQUo9-uNbcb70MGmYFHB1yuOT6eV4v-K5sTbs6-Vs8jD9ZK9Eln3XEmfs4yjbzulW5dcL9tY9lTbu9nTfF_FFF8FXGPjn-WfM4dlud43qrClW1xKpf4_MSfiEEv9P";
 
-    Map<String,String> tokk= new HashMap<>();
-    GetTokken th= new GetTokken(context,userid, tokk);
-    th.start();
-    try {
-      th.join();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-    if (tokk.get("tokken").equals("fail")){
-      return;
-    }
+//    Map<String, String> tokk = new HashMap<>();
+//    GetTokken th = new GetTokken(context, userid, tokk);
+//    th.start();
+//    try {
+//      th.join();
+//    } catch (InterruptedException e) {
+//      e.printStackTrace();
+//    }
+//    if (tokk.get("tokken").equals("fail")) {
+//      return;
+//    }
+//
+//    final String tok = tokk.get("tokken");
 
-    final String tok= tokk.get("tokken");
+    /*
 
+    private int num;
+    private String id;
+    private String startdate;
+    private String enddate;
+    private String starttime;
+    private String endtime;
+    private String title;
+    private String event;
+    private String place;
+    private String memo;
+    private String tag;
+    private int alarm;
+    private int repeat;
+
+     */
+    Log.i("nnnnn","1");
     new Thread(new Runnable() {
       @Override
       public void run() {
@@ -305,17 +321,39 @@ public class DoWhat {
           JSONObject root = new JSONObject();
           JSONObject notification = new JSONObject();
           notification.put("body", message);
-          notification.put("tag", userid+","+username);
-          if (dto== null) {
+          notification.put("tag", userid + "," + username);
+          if (dto == null) {
             notification.put("title", "DoWhat");
           } else {
-            notification.put("title", dto.toString());
+            JSONObject jobj = new JSONObject();
+            try {
+              Log.i("nnnnn","2");
+              jobj.put("num", dto.getNum());
+              jobj.put("id", dto.getId());
+              jobj.put("startdate", dto.getStartdate());
+              jobj.put("enddate", dto.getEnddate());
+              jobj.put("starttime", dto.getStarttime());
+              jobj.put("endtime", dto.getEndtime());
+              jobj.put("title", dto.getTitle());
+              jobj.put("event", dto.getEvent());
+              jobj.put("place", dto.getPlace());
+              jobj.put("memo", dto.getMemo());
+              jobj.put("tag", dto.getTag());
+              jobj.put("alarm", dto.getAlarm());
+              jobj.put("repeat", dto.getRepeat());
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
+            notification.put("title", jobj.toString());
+            Log.i("nnnnn",jobj.toString());
           }
+          Log.i("nnnnn","3");
 //          root.put("notification", notification);
-          root.put("data",notification);
-          root.put("to", tok);
+          root.put("data", notification);
+//          root.put("to", tok);
+          root.put("to", "fRQ_3IwltNA:APA91bG3Lw0Fv8mlU0-76h0DNXx0Lwd4HyPobM6q6ZaWOINqpoinDoXpk4IOTuubTxkLPrUb_K2VodSkSjnrsm2cHp8PkIGIoElBEOIcZhYwB3_3qHIqwrmGAtkrN1av3dMNGLftJkgK");
           // FMC 메시지 생성 end
-
+          Log.i("nnnnn","4");
           URL Url = new URL("https://fcm.googleapis.com/fcm/send");
           HttpURLConnection conn = (HttpURLConnection) Url.openConnection();
           conn.setRequestMethod("POST");
@@ -328,11 +366,13 @@ public class DoWhat {
           os.write(root.toString().getBytes("utf-8"));
           os.flush();
           conn.getResponseCode();
+          Log.i("nnnnn","5");
         } catch (Exception e) {
           e.printStackTrace();
         }
       }
     }).start();
+    Log.i("nnnnn","6");
   }
 
 
