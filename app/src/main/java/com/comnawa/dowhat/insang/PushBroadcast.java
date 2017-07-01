@@ -77,8 +77,8 @@ public class PushBroadcast extends BroadcastReceiver {
     int primary=0;
     for (int i=0; i<userid.length(); i++){
       primary+= userid.charAt(i);
+      Log.i("primaryz"+i, primary+"");
     }
-    primary*= userid.indexOf(0);
 
     Intent intentt = null;
     if (dongjak==1){ // 친구
@@ -93,6 +93,7 @@ public class PushBroadcast extends BroadcastReceiver {
         try {
           JSONObject jobj = new JSONObject(obj);
           dto.setNum(jobj.getInt("num")+1000+primary);
+          Log.i("primary",(jobj.getInt("num")+1000+primary)+"");
           dto.setId(new PrefManager(context).getUserInfo().get("id"));
           dto.setStartdate(jobj.getString("startdate"));
           dto.setEnddate(jobj.getString("enddate"));
@@ -132,6 +133,7 @@ public class PushBroadcast extends BroadcastReceiver {
         try {
           JSONObject jobj = new JSONObject(obj);
           dto.setNum(jobj.getInt("num")+1000+primary);
+          Log.i("primary",(jobj.getInt("num")+1000+primary)+"");
           dto.setId(new PrefManager(context).getUserInfo().get("id"));
           dto.setStartdate(jobj.getString("startdate"));
           dto.setEnddate(jobj.getString("enddate"));

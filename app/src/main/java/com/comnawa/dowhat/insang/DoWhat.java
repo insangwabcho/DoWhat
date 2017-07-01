@@ -352,7 +352,6 @@ public class DoWhat {
           Log.i("nnnnn","3");
 //          root.put("notification", notification);
           root.put("data", notification);
-//          root.put("to", tok);
           root.put("to", tok);
           // FMC 메시지 생성 end
           Log.i("nnnnn","4");

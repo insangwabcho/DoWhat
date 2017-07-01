@@ -155,7 +155,7 @@ public class DetailActivity extends AppCompatActivity {
                 DBManager dbManager = new DBManager(this);
                 if (check) { //신규
 
-                    if (!editTag.getText().equals("")) {
+                    if (!editTag.getText().toString().equals("")) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("푸시 서비스")
                           .setMessage("추가된 일정을 친구에게 보내시겠습니까?")
@@ -214,7 +214,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 } else { //수정
 
-                    if (!editTag.getText().equals("")) {
+                    if (!editTag.getText().toString().equals("")) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("푸시 서비스")
                           .setMessage("수정된 일정을 친구에게 보내시겠습니까?")
