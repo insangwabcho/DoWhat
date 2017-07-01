@@ -220,7 +220,9 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
 
         }
             //getAddress()
-       // editPlace.setText(getAddress(this, 123f, 145f));
+     //  editPlace.setText(getAddress(this, 123f, 145f));
+                                    //현재화면, 위도, 경도
+        editPlace.setText(getAddress(this, latitude,longitude));
         //List<Marker> prevMakers = null;
     /*    //중복마커 제거
         HashSet<Marker> hashSet = new HashSet<Marker>();
