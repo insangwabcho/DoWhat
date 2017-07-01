@@ -158,6 +158,7 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(PositionActivity.this, "이전화면으로 돌아갑니다.",
                                 Toast.LENGTH_SHORT).show();
+                        DetailActivity.address = null;
                         finish();
                     }
                 }).setNegativeButton("아니오", new DialogInterface.OnClickListener() {

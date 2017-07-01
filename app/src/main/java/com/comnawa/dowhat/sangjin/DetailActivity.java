@@ -90,7 +90,17 @@ public class DetailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         DoWhat.checkPermission(this, DoWhat.access_fine_location, DoWhat.access_coarse_location);
-        editPlace.setText(address);
+        editPlace.setText(
+          address==null ?
+            CalendarActivity.items.get(index).getPlace().equals("-") ? "" : CalendarActivity.items.get(index).getPlace()
+            : address
+        );
+    }
+
+    @Override
+    protected void onDestroy() {
+        address= null;
+        super.onDestroy();
     }
 
     @Override
@@ -133,6 +143,7 @@ public class DetailActivity extends AppCompatActivity {
                 if(edpc==null || edpc.equals("")){
                     edpc="-";
                 }
+                Log.i("edpc",edpc);
                 String friendtag=editTag.getText().toString();
                 if(friendtag==null || friendtag.equals("")){
                     friendtag="-";
@@ -152,7 +163,6 @@ public class DetailActivity extends AppCompatActivity {
                 dto.setRepeat(repeat);
                 dto.setTag(friendtag);
                 final ScheduleDTO sendDTO= dto;
-                DBManager dbManager = new DBManager(this);
                 if (check) { //신규
 
                     if (!editTag.getText().toString().equals("")) {
@@ -395,11 +405,16 @@ public class DetailActivity extends AppCompatActivity {
             ScheduleDTO dto = CalendarActivity.items.get(index);
             Num = dto.getNum();
             editTitle.setText(dto.getTitle());
-            if (dto.getPlace().equals("-")) {
-                editPlace.setText("");
-            } else {
-                editPlace.setText(dto.getPlace());
-            }
+
+            String plaace= dto.getPlace().equals("-")? "" : dto.getPlace();
+            Log.i("plaace",plaace);
+            editPlace.setText(plaace);
+//            if (dto.getPlace().equals("-")) {
+//                editPlace.setText("");
+//            } else {
+//                editPlace.setText(dto.getPlace());
+//            }
+
             txtSdate.setText(dto.getStartdate());
             txtEdate.setText(dto.getEnddate());
             txtStime.setText(dto.getStarttime());

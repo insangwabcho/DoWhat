@@ -35,7 +35,7 @@ public class LoadActivity extends AppCompatActivity {
     loading.execute(isNetWorkConnect);
 
     //인상이 혼자함
-    new PrefManager(this).setAutoLogin("insang","1234","Jo","bohye","123124124",true);
+//    new PrefManager(this).setAutoLogin("insang","1234","Jo","bohye","123124124",true);
 
   }
 
