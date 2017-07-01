@@ -90,11 +90,15 @@ public class DetailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         DoWhat.checkPermission(this, DoWhat.access_fine_location, DoWhat.access_coarse_location);
-        editPlace.setText(
-          address==null ?
-            CalendarActivity.items.get(index).getPlace().equals("-") ? "" : CalendarActivity.items.get(index).getPlace()
-            : address
-        );
+        try {
+            editPlace.setText(
+              address == null ?
+                CalendarActivity.items.get(index).getPlace().equals("-") ? "" : CalendarActivity.items.get(index).getPlace()
+                : address
+            );
+        } catch (ArrayIndexOutOfBoundsException e){
+            editPlace.setText("");
+        }
     }
 
     @Override
