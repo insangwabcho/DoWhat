@@ -24,6 +24,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DoWhat {
 
@@ -278,22 +280,22 @@ public class DoWhat {
   }
 
 
-  public static void sendPushMsg(Context context, final String message, @Nullable final String userid, @Nullable final String username, @Nullable final ScheduleDTO dto) {
+  public static void sendPushMsg(Context context, final String message, final String userid, @Nullable final String myId, @Nullable final String myname, @Nullable final ScheduleDTO dto) {
     final String svKey = "AAAARqvabTs:APA91bF_Ldp3AyUWQUo9-uNbcb70MGmYFHB1yuOT6eV4v-K5sTbs6-Vs8jD9ZK9Eln3XEmfs4yjbzulW5dcL9tY9lTbu9nTfF_FFF8FXGPjn-WfM4dlud43qrClW1xKpf4_MSfiEEv9P";
 
-//    Map<String, String> tokk = new HashMap<>();
-//    GetTokken th = new GetTokken(context, userid, tokk);
-//    th.start();
-//    try {
-//      th.join();
-//    } catch (InterruptedException e) {
-//      e.printStackTrace();
-//    }
-//    if (tokk.get("tokken").equals("fail")) {
-//      return;
-//    }
-//
-//    final String tok = tokk.get("tokken");
+    Map<String, String> tokk = new HashMap<>();
+    GetTokken th = new GetTokken(context, userid, tokk);
+    th.start();
+    try {
+      th.join();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    if (tokk.get("tokken").equals("fail")) {
+      return;
+    }
+
+    final String tok = tokk.get("tokken");
 
     /*
 
@@ -321,7 +323,7 @@ public class DoWhat {
           JSONObject root = new JSONObject();
           JSONObject notification = new JSONObject();
           notification.put("body", message);
-          notification.put("tag", userid + "," + username);
+          notification.put("tag", myId + "," + myname);
           if (dto == null) {
             notification.put("title", "DoWhat");
           } else {
@@ -351,7 +353,7 @@ public class DoWhat {
 //          root.put("notification", notification);
           root.put("data", notification);
 //          root.put("to", tok);
-          root.put("to", "fRQ_3IwltNA:APA91bG3Lw0Fv8mlU0-76h0DNXx0Lwd4HyPobM6q6ZaWOINqpoinDoXpk4IOTuubTxkLPrUb_K2VodSkSjnrsm2cHp8PkIGIoElBEOIcZhYwB3_3qHIqwrmGAtkrN1av3dMNGLftJkgK");
+          root.put("to", tok);
           // FMC 메시지 생성 end
           Log.i("nnnnn","4");
           URL Url = new URL("https://fcm.googleapis.com/fcm/send");

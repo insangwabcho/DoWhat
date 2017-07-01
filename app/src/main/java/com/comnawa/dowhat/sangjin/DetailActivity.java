@@ -176,15 +176,12 @@ public class DetailActivity extends AppCompatActivity {
                                   boolean connMobile = mobile.isConnected();
                                   if (connWifi || connMobile) {
                                       String tags = editTag.getText().toString();
-//                              String[] friendssId= taggg.split(",");
-                                      String[] friendssId = {
-                                        "조인상", "조인상"
-                                      };
+                                      String[] friendssId= taggg.split(",");
                                       String myId = new PrefManager(DetailActivity.this).getUserInfo().get("id");
                                       String myName = new PrefManager(DetailActivity.this).getUserInfo().get("name");
                                       Log.i("nnnnn", taggg);
                                       for (String f : friendssId) {
-                                          DoWhat.sendPushMsg(DetailActivity.this, myName + " 님의 일정이 추가되었습니다.", "jo", myName, sendDTO);
+                                          DoWhat.sendPushMsg(DetailActivity.this, myName + " 님의 일정이 추가되었습니다.", f, myId, myName, sendDTO);
                                       }
                                   } else {
                                       Toast.makeText(DetailActivity.this, "인터넷에 연결되어있지 않아 \n 메세지를 보내지 못하였습니다.", Toast.LENGTH_SHORT).show();
@@ -238,15 +235,12 @@ public class DetailActivity extends AppCompatActivity {
                                   boolean connMobile = mobile.isConnected();
                                   if (connWifi || connMobile) {
                                       String tags = editTag.getText().toString();
-//                              String[] friendssId= taggg.split(",");
-                                      String[] friendssId = {
-                                        "조인상", "조인상"
-                                      };
+                                      String[] friendssId= taggg.split(",");
                                       String myId = new PrefManager(DetailActivity.this).getUserInfo().get("id");
                                       String myName = new PrefManager(DetailActivity.this).getUserInfo().get("name");
                                       Log.i("nnnnn", taggg);
                                       for (String f : friendssId) {
-                                          DoWhat.sendPushMsg(DetailActivity.this, myName + " 님의 일정이 수정되었습니다.", "jo", myName, sendDTO);
+                                          DoWhat.sendPushMsg(DetailActivity.this, myName + " 님의 일정이 수정되었습니다.", f, myId, myName, sendDTO);
                                       }
                                   } else {
                                       Toast.makeText(DetailActivity.this, "인터넷에 연결되어있지 않아 \n 메세지를 보내지 못하였습니다.", Toast.LENGTH_SHORT).show();
