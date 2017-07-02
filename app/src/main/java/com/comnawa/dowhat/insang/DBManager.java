@@ -262,7 +262,7 @@ public class DBManager {
       SQLiteDatabase db = getWritableDatabase();
       String sql1 = "insert into schedule (num, id, startdate, enddate, starttime, endtime," +
         " title, event, place, memo, alarm, repeat, tag) ";
-      String sql2 = "values(" + dto.getNum() + "," + dto.getId() + "','" + dto.getStartdate() + "','" +
+      String sql2 = "values(" + dto.getNum() + ",'" + dto.getId() + "','" + dto.getStartdate() + "','" +
         dto.getEnddate() + "','" + dto.getStarttime() + "','" + dto.getEndtime() + "','" +
         dto.getTitle() + "','" + dto.getEvent() + "','" +
         dto.getPlace() + "','" + dto.getMemo() + "'," + dto.getAlarm() + "," + dto.getRepeat() +
