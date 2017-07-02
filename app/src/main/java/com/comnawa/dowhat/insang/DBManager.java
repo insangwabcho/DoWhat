@@ -35,6 +35,9 @@ public class DBManager {
     dbm.insertAllSchedules(dto);
   }
 
+  public void tagInsert(ScheduleDTO dto){
+    dbm.insertasd(dto);
+  }
 
   public ArrayList<ScheduleDTO> setDot(String id, int year, int month) {
     return dbm.setDot(id, year, month);
@@ -255,8 +258,25 @@ public class DBManager {
       }
     }
 
+    public int insertasd(ScheduleDTO dto) {
+      SQLiteDatabase db = getWritableDatabase();
+      String sql1 = "insert into schedule (num, id, startdate, enddate, starttime, endtime," +
+        " title, event, place, memo, alarm, repeat, tag) ";
+      String sql2 = "values(" + dto.getNum() + "," + dto.getId() + "','" + dto.getStartdate() + "','" +
+        dto.getEnddate() + "','" + dto.getStarttime() + "','" + dto.getEndtime() + "','" +
+        dto.getTitle() + "','" + dto.getEvent() + "','" +
+        dto.getPlace() + "','" + dto.getMemo() + "'," + dto.getAlarm() + "," + dto.getRepeat() +
+        ",'" + dto.getTag() + "')";
+      String sql = sql1 + sql2;
+      Log.i("insert", sql);
+      db.execSQL(sql);
+
+      return 0;
+    }
+
     public int insert(ScheduleDTO dto) {
       SQLiteDatabase db = getWritableDatabase();
+      int nuum = dto.getNum() != 0 ? dto.getNum() : 0;
       String sql1 = "insert into schedule (id, startdate, enddate, starttime, endtime," +
         " title, event, place, memo, alarm, repeat, tag) ";
       String sql2 = "values('" + dto.getId() + "','" + dto.getStartdate() + "','" +
@@ -268,21 +288,21 @@ public class DBManager {
       Log.i("insert", sql);
       db.execSQL(sql);
 
-      db= null;
+      db = null;
 
-      String sql3= "select num from schedule where id='"+dto.getId()+"' and startdate='"+dto.getStartdate()+
-        "' and enddate='"+dto.getEnddate()+"' and starttime='"+dto.getStarttime()+"' and endtime='"+dto.getEndtime()+
-        "' and title='"+dto.getTitle()+"' and event='"+dto.getEvent()+"' and place='"+dto.getPlace()+
-        "' and memo='"+dto.getMemo()+"' and alarm="+dto.getAlarm()+" and repeat="+dto.getRepeat()+
-        " and tag='"+dto.getTag()+"'";
+      String sql3 = "select num from schedule where id='" + dto.getId() + "' and startdate='" + dto.getStartdate() +
+        "' and enddate='" + dto.getEnddate() + "' and starttime='" + dto.getStarttime() + "' and endtime='" + dto.getEndtime() +
+        "' and title='" + dto.getTitle() + "' and event='" + dto.getEvent() + "' and place='" + dto.getPlace() +
+        "' and memo='" + dto.getMemo() + "' and alarm=" + dto.getAlarm() + " and repeat=" + dto.getRepeat() +
+        " and tag='" + dto.getTag() + "'";
 
-      db= getWritableDatabase();
-      rs= db.rawQuery(sql3,null);
-      int a=-1;
+      db = getWritableDatabase();
+      rs = db.rawQuery(sql3, null);
+      int a = -1;
       if (rs.moveToNext()) {
         a = rs.getInt(0);
       }
-      Log.i("insec num",a+"");
+      Log.i("insec num", a + "");
       return a;
     }
 

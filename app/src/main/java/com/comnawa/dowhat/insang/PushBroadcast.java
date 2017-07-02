@@ -142,7 +142,7 @@ public class PushBroadcast extends BroadcastReceiver {
         intent.removeExtra("tag");
 
         DBManager dbManager = new DBManager(context);
-        dbManager.insertSchedule(dto);
+        dbManager.tagInsert(dto);
         intentt = new Intent(context, CalendarActivity.class);
         intentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
