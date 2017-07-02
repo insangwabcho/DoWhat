@@ -87,7 +87,7 @@ public class PushBroadcast extends BroadcastReceiver {
       intentt.putExtra("userid",userid);
       intentt.putExtra("username",username);
     } else if (dongjak==2) { //일정
-      if (msg.indexOf("추가되었습니다.")!= -1) { //신규
+      if (msg.indexOf("추가")!= -1) { //신규
         String obj = intent.getStringExtra("title");
         ScheduleDTO dto = new ScheduleDTO();
         try {
@@ -127,7 +127,7 @@ public class PushBroadcast extends BroadcastReceiver {
         dbManager.insertSchedule(dto);
         intentt = new Intent(context, CalendarActivity.class);
         intentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-      } else if (msg.indexOf("수정되었습니다.")!= -1){ //수정
+      } else if (msg.indexOf("수정")!= -1){ //수정
         String obj = intent.getStringExtra("title");
         ScheduleDTO dto = new ScheduleDTO();
         try {
@@ -165,6 +165,46 @@ public class PushBroadcast extends BroadcastReceiver {
 
         DBManager dbManager = new DBManager(context);
         dbManager.updateSchedule(dto);
+        intentt = new Intent(context, CalendarActivity.class);
+        intentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+      } else if (msg.indexOf("삭제되었습니다.")!= -1){ //수정
+        String obj = intent.getStringExtra("title");
+        ScheduleDTO dto = new ScheduleDTO();
+        try {
+          JSONObject jobj = new JSONObject(obj);
+          dto.setNum(jobj.getInt("num")+1000+primary);
+          Log.i("primary",(jobj.getInt("num")+1000+primary)+"");
+          dto.setId(new PrefManager(context).getUserInfo().get("id"));
+          dto.setStartdate(jobj.getString("startdate"));
+          dto.setEnddate(jobj.getString("enddate"));
+          dto.setStarttime(jobj.getString("starttime"));
+          dto.setEndtime(jobj.getString("endtime"));
+          dto.setTitle(jobj.getString("title"));
+          dto.setEvent(jobj.getString("event"));
+          dto.setPlace(jobj.getString("place"));
+          dto.setMemo(jobj.getString("memo"));
+
+          String tagFriend= jobj.getString("tag");
+          String[] tagsFriend= tagFriend.split(",");
+          String tagResult="";
+          for (String t: tagsFriend){
+            if (t.equals(new PrefManager(context).getUserInfo().get("name"))){
+              t= username;
+            }
+            tagResult+= t+",";
+          }
+          tagResult= tagResult.substring(0,tagResult.length()-1);
+          dto.setTag(tagResult);
+
+          dto.setAlarm(jobj.getInt("alarm"));
+          dto.setRepeat(jobj.getInt("repeat"));
+          Log.i("push", dto.toString());
+        } catch (JSONException e) {
+          e.printStackTrace();
+        }
+
+        DBManager dbManager = new DBManager(context);
+        dbManager.deleteSchedule(dto);
         intentt = new Intent(context, CalendarActivity.class);
         intentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
       }

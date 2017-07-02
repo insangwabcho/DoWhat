@@ -169,7 +169,8 @@ public class DetailActivity extends AppCompatActivity {
                 final ScheduleDTO sendDTO= dto;
                 if (check) { //신규
 
-                    if (!editTag.getText().toString().equals("")) {
+//                    if (!editTag.getText().toString().equals("")) {
+                    if (editTag.getText().toString().equals("")) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("푸시 서비스")
                           .setMessage("추가된 일정을 친구에게 보내시겠습니까?")
@@ -195,7 +196,7 @@ public class DetailActivity extends AppCompatActivity {
                                       String myName = new PrefManager(DetailActivity.this).getUserInfo().get("name");
                                       Log.i("nnnnn", taggg);
                                       for (String f : friendssId) {
-                                          DoWhat.sendPushMsg(DetailActivity.this, myName + " 님의 일정이 추가되었습니다.", f, myId, myName, sendDTO);
+                                          new DoWhat().sendPushMsg(DetailActivity.this, myName + " 님의 일정이 추가되었습니다.", f, myId, myName, sendDTO);
                                       }
                                   } else {
                                       Toast.makeText(DetailActivity.this, "인터넷에 연결되어있지 않아 \n 메세지를 보내지 못하였습니다.", Toast.LENGTH_SHORT).show();
@@ -228,7 +229,8 @@ public class DetailActivity extends AppCompatActivity {
 
                 } else { //수정
 
-                    if (!editTag.getText().toString().equals("")) {
+//                    if (!editTag.getText().toString().equals("")) {
+                    if (editTag.getText().toString().equals("")) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("푸시 서비스")
                           .setMessage("수정된 일정을 친구에게 보내시겠습니까?")
@@ -254,7 +256,7 @@ public class DetailActivity extends AppCompatActivity {
                                       String myName = new PrefManager(DetailActivity.this).getUserInfo().get("name");
                                       Log.i("nnnnn", taggg);
                                       for (String f : friendssId) {
-                                          DoWhat.sendPushMsg(DetailActivity.this, myName + " 님의 일정이 수정되었습니다.", f, myId, myName, sendDTO);
+                                          new DoWhat().sendPushMsg(DetailActivity.this, myName + " 님의 일정이 수정되었습니다.", f, myId, myName, sendDTO);
                                       }
                                   } else {
                                       Toast.makeText(DetailActivity.this, "인터넷에 연결되어있지 않아 \n 메세지를 보내지 못하였습니다.", Toast.LENGTH_SHORT).show();

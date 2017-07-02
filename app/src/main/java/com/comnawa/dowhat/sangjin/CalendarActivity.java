@@ -78,7 +78,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 final ScheduleDTO dto = items.get(position);
                 AlertDialog.Builder dialog = new AlertDialog.Builder(CalendarActivity.this);
                 dialog.setTitle("일정삭제")
-                        .setMessage("일정을 삭제하시겠습니까?")
+                        .setMessage(dto.getTag().equals("-") ? "일정을 삭제하시겠습니까?" : "일정을 삭제하시겠습니까? \n (태그된 친구의 일정도 삭제됩니다)")
                         .setPositiveButton("네", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
