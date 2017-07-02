@@ -24,6 +24,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DoWhat {
 
@@ -282,19 +284,19 @@ public class DoWhat {
   public void sendPushMsg(Context context, final String message, final String userid, @Nullable final String myId, @Nullable final String myname, @Nullable final ScheduleDTO dto) {
     final String svKey = "AAAARqvabTs:APA91bF_Ldp3AyUWQUo9-uNbcb70MGmYFHB1yuOT6eV4v-K5sTbs6-Vs8jD9ZK9Eln3XEmfs4yjbzulW5dcL9tY9lTbu9nTfF_FFF8FXGPjn-WfM4dlud43qrClW1xKpf4_MSfiEEv9P";
 
-//    Map<String, String> tokk = new HashMap<>();
-//    GetTokken th = new GetTokken(context, userid, tokk);
-//    th.start();
-//    try {
-//      th.join();
-//    } catch (InterruptedException e) {
-//      e.printStackTrace();
-//    }
-//    if (tokk.get("tokken").equals("fail")) {
-//      return;
-//    }
-//
-//    final String tok = tokk.get("tokken");
+    Map<String, String> tokk = new HashMap<>();
+    GetTokken th = new GetTokken(context, userid, tokk);
+    th.start();
+    try {
+      th.join();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    if (tokk.get("tokken").equals("fail")) {
+      return;
+    }
+
+    final String tok = tokk.get("tokken");
 
     /*
 
@@ -355,7 +357,7 @@ public class DoWhat {
 //          root.put("notification",
 // notification);
           root.put("data", notification);
-          root.put("to", "cgGvKCoMN9Q:APA91bGkP7kPH7TjIow6xdCtwZiKgp3ZtKBXm5emNn4268ZGIw9ifgtASGbwf44NrH_AoIkq8PeGIJDKuoO5-5atFnsTjAn9XKbw3CpAzfiwhJkjdteb6oM9FdN5E1qTxZvBvjtCMDvw");
+          root.put("to", tok);
           // FMC 메시지 생성 end
           Log.i("nnnnn","4");
           URL Url = new URL("https://fcm.googleapis.com/fcm/send");
