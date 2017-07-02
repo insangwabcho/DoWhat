@@ -92,6 +92,8 @@ public class PushBroadcast extends BroadcastReceiver {
         ScheduleDTO dto = new ScheduleDTO();
         try {
           JSONObject jobj = new JSONObject(obj);
+
+          Log.i("mintest",jobj.toString());
           dto.setNum(jobj.getInt("num")+1000+primary);
           Log.i("primary",(jobj.getInt("num")+1000+primary)+"");
           dto.setId(new PrefManager(context).getUserInfo().get("id"));
@@ -118,10 +120,17 @@ public class PushBroadcast extends BroadcastReceiver {
 
           dto.setAlarm(jobj.getInt("alarm"));
           dto.setRepeat(jobj.getInt("repeat"));
+
           Log.i("push", dto.toString());
         } catch (JSONException e) {
           e.printStackTrace();
         }
+        intent.removeExtra("title");
+        intent.removeExtra("remoteMessage");
+        intent.removeExtra("tag");
+
+
+
 
         DBManager dbManager = new DBManager(context);
         dbManager.insertSchedule(dto);

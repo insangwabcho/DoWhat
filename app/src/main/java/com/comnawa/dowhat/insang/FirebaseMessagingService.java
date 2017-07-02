@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -13,19 +14,21 @@ import java.util.Calendar;
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
   private static final String TAG = "FirebaseMsgService";
-
+  private Intent intent;
+  private  PendingIntent sender;
   @Override
   public void onMessageReceived(RemoteMessage remoteMessage) {
 
     AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-    Intent intent = new Intent(this, PushBroadcast.class);
+    intent = new Intent(this, PushBroadcast.class);
 //    intent.putExtra("remoteMessage", remoteMessage.getNotification().getBody());
     intent.putExtra("remoteMessage", remoteMessage.getData().get("body"));
+    Log.i("mintest1", remoteMessage.getData().get("title"));
 //    intent.putExtra("tag", remoteMessage.getNotification().getTag());
     intent.putExtra("tag", remoteMessage.getData().get("tag"));
     intent.putExtra("title", remoteMessage.getData().get("title"));
 
-    PendingIntent sender = PendingIntent.getBroadcast(this, 3, intent, 0);
+   sender = PendingIntent.getBroadcast(this, 3, intent, 0);
 
     Calendar cal = Calendar.getInstance();
     cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE),
@@ -38,6 +41,9 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     } else {
       am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
     }
-
+    sender=null;
+    intent.removeExtra("tag");
+    intent.removeExtra("title");
+    intent.removeExtra("remoteMessage");
   }
 }
