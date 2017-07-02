@@ -59,6 +59,11 @@ public class PushBroadcast extends BroadcastReceiver {
     String userid= tagg.split(",")[0];
     String username= tagg.split(",")[1];
     /*
+    Jo님이 일정울 추가하였습니다.
+    Jo님이
+    일정을
+    추가하였습니다.
+
 
     msg형식 : 누구누구가 친구로 추가하셨습니다.
     msg형식 : 누구누구 님의 일정에 태그되었습니다.
@@ -87,7 +92,11 @@ public class PushBroadcast extends BroadcastReceiver {
       intentt.putExtra("userid",userid);
       intentt.putExtra("username",username);
     } else if (dongjak==2) { //일정
-      if (msg.indexOf("추가")!= -1) { //신규
+
+      String msgArr= msg.split(" ")[2];
+
+
+      if (msgArr.equals("추가되었습니다.")) { //신규
         String obj = intent.getStringExtra("title");
         ScheduleDTO dto = new ScheduleDTO();
         try {
@@ -127,7 +136,9 @@ public class PushBroadcast extends BroadcastReceiver {
         dbManager.insertSchedule(dto);
         intentt = new Intent(context, CalendarActivity.class);
         intentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-      } else if (msg.indexOf("수정")!= -1){ //수정
+
+      } else if (msgArr.equals("수정되었습니다.")){ //수정
+
         String obj = intent.getStringExtra("title");
         ScheduleDTO dto = new ScheduleDTO();
         try {
@@ -167,7 +178,9 @@ public class PushBroadcast extends BroadcastReceiver {
         dbManager.updateSchedule(dto);
         intentt = new Intent(context, CalendarActivity.class);
         intentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-      } else if (msg.indexOf("삭제되었습니다.")!= -1){ //수정
+
+      } else if (msgArr.equals("삭제되었습니다.")){ //수정
+
         String obj = intent.getStringExtra("title");
         ScheduleDTO dto = new ScheduleDTO();
         try {
