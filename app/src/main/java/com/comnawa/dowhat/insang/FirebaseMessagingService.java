@@ -42,6 +42,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
       am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
     }
     sender=null;
+    intent= null;
     intent.removeExtra("tag");
     intent.removeExtra("title");
     intent.removeExtra("remoteMessage");
