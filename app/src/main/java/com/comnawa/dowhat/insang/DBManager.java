@@ -68,8 +68,8 @@ public class DBManager {
     dbm.setRequestCode(dto, requestCode);
   }
 
-  public void insertSchedule(ScheduleDTO dto) {
-    dbm.insert(dto);
+  public int insertSchedule(ScheduleDTO dto) {
+    return dbm.insert(dto);
   }
 
   class DBM extends SQLiteOpenHelper {
@@ -255,7 +255,7 @@ public class DBManager {
       }
     }
 
-    public void insert(ScheduleDTO dto) {
+    public int insert(ScheduleDTO dto) {
       SQLiteDatabase db = getWritableDatabase();
       String sql1 = "insert into schedule (id, startdate, enddate, starttime, endtime," +
         " title, event, place, memo, alarm, repeat, tag) ";
@@ -267,6 +267,23 @@ public class DBManager {
       String sql = sql1 + sql2;
       Log.i("insert", sql);
       db.execSQL(sql);
+
+      db= null;
+
+      String sql3= "select num from schedule where id='"+dto.getId()+"' and startdate='"+dto.getStartdate()+
+        "' and enddate='"+dto.getEnddate()+"' and starttime='"+dto.getStarttime()+"' and endtime='"+dto.getEndtime()+
+        "' and title='"+dto.getTitle()+"' and event='"+dto.getEvent()+"' and place='"+dto.getPlace()+
+        "' and memo='"+dto.getMemo()+"' and alarm="+dto.getAlarm()+" and repeat="+dto.getRepeat()+
+        " and tag='"+dto.getTag()+"'";
+
+      db= getWritableDatabase();
+      rs= db.rawQuery(sql3,null);
+      int a=-1;
+      if (rs.moveToNext()) {
+        a = rs.getInt(0);
+      }
+      Log.i("insec num",a+"");
+      return a;
     }
 
     //일정 수정

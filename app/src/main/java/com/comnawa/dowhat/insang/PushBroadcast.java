@@ -106,6 +106,8 @@ public class PushBroadcast extends BroadcastReceiver {
           Log.i("mintest",jobj.toString());
           dto.setNum(jobj.getInt("num")+1000+primary);
           Log.i("primary",(jobj.getInt("num")+1000+primary)+"");
+          Log.i("insec new",jobj.getInt("num")+"");
+          Log.i("insec new",primary+"");
           dto.setId(new PrefManager(context).getUserInfo().get("id"));
           dto.setStartdate(jobj.getString("startdate"));
           dto.setEnddate(jobj.getString("enddate"));
@@ -139,9 +141,6 @@ public class PushBroadcast extends BroadcastReceiver {
         intent.removeExtra("remoteMessage");
         intent.removeExtra("tag");
 
-
-
-
         DBManager dbManager = new DBManager(context);
         dbManager.insertSchedule(dto);
         intentt = new Intent(context, CalendarActivity.class);
@@ -154,7 +153,10 @@ public class PushBroadcast extends BroadcastReceiver {
         try {
           JSONObject jobj = new JSONObject(obj);
           dto.setNum(jobj.getInt("num")+1000+primary);
-          Log.i("primary",(jobj.getInt("num")+1000+primary)+"");
+
+          Log.i("insec mod",jobj.getInt("num")+"");
+          Log.i("insec mod",primary+"");
+
           dto.setId(new PrefManager(context).getUserInfo().get("id"));
           dto.setStartdate(jobj.getString("startdate"));
           dto.setEnddate(jobj.getString("enddate"));

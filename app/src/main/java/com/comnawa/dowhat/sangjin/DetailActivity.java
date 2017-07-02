@@ -183,7 +183,9 @@ public class DetailActivity extends AppCompatActivity {
                                   intent.putExtra("newMod", false);
                                   intent.putExtra("cbAlarm", cbAlarm.getText().toString());
                                   DoWhat.resetAlarm(DetailActivity.this, intent, check);
-                                  new DBManager(DetailActivity.this).insertSchedule(sendDTO);
+                                  int rNum= new DBManager(DetailActivity.this).insertSchedule(sendDTO);
+                                  ScheduleDTO senderr= sendDTO;
+                                  senderr.setNum(rNum);
                                   ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                                   final NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
                                   final NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -196,7 +198,7 @@ public class DetailActivity extends AppCompatActivity {
                                       String myName = new PrefManager(DetailActivity.this).getUserInfo().get("name");
                                       Log.i("nnnnn", taggg);
                                       for (String f : friendssId) {
-                                          new DoWhat().sendPushMsg(DetailActivity.this, myName + " 님의 일정이 추가되었습니다.", f, myId, myName, sendDTO);
+                                          new DoWhat().sendPushMsg(DetailActivity.this, myName + " 님의 일정이 추가되었습니다.", f, myId, myName, senderr);
                                       }
                                   } else {
                                       Toast.makeText(DetailActivity.this, "인터넷에 연결되어있지 않아 \n 메세지를 보내지 못하였습니다.", Toast.LENGTH_SHORT).show();
