@@ -149,6 +149,7 @@ public class DoWhat {
       intent.putExtra("requestCode", requestCode);
 
       PendingIntent sender = PendingIntent.getBroadcast(context, requestCode, intent, 0);
+//      PendingIntent sender = PendingIntent.getBroadcast(context, 1, intent, 0);
 
       Calendar calendar = Calendar.getInstance();
       calendar.set(year, month, date, hour, min, 0);
@@ -294,8 +295,6 @@ public class DoWhat {
 //    }
 //
 //    final String tok = tokk.get("tokken");
-    final String emul= "e0x2k5P1E5Q:APA91bEH_oV0KhFGm-jsp9tStha_I5siG9KnxQC_OWlksJ2hwia5Q3geQ7MArBl-YS5Z_AcjpykhvMF-ZNA2L6woXhqBB0FBZcndxjoUGVwSYjW3GBFjA1xfRlXYaYoHCaY00OYCq2gz";
-    final String phone= "fRQ_3IwltNA:APA91bG3Lw0Fv8mlU0-76h0DNXx0Lwd4HyPobM6q6ZaWOINqpoinDoXpk4IOTuubTxkLPrUb_K2VodSkSjnrsm2cHp8PkIGIoElBEOIcZhYwB3_3qHIqwrmGAtkrN1av3dMNGLftJkgK";
 
     /*
 
@@ -314,6 +313,7 @@ public class DoWhat {
     private int repeat;
 
      */
+
     Log.i("nnnnn","1");
     new Thread(new Runnable() {
       @Override
@@ -329,6 +329,7 @@ public class DoWhat {
             notification.put("title", "DoWhat");
           } else {
             JSONObject jobj = new JSONObject();
+            Log.i("msgg",dto.toString());
             try {
               Log.i("nnnnn","2");
               jobj.put("num", dto.getNum());
@@ -354,7 +355,7 @@ public class DoWhat {
 //          root.put("notification",
 // notification);
           root.put("data", notification);
-          root.put("to", phone);
+          root.put("to", "cgGvKCoMN9Q:APA91bGkP7kPH7TjIow6xdCtwZiKgp3ZtKBXm5emNn4268ZGIw9ifgtASGbwf44NrH_AoIkq8PeGIJDKuoO5-5atFnsTjAn9XKbw3CpAzfiwhJkjdteb6oM9FdN5E1qTxZvBvjtCMDvw");
           // FMC 메시지 생성 end
           Log.i("nnnnn","4");
           URL Url = new URL("https://fcm.googleapis.com/fcm/send");

@@ -1,5 +1,6 @@
 package com.comnawa.dowhat.insang;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -22,10 +23,9 @@ public class PushBroadcast extends BroadcastReceiver {
 
   private String msg;
   private static PowerManager.WakeLock wakeScreen;
-
+  private Activity ac;
   @Override
   public void onReceive(Context context, Intent intent) {
-
     Log.i("test","여기4");
     if (wakeScreen != null) {
       return;
@@ -91,6 +91,7 @@ public class PushBroadcast extends BroadcastReceiver {
       intentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
       intentt.putExtra("userid",userid);
       intentt.putExtra("username",username);
+      PendingIntent.getBroadcast(context,1000,intent,0).cancel();
     } else if (dongjak==2) { //일정
 
       String msgArr= msg.split(" ")[2];
@@ -144,7 +145,7 @@ public class PushBroadcast extends BroadcastReceiver {
         DBManager dbManager = new DBManager(context);
         dbManager.insertSchedule(dto);
         intentt = new Intent(context, CalendarActivity.class);
-        intentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
       } else if (msg.indexOf("수정되었습니다.")!= -1){ //수정
 
@@ -215,6 +216,9 @@ public class PushBroadcast extends BroadcastReceiver {
 
     notificationManager.notify(3, builder.build());
 
-
+    PendingIntent.getBroadcast(context, 1000, intent, 0).cancel();
   }
+
+
 }
+

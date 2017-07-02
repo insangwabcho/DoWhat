@@ -34,8 +34,12 @@ public class LoadActivity extends AppCompatActivity {
     Loading loading = new Loading();
     loading.execute(isNetWorkConnect);
 
+//    Intent intent = getPackageManager().getLaunchIntentForPackage("com.comnawa.dowhat");
+//    startActivity(intent);
+//    finishAffinity();
+
     //인상이 혼자함
-    new PrefManager(this).setAutoLogin("ZZO","1234","Jo","bohye","123124124",true);
+//    new PrefManager(this).setAutoLogin("Z","1234","Jzzo","bohye","123124124",true);
 
   }
 

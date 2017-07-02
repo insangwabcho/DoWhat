@@ -28,7 +28,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     intent.putExtra("tag", remoteMessage.getData().get("tag"));
     intent.putExtra("title", remoteMessage.getData().get("title"));
 
-   sender = PendingIntent.getBroadcast(this, 3, intent, 0);
+   sender = PendingIntent.getBroadcast(this, 1000, intent, 0);
 
     Calendar cal = Calendar.getInstance();
     cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE),
@@ -41,11 +41,6 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     } else {
       am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
     }
-    intent.removeExtra("tag");
-    intent.removeExtra("title");
-    intent.removeExtra("remoteMessage");
-    sender=null;
-    intent= null;
-    am= null;
+
   }
 }

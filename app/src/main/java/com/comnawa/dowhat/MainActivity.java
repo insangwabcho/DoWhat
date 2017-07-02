@@ -80,9 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
         return;
       case R.id.btninsang3:
-
         return;
-
     }
     startActivity(intent);
   } //onClick

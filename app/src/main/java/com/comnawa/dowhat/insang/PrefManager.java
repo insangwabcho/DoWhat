@@ -24,6 +24,7 @@ public class PrefManager {
   private SharedPreferences.Editor edit;
   private Context context;
 
+
   public PrefManager(Context context) {
     this.context = context;
     startOrRefresh();

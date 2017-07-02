@@ -1,6 +1,7 @@
 package com.comnawa.dowhat.sangjin;
 
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -9,6 +10,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -68,6 +71,10 @@ public class CalendarActivity extends ListActivity implements Serializable {
     private float x; //좌표
     private int stat=0; //캘린더뷰 넘길때 왼쪽 오른쪽 ( 0 default, 1 left, 2 right )
 
+    public Activity a(){
+        return CalendarActivity.this;
+    }
+
     private void SettingListview() {
         adapter = new ScheduleAdapter(CalendarActivity.this, R.layout.layout, items);
         setListAdapter(adapter);
@@ -112,6 +119,18 @@ public class CalendarActivity extends ListActivity implements Serializable {
         setDot();
         super.onResume();
     }*/
+
+    private Handler handler1= new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what==0){
+                Intent intent = getPackageManager().getLaunchIntentForPackage("com.comnawa.dowhat");
+                startActivity(intent);
+                finishAffinity();
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -735,5 +754,9 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 dots[startdate + Integer.parseInt(dateArr[2])].startAnimation(anim);
                 dots[startdate + Integer.parseInt(dateArr[2])].setVisibility(View.VISIBLE);
             }
+    }
+
+    public void restartApp(){
+        handler1.sendEmptyMessage(0);
     }
 }
