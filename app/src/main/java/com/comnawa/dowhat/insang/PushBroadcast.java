@@ -144,6 +144,7 @@ public class PushBroadcast extends BroadcastReceiver {
         DBManager dbManager = new DBManager(context);
         dbManager.tagInsert(dto);
         intentt = new Intent(context, CalendarActivity.class);
+        intentt.putExtra("sdate",dto.getStartdate());
         intentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
       } else if (msg.indexOf("수정되었습니다.")!= -1){ //수정
@@ -189,6 +190,7 @@ public class PushBroadcast extends BroadcastReceiver {
         DBManager dbManager = new DBManager(context);
         dbManager.updateSchedule(dto);
         intentt = new Intent(context, CalendarActivity.class);
+        intentt.putExtra("sdate",dto.getStartdate());
         intentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
       }
