@@ -91,7 +91,6 @@ public class PushBroadcast extends BroadcastReceiver {
       intentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
       intentt.putExtra("userid",userid);
       intentt.putExtra("username",username);
-      PendingIntent.getBroadcast(context,1000,intent,0).cancel();
     } else if (dongjak==2) { //일정
 
       String msgArr= msg.split(" ")[2];

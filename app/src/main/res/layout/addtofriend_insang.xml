@@ -25,4 +25,28 @@
       tools:layout_constraintRight_creator="1"
       tools:layout_constraintTop_creator="1" />
 
+  <Button
+    android:id="@+id/btnNo"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="아니오"
+    tools:layout_constraintTop_creator="1"
+    tools:layout_constraintRight_creator="1"
+    android:layout_marginEnd="34dp"
+    app:layout_constraintRight_toRightOf="@+id/txtResult"
+    android:layout_marginTop="17dp"
+    app:layout_constraintTop_toBottomOf="@+id/txtResult"/>
+
+  <Button
+    android:id="@+id/btnOk"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="네"
+    tools:layout_constraintTop_creator="1"
+    android:layout_marginStart="15dp"
+    android:layout_marginTop="16dp"
+    app:layout_constraintTop_toBottomOf="@+id/txtResult"
+    tools:layout_constraintLeft_creator="1"
+    app:layout_constraintLeft_toLeftOf="@+id/txtResult"/>
+
 </android.support.constraint.ConstraintLayout>
