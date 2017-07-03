@@ -188,6 +188,7 @@ public class DetailActivity extends AppCompatActivity {
                                   intent.putExtra("newMod", false);
                                   intent.putExtra("cbAlarm", cbAlarm.getText().toString());
                                   ScheduleDTO senderr= sendDTO;
+                                  senderr.setTagId(taggg);
                                   int rNum= new DBManager(DetailActivity.this).insertSchedule(senderr);
                                   senderr.setNum(rNum);
                                   Log.i("insecc tagid", senderr.getTagId());
@@ -250,7 +251,7 @@ public class DetailActivity extends AppCompatActivity {
                                   intent.putExtra("newMod", false);
                                   intent.putExtra("cbAlarm", cbAlarm.getText().toString());
                                   ScheduleDTO senderr= sendDTO;
-                                  senderr.setTagId(CalendarActivity.items.get(index).getTagId());
+//                                  senderr.setTagId(CalendarActivity.items.get(index).getTagId());
                                   new DBManager(DetailActivity.this).updateSchedule(senderr);
                                   ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                                   final NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
