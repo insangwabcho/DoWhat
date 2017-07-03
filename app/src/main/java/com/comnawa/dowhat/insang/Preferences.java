@@ -71,14 +71,14 @@ public class Preferences extends android.preference.PreferenceActivity {
       restore = (Preference) findPreference("restore");
       developers= (Preference) findPreference("developers");
 
-      developers.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+/*      developers.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
         @Override
         public boolean onPreferenceClick(Preference preference) {
           Intent intent= new Intent(ac, MainActivity.class);
           startActivity(intent);
           return false;
         }
-      });
+      });*/
 
       //네트워크 상태체크
       ConnectivityManager manager = (ConnectivityManager) ac.getSystemService(Context.CONNECTIVITY_SERVICE);

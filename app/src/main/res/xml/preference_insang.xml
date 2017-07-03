@@ -58,8 +58,8 @@
       android:title="Thanks for DoWhat User"/>
   </PreferenceCategory>
 
-  <Preference
+  <!--<Preference
     android:title="개발자메뉴"
-    android:key="developers"/>
+    android:key="developers"/>-->
 </PreferenceScreen>
 
