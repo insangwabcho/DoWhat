@@ -46,7 +46,7 @@ public class ScheduleRestore extends Thread {
     ArrayList<ScheduleDTO> items = null;
     try {
       items = new ArrayList<ScheduleDTO>();
-      String page = Common.SERVER_URL + "/Dowhat/Schedule_servlet/detail.do";
+      String page = Common.SERVER_URL + "/Dowhat/Schedule_servlet/resotre.do";
       HttpClient http = new DefaultHttpClient();
       ArrayList<NameValuePair> postData = new ArrayList<>();
 
