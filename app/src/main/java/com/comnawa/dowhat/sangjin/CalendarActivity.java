@@ -185,7 +185,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
         float last= ev.getX()-a;
         Log.i("asdf","last:"+last+"");
 
-        if (last < -20 || last > 20){
+        if (last < -100 || last > 100){
             return false;
         }
 
