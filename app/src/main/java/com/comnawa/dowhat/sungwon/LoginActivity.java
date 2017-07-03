@@ -61,7 +61,7 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DoWhat.fixedScreen(this, DoWhat.sero); //화면 세로로 고정
-        setContentView(R.layout.login);
+        setContentView(R.layout.login_1);
         //해시 키 출력
         Log.i("hashkey", getKeyHash(getApplicationContext()));
 
