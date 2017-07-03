@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.comnawa.dowhat.insang.DBManager;
 import com.comnawa.dowhat.insang.DoWhat;
 import com.comnawa.dowhat.insang.Preferences;
-import com.comnawa.dowhat.kwanwoo.CalendarCoreActivity;
 import com.comnawa.dowhat.sangjin.CalendarActivity;
 import com.comnawa.dowhat.sungwon.LoginActivity;
 import com.google.firebase.FirebaseApp;
@@ -66,9 +65,6 @@ public class MainActivity extends AppCompatActivity {
 //        return;
       case R.id.btnSangjin:
         intent = new Intent(this, CalendarActivity.class);
-        break;
-      case R.id.btnKwanwoo:
-        intent = new Intent(this, CalendarCoreActivity.class);
         break;
       case R.id.btnSungwon:
         intent = new Intent(this, LoginActivity.class);

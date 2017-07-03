@@ -331,14 +331,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
             SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
             setDot();
         }
-        //
         btnPlus.setImageResource(R.drawable.plus);
-        btnAdd.setImageResource(R.drawable.add);
-        btnMic.setImageResource(R.drawable.mic);
-        btnSet.setImageResource(R.drawable.set);
-        btnAdd.setVisibility(View.INVISIBLE);
-        btnMic.setVisibility(View.INVISIBLE);
-        btnSet.setVisibility(View.INVISIBLE);
+        isClick=true;
 
         //플러스 버튼을 눌렀을때 이벤트
         btnPlus.setOnClickListener(new View.OnClickListener() {
@@ -346,6 +340,9 @@ public class CalendarActivity extends ListActivity implements Serializable {
             public void onClick(View v) {
                 if (isClick) {
                     //버튼 2개 표시후 X로 이미지 변경
+                    btnAdd.setImageResource(R.drawable.add);
+                    btnMic.setImageResource(R.drawable.mic);
+                    btnSet.setImageResource(R.drawable.set);
                     btnAdd.setVisibility(View.VISIBLE);
                     btnMic.setVisibility(View.VISIBLE);
                     btnSet.setVisibility(View.VISIBLE);
