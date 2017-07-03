@@ -67,13 +67,16 @@ public class TagFriendActivity extends AppCompatActivity implements Filterable {
                     if (dd.get(i)) {
                         String[] arr = items.get(i).split("[(]");
                         tag += arr[0] + ",";
-                        tagId += arr[1].substring(arr[1].length())+",";
+                        tagId += arr[1].substring(0,arr[1].length()-1)+",";
                     }
                 }
                 tag = tag.substring(0, tag.length() - 1);
+                tagId= tagId.substring(0, tagId.length() -1);
                 Log.i("tag", tag);
                 DetailActivity.editTag.setText(tag);
+                Log.i("insecc",tag);
                 DetailActivity.taggg= tagId;
+                Log.i("insecc",tagId);
                 finish();
             }
         } else if (item.getItemId() == R.id.addFriend) { //친구 추가

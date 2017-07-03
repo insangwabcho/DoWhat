@@ -26,8 +26,8 @@ public class AddToFriend extends AppCompatActivity {
     final String userid= getIntent().getStringExtra("userid");
     final String username= getIntent().getStringExtra("username");
 
-//    btnOk= (Button) findViewById(R.id.btnOk);
-//    btnNo= (Button) findViewById(R.id.btnNo);
+    btnOk= (Button) findViewById(R.id.btnOk);
+    btnNo= (Button) findViewById(R.id.btnNo);
     txtResult= (TextView) findViewById(R.id.txtResult);
 
     txtResult.setText(username+"님을 친구로 등록하시겠습니까?");
@@ -56,7 +56,7 @@ public class AddToFriend extends AppCompatActivity {
 
   private void addFriend(String userid, String username){
     String myId= new PrefManager(this).getUserInfo().get("id");
-    String choice= username+"("+username+")";
+    String choice= username+"("+userid+")";
     ArrayList<String> friendList = new ArrayList<>();
     GetFriend gf = new GetFriend(this, myId, friendList);
     Log.i("addf", "here2");
@@ -92,7 +92,6 @@ public class AddToFriend extends AppCompatActivity {
       e.printStackTrace();
     }
     //푸시메세지 코드
-    new DoWhat().sendPushMsg(this, username + " 님께서 친구로 추가하셨습니다.", userid, new PrefManager(this).getUserInfo().get("id"), username, null);
     Toast.makeText(this, "친구로 추가되었습니다.", Toast.LENGTH_SHORT).show();
   }
 

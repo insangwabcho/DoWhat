@@ -197,6 +197,7 @@ public class DetailActivity extends AppCompatActivity {
                                       String myName = new PrefManager(DetailActivity.this).getUserInfo().get("name");
                                       Log.i("nnnnn", taggg);
                                       for (String f : friendssId) {
+                                          Log.i("insecc",f);
                                           new DoWhat().sendPushMsg(DetailActivity.this, myName + " 님의 일정이 추가되었습니다.", f, myId, myName, senderr);
                                       }
                                   } else {
