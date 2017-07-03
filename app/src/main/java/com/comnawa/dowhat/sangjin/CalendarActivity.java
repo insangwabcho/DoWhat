@@ -85,7 +85,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
                 final ScheduleDTO dto = items.get(position);
                 AlertDialog.Builder dialog = new AlertDialog.Builder(CalendarActivity.this);
                 dialog.setTitle("일정삭제")
-                        .setMessage(dto.getTag().equals("-") ? "일정을 삭제하시겠습니까?" : "일정을 삭제하시겠습니까? \n (태그된 친구의 일정도 삭제됩니다.)")
+                        .setMessage(dto.getTag().equals("-") ? "일정을 삭제하시겠습니까?" : "일정을 삭제하시겠습니까? \n (태그된 친구들의 일정은 변하지않습니다.)")
                         .setPositiveButton("네", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -97,12 +97,12 @@ public class CalendarActivity extends ListActivity implements Serializable {
                                 SetYMD(Integer.parseInt(days[0]), Integer.parseInt(days[1]) - 1, Integer.parseInt(days[2]));
                                 String myId= new PrefManager(CalendarActivity.this).getUserInfo().get("name");
                                 String myName= new PrefManager(CalendarActivity.this).getUserInfo().get("id");
-                                String[] friendss= dto.getTagId().split(",");
-                                Log.i("insecc del", friendss.toString());
-                                for (String t: friendss) {
-                                    new DoWhat().sendPushMsg(CalendarActivity.this, myName + " 님의 일정이 삭제되었습니다.", t, myId, myName, dto);
-                                    Log.i("insecc del", t);
-                                }
+//                                String[] friendss= dto.getTagId().split(",");
+//                                Log.i("insecc del", friendss.toString());
+//                                for (String t: friendss) {
+//                                    new DoWhat().sendPushMsg(CalendarActivity.this, myName + " 님의 일정이 삭제되었습니다.", t, myId, myName, dto);
+//                                    Log.i("insecc del", t);
+//                                }
                                 setDot();
                             }
                         })
