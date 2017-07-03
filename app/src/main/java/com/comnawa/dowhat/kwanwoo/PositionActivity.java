@@ -2,6 +2,7 @@ package com.comnawa.dowhat.kwanwoo;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -10,9 +11,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.comnawa.dowhat.R;
@@ -39,13 +42,15 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
     GoogleMap map;
     LocationManager locationManager;
     LocationListener locationListener; //위치정보 리스너
-
+    ImageButton imgClear;
     double latitude; //위도
     double longitude; //경도
 
     //GoogleMap
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //화면전환 방지
+        DoWhat.fixedScreen(this, DoWhat.sero);
         super.onCreate(savedInstanceState);
         //위치정보관리자
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -79,8 +84,31 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
         setContentView(R.layout.position_kwanwoo);
         // btnOk = (Button)findViewById(R.id.btnOk);
         editPlace = (EditText) findViewById(R.id.editPlace);
+        imgClear = (ImageButton) findViewById(R.id.imgClear);
         fragment = (MapFragment) getFragmentManager().findFragmentById(R.id.fragment1);
         fragment.getMapAsync(this);
+        //주소가 입력된 텍스트 초기화 작업
+        imgClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editPlace = (EditText) findViewById(R.id.editPlace);
+
+                switch (v.getId()){
+                    case R.id.imgClear:
+                        editPlace.setText("");
+                        break;
+                }
+            }
+        });
+
+   /*     editPlace.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                editPlace.setText("");
+                return false;
+            }
+        });*/
+
         //확인버튼
         Button btnOk = (Button) findViewById(R.id.btnOk);
 
@@ -110,21 +138,19 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
                 }).create().show();
             }//onClick
         }); //onClickListener
-
     }
 
 
     @Override
     protected void onResume() {
-        super.onResume();
-        //출력된 주소 값을 지도액티비티에 다시 불러옴
+        //출력된 주소 값을 캘린더액티비티에 다시 불러옴
         editPlace.setText(DetailActivity.address);
-
+        super.onResume();
 
     }
 
     //스타트액티비티포리저트
- /*   public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         PositionActivity.super.onActivityResult(requestCode, resultCode, intent);
         Bundle extraBundle;
         if (requestCode == 1) {
@@ -136,7 +162,7 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
             }
         }
 
-    }*/
+    }
 
     //취소버튼 이벤트
     @Override
@@ -152,7 +178,7 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
                         DetailActivity.address = null;
                         finish();
                     }
-                }).setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+    }).setNegativeButton("아니오", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(PositionActivity.this, "위치설정을 계속합니다."
@@ -235,7 +261,7 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
 
             e.printStackTrace();
         }
-        if( list.size() > 0 ) {
+        if( list.size() > 0 ) { //지도상에 없는 주소를 입력했을 때 오류처리
             Address addr = list.get(0);
             double lat = addr.getLatitude();    //위도
             double log = addr.getLongitude();   //경도

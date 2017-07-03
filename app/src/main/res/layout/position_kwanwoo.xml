@@ -36,7 +36,7 @@
 
     <EditText
         android:id="@+id/editPlace"
-        android:layout_width="270dp"
+        android:layout_width="260dp"
         android:layout_height="40dp"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="8dp"
@@ -55,7 +55,7 @@
 
     <Button
         android:id="@+id/btnSearch"
-        android:layout_width="75dp"
+        android:layout_width="65dp"
         android:layout_height="40dp"
         android:layout_above="@+id/fragment1"
         android:layout_alignParentEnd="true"
@@ -75,12 +75,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         tools:layout_constraintRight_creator="1"
-        tools:layout_editor_absoluteX="294dp" />
+        tools:layout_editor_absoluteX="306dp" />
 
     <Button
         android:id="@+id/btnOk"
-        android:layout_width="75dp"
-        android:layout_height="40dp"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginLeft="8dp"
@@ -94,5 +94,23 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
+
+    <ImageButton
+        android:id="@+id/imgClear"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="16dp"
+        android:onClick="onClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.995"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/editPlace"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+        tools:layout_constraintRight_creator="1" />
 
 </android.support.constraint.ConstraintLayout>
