@@ -203,8 +203,8 @@ public class CalendarActivity extends ListActivity implements Serializable {
     public boolean onOptionsItemSelected(MenuItem item) {
         //친구찾기 버튼을 눌렀을때 처리
         if (item.getItemId() == R.id.addFriend) {
-//            Intent intent=new Intent(this, AddFriendActivity.class);
-//            startActivity(intent);
+            Intent intent=new Intent(this, AddFriendActivity.class);
+            startActivity(intent);
             //환경설정 버튼을 눌렀을때 처리
         } else if (item.getItemId() == R.id.action_settings) {
             startActivity(new Intent(CalendarActivity.this, Preferences.class));
