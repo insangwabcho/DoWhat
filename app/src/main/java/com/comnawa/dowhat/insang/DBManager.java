@@ -106,7 +106,7 @@ public class DBManager {
           "alarm integer," + //10
           "repeat integer," + //11
           "requestcode integer," + //12
-          "tag varchar(100)" + //13
+          "tag varchar(100)," + //13
           "tagid varchar(300))"; //14
 //    String sql="drop table schedule";
       SQLiteDatabase db = getWritableDatabase();
