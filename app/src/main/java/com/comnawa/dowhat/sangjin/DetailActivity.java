@@ -94,12 +94,13 @@ public class DetailActivity extends AppCompatActivity {
         try {
             editPlace.setText(
               address == null ?
-                CalendarActivity.items.get(index).getPlace().equals("-") ? "" : CalendarActivity.items.get(index).getPlace()
+                      CalendarActivity.items.get(index).getPlace().equals("-") ? "" : CalendarActivity.items.get(index).getPlace()
                 : address
             );
+            Log.i("ssssss",editPlace.getText().toString());
             friendTagId= CalendarActivity.items.get(index).getTagId();
         } catch (ArrayIndexOutOfBoundsException e){
-            editPlace.setText("");
+            /*editPlace.setText("");*/
         }
     }
 
