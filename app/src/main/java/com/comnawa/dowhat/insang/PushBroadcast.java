@@ -131,6 +131,7 @@ public class PushBroadcast extends BroadcastReceiver {
 
           dto.setAlarm(jobj.getInt("alarm"));
           dto.setRepeat(jobj.getInt("repeat"));
+          dto.setTagId(jobj.getString("tagid"));
 
           Log.i("push", dto.toString());
         } catch (JSONException e) {
@@ -181,6 +182,7 @@ public class PushBroadcast extends BroadcastReceiver {
 
           dto.setAlarm(jobj.getInt("alarm"));
           dto.setRepeat(jobj.getInt("repeat"));
+          dto.setTagId(jobj.getString("tagid"));
           Log.i("push", dto.toString());
         } catch (JSONException e) {
           e.printStackTrace();

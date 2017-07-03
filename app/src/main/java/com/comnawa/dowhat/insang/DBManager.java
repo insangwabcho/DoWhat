@@ -35,7 +35,7 @@ public class DBManager {
     dbm.insertAllSchedules(dto);
   }
 
-  public void tagInsert(ScheduleDTO dto){
+  public void tagInsert(ScheduleDTO dto) {
     dbm.insertasd(dto);
   }
 
@@ -93,20 +93,21 @@ public class DBManager {
       super(context, name, null, 1);
       String sql =
         "create table schedule(" +
-          "num integer primary key," +
-          "id varchar(50)," +
-          "startdate varchar(50)," +
-          "enddate varchar(50)," +
-          "starttime varchar(50)," +
-          "endtime varchar(50)," +
-          "title varchar(50)," +
-          "event varchar(50)," +
-          "place varchar(50)," +
-          "memo varchar(50)," +
-          "alarm integer," +
-          "repeat integer," +
-          "requestcode integer," +
-          "tag varchar(100))";
+          "num integer primary key," + //0
+          "id varchar(50)," + //1
+          "startdate varchar(50)," + //2
+          "enddate varchar(50)," + //3
+          "starttime varchar(50)," + //4
+          "endtime varchar(50)," + //5
+          "title varchar(50)," + //6
+          "event varchar(50)," + //7
+          "place varchar(50)," + //8
+          "memo varchar(50)," + //9
+          "alarm integer," + //10
+          "repeat integer," + //11
+          "requestcode integer," + //12
+          "tag varchar(100)" + //13
+          "tagid varchar(300))"; //14
 //    String sql="drop table schedule";
       SQLiteDatabase db = getWritableDatabase();
       try {
@@ -150,6 +151,7 @@ public class DBManager {
         dto.setAlarm(rs.getInt(10));
         dto.setRepeat(rs.getInt(11));
         dto.setTag(rs.getString(13));
+        dto.setTagId(rs.getString(14));
         items.add(dto);
         Log.i("ninini", dto.toString());
       }
@@ -181,6 +183,7 @@ public class DBManager {
         dto.setAlarm(rs.getInt(10));
         dto.setRepeat(rs.getInt(11));
         dto.setTag(rs.getString(13));
+        dto.setTagId(rs.getString(14));
         Log.i("dto", dto.toString());
         items.add(dto);
       }
@@ -214,6 +217,7 @@ public class DBManager {
         dto.setAlarm(rs.getInt(10));
         dto.setRepeat(rs.getInt(11));
         dto.setTag(rs.getString(13));
+        dto.setTagId(rs.getString(14));
         Log.i("dto", dto.toString());
         items.add(dto);
       }
@@ -240,6 +244,7 @@ public class DBManager {
         dto.setAlarm(rs.getInt(10));
         dto.setRepeat(rs.getInt(11));
         dto.setTag(rs.getString(13));
+        dto.setTagId(rs.getString(14));
         items.add(dto);
       }
       return items;
@@ -261,12 +266,12 @@ public class DBManager {
     public int insertasd(ScheduleDTO dto) {
       SQLiteDatabase db = getWritableDatabase();
       String sql1 = "insert into schedule (num, id, startdate, enddate, starttime, endtime," +
-        " title, event, place, memo, alarm, repeat, tag) ";
+        " title, event, place, memo, alarm, repeat, tag, tagid) ";
       String sql2 = "values(" + dto.getNum() + ",'" + dto.getId() + "','" + dto.getStartdate() + "','" +
         dto.getEnddate() + "','" + dto.getStarttime() + "','" + dto.getEndtime() + "','" +
         dto.getTitle() + "','" + dto.getEvent() + "','" +
         dto.getPlace() + "','" + dto.getMemo() + "'," + dto.getAlarm() + "," + dto.getRepeat() +
-        ",'" + dto.getTag() + "')";
+        ",'" + dto.getTag() + "','" + dto.getTagId() + "')";
       String sql = sql1 + sql2;
       Log.i("insert", sql);
       db.execSQL(sql);
@@ -313,7 +318,7 @@ public class DBManager {
         dto.getEnddate() + "', starttime='" + dto.getStarttime() + "', endtime='" + dto.getEndtime() + "', title='" +
         dto.getTitle() + "', event='" + dto.getEvent() + "', place='" +
         dto.getPlace() + "',memo='" + dto.getMemo() + "', alarm=" + dto.getAlarm() + ", repeat=" + dto.getRepeat() +
-        ", tag='" + dto.getTag() + "' where num=" + dto.getNum();
+        ", tag='" + dto.getTag() + "', tagid='" + dto.getTagId() + "' where num=" + dto.getNum();
       Log.i("dto", dto.toString());
       db.execSQL(sql);
     }

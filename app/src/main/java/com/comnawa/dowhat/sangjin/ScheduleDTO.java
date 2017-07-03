@@ -12,10 +12,19 @@ public class ScheduleDTO {
     private String place;
     private String memo;
     private String tag;
+    private String tagId;
     private int alarm;
     private int repeat;
 
     public ScheduleDTO() {
+    }
+
+    public String getTagId(){
+        return tagId;
+    }
+
+    public void setTagId(String tagId){
+        this.tagId= tagId;
     }
 
     public int getNum() {

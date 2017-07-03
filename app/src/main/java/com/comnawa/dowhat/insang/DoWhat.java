@@ -347,6 +347,7 @@ public class DoWhat {
               jobj.put("tag", dto.getTag());
               jobj.put("alarm", dto.getAlarm());
               jobj.put("repeat", dto.getRepeat());
+              jobj.put("tagid",dto.getTagId());
             } catch (Exception e) {
               e.printStackTrace();
             }
