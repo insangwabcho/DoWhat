@@ -41,8 +41,7 @@
       </intent-filter>
     </activity>
     <activity android:name=".insang.Preferences"/>
-    <activity android:name=".kwanwoo.CalendarCoreActivity"/>
-    <activity android:name=".kwanwoo.PositionActivity"/>
+      <activity android:name=".kwanwoo.PositionActivity"/>
     <activity android:name=".MainActivity"/>
     <activity android:name=".sangjin.CalendarActivity"/>
     <activity android:name=".sungwon.LoginActivity"/>
