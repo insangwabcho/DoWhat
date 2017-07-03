@@ -55,6 +55,7 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
         //위치정보관리자
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         //맵 프래그먼트
+
         fragment = (MapFragment)getFragmentManager().findFragmentById(R.id.fragment1);
       //  fragment.getMapAsync(this); //비동기 방식으로 로딩
         //위치정보리스너 등록
