@@ -246,7 +246,7 @@ public class DetailActivity extends AppCompatActivity {
                                   intent.putExtra("cbAlarm", cbAlarm.getText().toString());
                                   DoWhat.resetAlarm(DetailActivity.this, intent, check);
                                   ScheduleDTO senderr= sendDTO;
-                                  senderr.setTagId(taggg);
+                                  senderr.setTagId(sendDTO.getTagId());
                                   new DBManager(DetailActivity.this).updateSchedule(sendDTO);
                                   ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                                   final NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
@@ -255,7 +255,7 @@ public class DetailActivity extends AppCompatActivity {
                                   boolean connMobile = mobile.isConnected();
                                   if (connWifi || connMobile) {
                                       String tags = editTag.getText().toString();
-                                      String[] friendssId= taggg.split(",");
+                                      String[] friendssId= senderr.getTagId().split(",");
                                       String myId = new PrefManager(DetailActivity.this).getUserInfo().get("id");
                                       String myName = new PrefManager(DetailActivity.this).getUserInfo().get("name");
                                       Log.i("nnnnn", taggg);
