@@ -254,10 +254,12 @@ public class DBManager {
     public void insertAllSchedules(ArrayList<ScheduleDTO> items) {
       SQLiteDatabase db = getWritableDatabase();
       for (ScheduleDTO dto : items) {
-        String sql = "insert into schedule values(" + dto.getNum() + ",'" + dto.getId() + "','" + dto.getStartdate() + "','" +
+        String sql = "insert into schedule (num,id,startdate,enddate,starttime,endtime,title,event,place,memo,alarm,repeat,tag) " +
+          "values(" + dto.getNum() + ",'" + dto.getId() + "','" + dto.getStartdate() + "','" +
           dto.getEnddate() + "','" + dto.getStarttime() + "','" + dto.getEndtime() + "','" +
           dto.getTitle() + "','" + dto.getEvent() + "','" +
-          dto.getPlace() + "','" + dto.getMemo() + "'," + dto.getAlarm() + "," + dto.getRepeat() + ")";
+          dto.getPlace() + "','" + dto.getMemo() + "'," + dto.getAlarm() + "," + dto.getRepeat() + ",'" +
+          dto.getTag()+"')";
         Log.i("insert", dto.toString());
         db.execSQL(sql);
       }
