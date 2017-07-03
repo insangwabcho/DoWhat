@@ -2,7 +2,6 @@ package com.comnawa.dowhat.kwanwoo;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -11,7 +10,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -85,29 +83,22 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
         fragment.getMapAsync(this);
         //확인버튼
         Button btnOk = (Button) findViewById(R.id.btnOk);
-        //btnOk.setOnClickListener(this);
+
         btnOk.setOnClickListener(new View.OnClickListener() {
-            //static final int REQUEST_CODE=1234;
+
             @Override
             public void onClick(View v) {
 
                 AlertDialog.Builder mOk = new AlertDialog.Builder(PositionActivity.this);
+
                 mOk.setTitle("설정알림")
                         .setMessage("설정한 위치를 저장하시겠습니까?")
                         .setPositiveButton("예", new DialogInterface.OnClickListener() {
+
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Toast.makeText(PositionActivity.this, "위치가 저장되었습니다."
                                         , Toast.LENGTH_SHORT).show();
-                                //저장된 값을 DetailActivity로 이동
-                                // Intent intent = new Intent(PositionActivity.this, DetailActivity.class);
-                                // Intent intent = new Intent();
-                       /*         intent.setClassName("com.comnawa.dowhat.kwanwoo.CalendarCoreActivity"
-                                        ,"com.comnawa.dowhat.kwanwoo.PositionActivity");*/
-                                //intent.setClassName(CalendarCoreActivity.class,PositionActivity.this);
-
-                                // startActivityForResult(intent,1);
-                                // startActivity(intent);
                                 //입력한 값을 DetailActivity editPlace에 넘김
                                 DetailActivity.address = editPlace.getText().toString();
                                 finish(); //이전화면으로 이동
@@ -133,7 +124,7 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
     }
 
     //스타트액티비티포리저트
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+ /*   public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         PositionActivity.super.onActivityResult(requestCode, resultCode, intent);
         Bundle extraBundle;
         if (requestCode == 1) {
@@ -145,7 +136,7 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
             }
         }
 
-    }
+    }*/
 
     //취소버튼 이벤트
     @Override
@@ -216,20 +207,21 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
         String locationProvider = LocationManager.GPS_PROVIDER;
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
         if(lastKnownLocation != null){
-            latitude = lastKnownLocation.getLatitude();
-            longitude = lastKnownLocation.getLongitude();
+            latitude = lastKnownLocation.getLatitude(); //위도
+            longitude = lastKnownLocation.getLongitude(); //경도
 
         }
-            //getAddress()
-     //  editPlace.setText(getAddress(this, 123f, 145f));
-                                    //현재화면, 위도, 경도
+
+        //현재화면, 위도, 경도
         editPlace.setText(getAddress(this, latitude,longitude));
-        //List<Marker> prevMakers = null;
-    /*    //중복마커 제거
-        HashSet<Marker> hashSet = new HashSet<Marker>();
-        hashSet.addAll(prevMakers);
-        prevMakers.clear();
-        prevMakers.addAll(hashSet);*/
+        //지도 버튼누르면 현재위치로 고정
+        LatLng gPoint = new LatLng(latitude,longitude);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(gPoint, 17));
+        MarkerOptions marker = new MarkerOptions();
+        marker.position(gPoint);
+        //현재위치 마커
+        marker.title(getAddress(this, latitude,longitude));
+        map.addMarker(marker);
     }
 
     public void search(View v) {
@@ -240,20 +232,25 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
         try {
             list = corder.getFromLocationName(place, 5);
         } catch (Exception e) {
+
             e.printStackTrace();
         }
-        Address addr = list.get(0);
-        double lat = addr.getLatitude();    //위도
-        double log = addr.getLongitude();   //경도
-        //좌표객체
-        LatLng geoPoint = new LatLng(lat, log);
-        //카메라 이동 효과,좌표,줌레벨
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(geoPoint, 15));
-        MarkerOptions marker = new MarkerOptions();
-        marker.position(geoPoint);
-        marker.title("" + editPlace.getText().toString());
-        map.addMarker(marker);
-
+        if( list.size() > 0 ) {
+            Address addr = list.get(0);
+            double lat = addr.getLatitude();    //위도
+            double log = addr.getLongitude();   //경도
+            //좌표객체
+            LatLng geoPoint = new LatLng(lat, log);
+            //카메라 이동 효과,좌표,줌레벨
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(geoPoint, 17));
+            MarkerOptions marker = new MarkerOptions();
+            marker.position(geoPoint);
+            marker.title("" + editPlace.getText().toString());
+            map.addMarker(marker);
+        }else{
+            Toast.makeText(
+                    PositionActivity.this,"찾을 수 없는 위치입니다.",Toast.LENGTH_SHORT).show();
+        }
 
     }
 
