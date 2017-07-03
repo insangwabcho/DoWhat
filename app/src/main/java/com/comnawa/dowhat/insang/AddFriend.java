@@ -36,7 +36,7 @@ public class AddFriend extends Thread {
     String id= prefManager.getUserInfo().get("id");
 
     try {
-      String page = Common.SERVER_URL + "/Dowhat/Member_servlet/qwer.do";
+      String page = Common.SERVER_URL + "/Dowhat/Member_servlet/plusfrd.do";
       HashMap<String,String> map= new HashMap<>();
       map.put("id",id);
       map.put("friendid", friendlist);
