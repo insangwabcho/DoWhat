@@ -63,6 +63,7 @@ public class DetailActivity extends AppCompatActivity {
     int Num;
     public static String address; //지도에 입력한 값을 넘길 변수
     int index;
+    private String friendTagId;
 
     //주소로 위도, 경도 구하기
     public static Location findGeoPoint(Context mcontext, String address){
@@ -96,6 +97,7 @@ public class DetailActivity extends AppCompatActivity {
                 CalendarActivity.items.get(index).getPlace().equals("-") ? "" : CalendarActivity.items.get(index).getPlace()
                 : address
             );
+            friendTagId= CalendarActivity.items.get(index).getTagId();
         } catch (ArrayIndexOutOfBoundsException e){
             editPlace.setText("");
         }
@@ -166,7 +168,9 @@ public class DetailActivity extends AppCompatActivity {
                 dto.setAlarm(alarm);
                 dto.setRepeat(repeat);
                 dto.setTag(friendtag);
+                dto.setTagId(friendTagId);
                 final ScheduleDTO sendDTO= dto;
+
                 if (check) { //신규
 
                     if (!editTag.getText().toString().equals("")) {
@@ -182,8 +186,8 @@ public class DetailActivity extends AppCompatActivity {
                                   intent.putExtra("newMod", false);
                                   intent.putExtra("cbAlarm", cbAlarm.getText().toString());
                                   DoWhat.resetAlarm(DetailActivity.this, intent, check);
-                                  int rNum= new DBManager(DetailActivity.this).insertSchedule(sendDTO);
                                   ScheduleDTO senderr= sendDTO;
+                                  int rNum= new DBManager(DetailActivity.this).insertSchedule(senderr);
                                   senderr.setNum(rNum);
                                   senderr.setTagId(taggg);
                                   Log.i("insecc tagid", senderr.getTagId());
@@ -235,7 +239,7 @@ public class DetailActivity extends AppCompatActivity {
                      if (!editTag.getText().toString().equals("")) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("푸시 서비스")
-                          .setMessage("수정된 일정을 친구에게 보내시겠습니까?")
+                          .setMessage("수정된 일정을 친구에게 보내시겠습니까?\n(본인이 등록하신 일정이 아니면 발송이 되지않습니다.)")
                           .setPositiveButton("예", new DialogInterface.OnClickListener() {
                               @Override
                               public void onClick(DialogInterface dialog, int which) {
@@ -246,8 +250,7 @@ public class DetailActivity extends AppCompatActivity {
                                   intent.putExtra("cbAlarm", cbAlarm.getText().toString());
                                   DoWhat.resetAlarm(DetailActivity.this, intent, check);
                                   ScheduleDTO senderr= sendDTO;
-                                  senderr.setTagId(sendDTO.getTagId());
-                                  new DBManager(DetailActivity.this).updateSchedule(sendDTO);
+                                  new DBManager(DetailActivity.this).updateSchedule(senderr);
                                   ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                                   final NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
                                   final NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -259,8 +262,15 @@ public class DetailActivity extends AppCompatActivity {
                                       String myId = new PrefManager(DetailActivity.this).getUserInfo().get("id");
                                       String myName = new PrefManager(DetailActivity.this).getUserInfo().get("name");
                                       Log.i("nnnnn", taggg);
-                                      for (String f : friendssId) {
-                                          new DoWhat().sendPushMsg(DetailActivity.this, myName + " 님의 일정이 수정되었습니다.", f, myId, myName, senderr);
+                                      boolean currentt= true;
+                                      for (String af: friendssId){
+                                          if (myId.equals(af))
+                                              currentt= false;
+                                      }
+                                      if (currentt) {
+                                          for (String f : friendssId) {
+                                              new DoWhat().sendPushMsg(DetailActivity.this, myName + " 님의 일정이 수정되었습니다.", f, myId, myName, senderr);
+                                          }
                                       }
                                   } else {
                                       Toast.makeText(DetailActivity.this, "인터넷에 연결되어있지 않아 \n 메세지를 보내지 못하였습니다.", Toast.LENGTH_SHORT).show();
