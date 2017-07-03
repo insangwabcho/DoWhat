@@ -52,6 +52,7 @@ public class DBManager {
   }
 
   public ArrayList<ScheduleDTO> todaySchedule(String id) {
+    Log.i("alarmrm", "todayschedule method");
     return dbm.selectTodaySchedule(id);
   }
 
@@ -125,17 +126,20 @@ public class DBManager {
     }
 
     public ArrayList<ScheduleDTO> selectTodaySchedule(String id) {
+      Log.i("alarmrm", "selecttodayschedule method1");
       ArrayList<ScheduleDTO> items = new ArrayList<>();
       Calendar cal = Calendar.getInstance();
       String year = cal.get(Calendar.YEAR) + "";
       String month = (cal.get(Calendar.MONTH) + 1 < 10) ?
         "0" + (cal.get(Calendar.MONTH) + 1) : cal.get(Calendar.MONTH) + "";
       String date = (cal.get(Calendar.DATE) + 1 < 10) ?
-        "0" + (cal.get(Calendar.DATE) + 1) : cal.get(Calendar.DATE) + "";
+        "0" + (cal.get(Calendar.DATE)) : cal.get(Calendar.DATE) + "";
       String today = year + "-" + month + "-" + date;
       String sql = "select * from schedule where id='" + id + "' and startdate='" + today + "'";
+      Log.i("alarmrm sql", sql);
       SQLiteDatabase db = getReadableDatabase();
       rs = db.rawQuery(sql, null);
+      Log.i("alarmrm", "selecttodayschedule method1");
       while (rs.moveToNext()) {
         ScheduleDTO dto = new ScheduleDTO();
         dto.setNum(rs.getInt(0));
@@ -154,6 +158,7 @@ public class DBManager {
         dto.setTagId(rs.getString(14));
         items.add(dto);
         Log.i("ninini", dto.toString());
+        Log.i("alarmrm", "selecttodayschedule method1");
       }
       return items;
     }

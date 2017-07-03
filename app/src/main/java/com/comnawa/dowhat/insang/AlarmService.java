@@ -24,13 +24,13 @@ public class AlarmService extends Service {
   public void onCreate() {
     super.onCreate();
 //    Toast.makeText(this, "서비스 시작", Toast.LENGTH_SHORT).show();
-
+    Log.i("alarmrm service","oncreate");
   } //서비스 생성될시 (최초 1회)
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     super.onStartCommand(intent, flags, startId);
-
+    Log.i("alarmrm service","onstartcommand");
     /*
       DateChangedReceiver로 서비스가 재생성됨.
       당일에 해당되는 일정자료 reload 코드작성해야함
@@ -51,22 +51,21 @@ public class AlarmService extends Service {
     int min = cal.get(Calendar.MINUTE);
     int sec = cal.get(Calendar.SECOND);
 
-    Log.i("dto",schedules.toString());
+    Log.i("alarmrm scheduledto",schedules.toString());
 
     for (ScheduleDTO dto : schedules) {
-
+      Log.i("alarmrm",dto.toString());
       if (dto.getAlarm()==0){
         continue;
       }
-
       long dtoTime = Time.valueOf(dto.getStarttime()+":00").getTime();
       long nowTime = Time.valueOf(hour + ":" + min + ":" + sec).getTime();
-      Log.i("timezzo",dtoTime+","+nowTime);
+      Log.i("alarmrm timezzo",dtoTime+","+nowTime);
 
       if (dtoTime > nowTime) {
         String alarmtime = dto.getStarttime();
         String[] foo = alarmtime.split(":");
-        Log.i("test", foo[0] + "" + foo[1]);
+        Log.i("alarmrm time", foo[0] + "" + foo[1]);
 
         DoWhat.setAlarm(this, year, month, date, Integer.parseInt(foo[0]), Integer.parseInt(foo[1]), dto.getTitle());
       }
@@ -82,6 +81,7 @@ public class AlarmService extends Service {
   @Override
   public void onDestroy() {
     super.onDestroy();
+    Log.i("alarmrm service","ondestroy");
     isRunning = false;
     final PrefManager pm = new PrefManager(this);
     for (int i = 1; i <= pm.getScheduleCount(); i++) {

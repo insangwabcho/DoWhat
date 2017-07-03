@@ -63,7 +63,7 @@ public class AlarmBroadcast extends BroadcastReceiver {
     prefManager.setScheduleCount(prefManager.getScheduleCount() - 1);
     Log.i("test","여기1");
     prefManager.testAlarm(intent.getStringExtra("subject"));
-    PendingIntent.getBroadcast(context,intent.getIntExtra("requestCode",0),intent,0).cancel();
+//    PendingIntent.getBroadcast(context,intent.getIntExtra("requestCode",0),intent,0).cancel();
   }
 
 }

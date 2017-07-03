@@ -99,6 +99,7 @@ public class DetailActivity extends AppCompatActivity {
             );
             Log.i("ssssss",editPlace.getText().toString());
             friendTagId= CalendarActivity.items.get(index).getTagId();
+//            Log.i("adsf",friendTagId);
         } catch (ArrayIndexOutOfBoundsException e){
             /*editPlace.setText("");*/
         }
@@ -169,7 +170,7 @@ public class DetailActivity extends AppCompatActivity {
                 dto.setAlarm(alarm);
                 dto.setRepeat(repeat);
                 dto.setTag(friendtag);
-                dto.setTagId(friendTagId);
+                dto.setTagId(taggg);
                 final ScheduleDTO sendDTO= dto;
 
                 if (check) { //신규
@@ -186,17 +187,16 @@ public class DetailActivity extends AppCompatActivity {
                                   intent.putExtra("sdate", txtSdate.getText().toString());
                                   intent.putExtra("newMod", false);
                                   intent.putExtra("cbAlarm", cbAlarm.getText().toString());
-                                  DoWhat.resetAlarm(DetailActivity.this, intent, check);
                                   ScheduleDTO senderr= sendDTO;
                                   int rNum= new DBManager(DetailActivity.this).insertSchedule(senderr);
                                   senderr.setNum(rNum);
-                                  senderr.setTagId(taggg);
                                   Log.i("insecc tagid", senderr.getTagId());
                                   ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                                   final NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
                                   final NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
                                   boolean connWifi = wifi.isConnected();
                                   boolean connMobile = mobile.isConnected();
+                                  DoWhat.resetAlarm(DetailActivity.this, intent, check);
                                   if (connWifi || connMobile) {
                                       String tags = editTag.getText().toString();
                                       String[] friendssId= taggg.split(",");
@@ -249,8 +249,8 @@ public class DetailActivity extends AppCompatActivity {
                                   intent.putExtra("sdate", txtSdate.getText().toString());
                                   intent.putExtra("newMod", false);
                                   intent.putExtra("cbAlarm", cbAlarm.getText().toString());
-                                  DoWhat.resetAlarm(DetailActivity.this, intent, check);
                                   ScheduleDTO senderr= sendDTO;
+                                  senderr.setTagId(CalendarActivity.items.get(index).getTagId());
                                   new DBManager(DetailActivity.this).updateSchedule(senderr);
                                   ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                                   final NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
@@ -262,7 +262,7 @@ public class DetailActivity extends AppCompatActivity {
                                       String[] friendssId= senderr.getTagId().split(",");
                                       String myId = new PrefManager(DetailActivity.this).getUserInfo().get("id");
                                       String myName = new PrefManager(DetailActivity.this).getUserInfo().get("name");
-                                      Log.i("nnnnn", taggg);
+                                      DoWhat.resetAlarm(DetailActivity.this, intent, check);
                                       boolean currentt= true;
                                       for (String af: friendssId){
                                           if (myId.equals(af))

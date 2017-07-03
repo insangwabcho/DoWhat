@@ -189,6 +189,7 @@ public class DoWhat {
   }
 
   public static void resetAlarm(final Activity context, @Nullable final Intent finIntent, final boolean check) {
+    Log.i("alarmrm","여기시작");
     PrefManager pm = new PrefManager(context);
     String cbAlarm = "";
     if (finIntent.getStringExtra("cbAlarm") != null) {
@@ -248,31 +249,36 @@ public class DoWhat {
         }
       }
     }
+    Log.i("alarmrm","여기끝");
   }
 
   private static void resettAlarm(final Activity context, @Nullable final Intent finIntent) {
+    Log.i("alarmrm","여기0");
     final PrefManager pm = new PrefManager(context);
+    Log.i("alarmrm",pm.getScheduleCount()+"<=schedulecount");
     for (int i = 1; i <= pm.getScheduleCount(); i++) {
       AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
       Intent intent = new Intent(context, AlarmBroadcast.class);
       PendingIntent sender = PendingIntent.getBroadcast(context, i, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+      Log.i("alarmrm","여기1");
       if (sender != null) {
+        Log.i("alarmrm","여기2");
         am.cancel(sender);
-        sender.cancel();
         sender.cancel();
       }
     }
     pm.setScheduleCount(0);
-
+    Log.i("alarmrm","여기3");
     context.stopService(new Intent(context, AlarmService.class));
     context.startService(new Intent(context, AlarmService.class));
 
     if (finIntent != null) {
+      Log.i("alarmrm","여기4");
       context.startActivity(finIntent);
       context.finish();
     }
     pm.setPushAlarm(true);
+    Log.i("alarmrm", "여기5");
   }
 
 
