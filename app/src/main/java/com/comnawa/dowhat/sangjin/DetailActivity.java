@@ -163,8 +163,8 @@ public class DetailActivity extends AppCompatActivity {
                 dto.setStartdate(txtSdate.getText().toString());
                 dto.setPlace(edpc);
                 dto.setEnddate(txtEdate.getText().toString());
-                dto.setStarttime(DBstime);
-                dto.setEndtime(DBetime);
+                dto.setStarttime(txtStime.getText().toString());
+                dto.setEndtime(txtEtime.getText().toString());
                 dto.setMemo(edmm);
                 dto.setAlarm(alarm);
                 dto.setRepeat(repeat);
