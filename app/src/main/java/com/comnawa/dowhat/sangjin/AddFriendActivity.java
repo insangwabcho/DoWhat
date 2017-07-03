@@ -112,7 +112,11 @@ public class AddFriendActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 //푸시메세지 코드
-                new DoWhat().sendPushMsg(this, myName + " 님께서 친구로 추가하셨습니다.", id, new PrefManager(this).getUserInfo().get("id"), myName, null);
+                try {
+                    new DoWhat().sendPushMsg(this, myName + " 님께서 친구로 추가하셨습니다.", id, new PrefManager(this).getUserInfo().get("id"), myName, null);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 Toast.makeText(this, "친구로 추가되었습니다.", Toast.LENGTH_SHORT).show();
                 editText.setText("");
             } else if (idx == 0) {
