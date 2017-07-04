@@ -8,6 +8,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
@@ -152,6 +154,19 @@ public class Preferences extends android.preference.PreferenceActivity {
 
     }
 
+
+    boolean success;
+    Handler handler= new Handler(){
+      @Override
+      public void handleMessage(Message msg) {
+        super.handleMessage(msg);
+        if (msg.what== 1){
+          Toast.makeText(ac, "서버로 백업할 일정이 없습니다.", Toast.LENGTH_SHORT).show();
+          success= true;
+        }
+      }
+    };
+
     class Network extends AsyncTask<Void, Void, Void> {
 
       ProgressDialog dialog = new ProgressDialog(ac);
@@ -182,7 +197,7 @@ public class Preferences extends android.preference.PreferenceActivity {
             Log.i("ac", "실패");
           }
         } else if (restoreOrBackup.equals("백업")) {
-          ScheduleBackup b = new ScheduleBackup(ac);
+          ScheduleBackup b = new ScheduleBackup(ac, handler);
           b.start();
           boolean current = true;
           try {
@@ -203,8 +218,11 @@ public class Preferences extends android.preference.PreferenceActivity {
       @Override
       protected void onPostExecute(Void aVoid) {
         dialog.dismiss();
-        Toast.makeText(ac, "완료", Toast.LENGTH_SHORT).show();
+        if (!success && restoreOrBackup.equals("백업")) {
+          Toast.makeText(ac, "완료", Toast.LENGTH_SHORT).show();
+        }
         if (restoreOrBackup.equals("복원")) {
+          Toast.makeText(ac, "완료", Toast.LENGTH_SHORT).show();
           Intent intent = ac.getPackageManager().getLaunchIntentForPackage("com.comnawa.dowhat");
           startActivity(intent);
           ac.finishAffinity();
