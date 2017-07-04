@@ -473,7 +473,7 @@ public class CalendarActivity extends ListActivity implements Serializable {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "인터넷 연결 상태를 확인하세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "명령어 또는 네트워크 상태를 확인하세요.", Toast.LENGTH_SHORT).show();
         }
     }
 
