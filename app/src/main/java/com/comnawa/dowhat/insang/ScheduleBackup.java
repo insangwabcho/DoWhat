@@ -1,6 +1,7 @@
 package com.comnawa.dowhat.insang;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 
 import com.comnawa.dowhat.sangjin.ScheduleDTO;
@@ -20,9 +21,11 @@ import java.util.ArrayList;
 public class ScheduleBackup extends Thread {
 
   Context context;
+  Handler handler;
 
-  public ScheduleBackup(Context context) {
+  public ScheduleBackup(Context context, Handler handler) {
     this.context = context;
+    this.handler= handler;
   }
 
   @Override
@@ -33,6 +36,10 @@ public class ScheduleBackup extends Thread {
   private void sendSchedule() {
     DBManager dbManager = new DBManager(context);
     ArrayList<ScheduleDTO> items = dbManager.getAllSchedule(new PrefManager(context).getUserInfo().get("id"));
+    if (items==null || items.size()== 0){
+      handler.sendEmptyMessage(1);
+      return;
+    }
     JSONArray itemsArr = new JSONArray();
     JSONObject jsonMain = new JSONObject();
     int aCount = 0;
