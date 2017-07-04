@@ -263,8 +263,7 @@ public class DBManager {
           "values(" + dto.getNum() + ",'" + dto.getId() + "','" + dto.getStartdate() + "','" +
           dto.getEnddate() + "','" + dto.getStarttime() + "','" + dto.getEndtime() + "','" +
           dto.getTitle() + "','" + dto.getEvent() + "','" +
-          dto.getPlace() + "','" + dto.getMemo() + "'," + dto.getAlarm() + "," + dto.getRepeat() + ",'" +
-          dto.getTag()+"')";
+          dto.getPlace() + "','" + dto.getMemo() + "'," + dto.getAlarm() + "," + dto.getRepeat() + ",'-')";
         Log.i("insert", dto.toString());
         db.execSQL(sql);
       }
