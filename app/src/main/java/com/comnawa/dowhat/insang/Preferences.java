@@ -15,7 +15,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.comnawa.dowhat.MainActivity;
 import com.comnawa.dowhat.R;
 import com.comnawa.dowhat.sungwon.LoginActivity;
 
@@ -205,6 +204,9 @@ public class Preferences extends android.preference.PreferenceActivity {
       protected void onPostExecute(Void aVoid) {
         dialog.dismiss();
         Toast.makeText(ac, "완료", Toast.LENGTH_SHORT).show();
+        Intent intent = ac.getPackageManager().getLaunchIntentForPackage("com.comnawa.dowhat");
+        startActivity(intent);
+        ac.finishAffinity();
         super.onPostExecute(aVoid);
       }
     }
