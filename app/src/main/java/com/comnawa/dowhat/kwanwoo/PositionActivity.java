@@ -101,7 +101,7 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
                 }
             }
         });
-
+        //터치 시 입력된 값 초기화
    /*     editPlace.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -259,7 +259,6 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
         try {
             list = corder.getFromLocationName(place, 5);
         } catch (Exception e) {
-
             e.printStackTrace();
         }
         if( list.size() > 0 ) { //지도상에 없는 주소를 입력했을 때 오류처리
@@ -275,10 +274,7 @@ public class PositionActivity extends AppCompatActivity implements OnMapReadyCal
             marker.title("" + editPlace.getText().toString());
             map.addMarker(marker);
         }else{
-            Toast.makeText(
-                    PositionActivity.this,"찾을 수 없는 위치입니다.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(PositionActivity.this,"찾을 수 없는 위치입니다.",Toast.LENGTH_SHORT).show();
         }
-
     }
-
 }
