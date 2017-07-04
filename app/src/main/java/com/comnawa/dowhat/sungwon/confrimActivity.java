@@ -101,5 +101,14 @@ public class confrimActivity extends Activity {
                 th.start();
             }
         });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(confrimActivity.this,LoginActivity.class);
+                startActivity(intent);
+                finish();
+
+            }
+        });
     }
 }
