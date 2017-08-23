@@ -23,6 +23,21 @@
   <td><img src="readme/2.png" width="300px"></td>
   <td><img src="readme/3.png" width="300px"></td>
  </tr>
+  <tr>
+  <td><img src="readme/4.png" width="300px"></td>
+  <td><img src="readme/5.png" width="300px"></td>
+  <td><img src="readme/6.png" width="300px"></td>
+ </tr>
+  <tr>
+  <td><img src="readme/7.png" width="300px"></td>
+  <td><img src="readme/8.png" width="300px"></td>
+  <td><img src="readme/9.png" width="300px"></td>
+ </tr>
+  <tr>
+  <td><img src="readme/10.png" width="300px"></td>
+  <td><img src="readme/11.png" width="300px"></td>
+  <td><img src="readme/12.png" width="300px"></td>
+ </tr>
  </table>
  
 
