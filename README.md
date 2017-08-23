@@ -6,7 +6,7 @@
  <li>개발환경 : Windows10, Mac OS Sierra</li>
  <br>
 
-![Comnawa image](readme/comnawa.jpg)
+![Comnawa image](readme/dowhat.jpg)
 
 ### 팀원정보
 
