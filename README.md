@@ -1,7 +1,7 @@
 # Dowhat 일정관리 안드로이드 앱
 
-<ul># DoWhat 프로젝트</ul>
- <li>진행기간 : 17.03.16 ~ 17.03.29</li>
+<ul># DoWhat 안드로이드 프로젝트</ul>
+ <li>진행기간 : 17.06.15 ~ 17.07.03</li>
  <li>진행인원 : 4명</li>
  <li>개발환경 : Windows10, Mac OS Sierra</li>
  <br>
