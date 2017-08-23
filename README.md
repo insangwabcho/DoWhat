@@ -11,7 +11,7 @@
 ### 팀원정보
 
 *<li>조인상 [GitHub][ghinsang] , [StackOverFlow][sfinsang]</li>*
-*<li>예상진 [GitHub][ghsangjin]</li>*
+*<li>예상진 [GitHub][ghsangjin], [StackOverFlow][sfsangjin]</li>* 
 *<li>이성원 [GitHub][ghsungwon]</li>*
 *<li>이관우 ..</li>*
 
@@ -45,3 +45,4 @@
 [ghsungwon]: https://github.com/tjddnjs625
 [ghinsang]: https://github.com/insangwabcho
 [sfinsang]: https://stackoverflow.com/users/8349800/%EC%A1%B0%EC%9D%B8%EC%83%81
+[sfsangjin]: https://stackoverflow.com/users/8366655/%EC%98%88%EC%83%81%EC%A7%84
